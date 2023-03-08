@@ -31,7 +31,7 @@ public class AgentSelectMain {
 		} else if (modeNum == 2) {
 			System.out.println("Unrated chosen!");
 			Unrated gameUnrated = new Unrated();
-
+			gameUnrated.startGame();
 		} else {
 			System.out.println("Not a valid mode!");
 		}

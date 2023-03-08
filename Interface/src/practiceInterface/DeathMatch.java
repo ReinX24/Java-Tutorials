@@ -13,7 +13,6 @@ public class DeathMatch implements Agent {
 		generateMap();
 		generateAgent();
 		askAction();
-
 	}
 
 	public void generateMap() {
