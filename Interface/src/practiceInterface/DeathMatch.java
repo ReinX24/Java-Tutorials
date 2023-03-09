@@ -61,6 +61,8 @@ public class DeathMatch implements Agent {
 		case 5:
 			exitGame();
 			break;
+		default:
+			System.out.println("Not a valid action!");
 		}
 	}
 

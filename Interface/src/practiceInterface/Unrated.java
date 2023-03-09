@@ -57,6 +57,7 @@ public class Unrated implements Agent, Abilities {
 		do {
 			System.out.println("\n[Choose Action]");
 			System.out.println("\n[1 - Walk]\n[2 - Run]\n[3 - Shoot]\n[4 - Aim Down Sight]\n[5 - Exit Game]");
+			System.out.println("\n[6 - Skill 1]\n[7 - Skill 2]\n[8 - Skill 3]\n[9 - Skill 4]\n[10 - Get Orb]");
 			System.out.print("Enter Action: ");
 			userAction = userInput.nextInt();
 			checkAction(userAction);
@@ -79,6 +80,24 @@ public class Unrated implements Agent, Abilities {
 			break;
 		case 5:
 			exitGame();
+			break;
+		case 6:
+			firstAbility("\nAbility 1");
+			break;
+		case 7:
+			secondAbility("\nAbility 2");
+			break;
+		case 8:
+			thirdAbility("\nAbility 3");
+			break;
+		case 9:
+			ultimateAbility("\nUltimate Ability");
+			break;
+		case 10:
+			getOrb();
+			break;
+		default:
+			System.out.println("Not a valid action!");
 			break;
 		}
 	}
@@ -110,26 +129,26 @@ public class Unrated implements Agent, Abilities {
 
 	@Override
 	public void firstAbility(String abilityName) {
-		// TODO Auto-generated method stub
-
+		System.out.println(abilityName + " used!");
 	}
 
 	@Override
 	public void secondAbility(String abilityName) {
-		// TODO Auto-generated method stub
-
+		System.out.println(abilityName + " used!");
 	}
 
 	@Override
 	public void thirdAbility(String abilityName) {
-		// TODO Auto-generated method stub
-
+		System.out.println(abilityName + " used!");
 	}
 
 	@Override
 	public void ultimateAbility(String abilityName) {
-		// TODO Auto-generated method stub
+		System.out.println(abilityName + " used!");
+	}
 
+	public void getOrb() {
+		System.out.println("\nGetting Orb!");
 	}
 
 }

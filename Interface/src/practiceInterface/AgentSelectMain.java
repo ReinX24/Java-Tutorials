@@ -18,7 +18,7 @@ public class AgentSelectMain {
 	}
 
 	static void askMode() {
-		System.out.print("[Pick Mode]\n[1 - Death Match]\n[2 - Unrated]\nEnter Mode Number: ");
+		System.out.print("[Pick Mode]\n[1 - Death Match]\n[2 - Unrated]\n\nEnter Mode Number: ");
 		int modeNum = userInput.nextInt();
 		checkMode(modeNum);
 	}
@@ -29,7 +29,7 @@ public class AgentSelectMain {
 			DeathMatch gameDeathMatch = new DeathMatch();
 			gameDeathMatch.startGame();
 		} else if (modeNum == 2) {
-			System.out.println("Unrated chosen!");
+			System.out.println("\nUnrated chosen!");
 			Unrated gameUnrated = new Unrated();
 			gameUnrated.startGame();
 		} else {
