@@ -1,0 +1,5 @@
+Name: Bob
+Occupation: Builder
+Age: 21
+Sex: Male
+Marital Status: Never Married
