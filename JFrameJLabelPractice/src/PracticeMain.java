@@ -1,9 +1,11 @@
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 
 public class PracticeMain {
 
@@ -40,17 +42,28 @@ public class PracticeMain {
 		labelOne.setFont(new Font("Arial", Font.PLAIN, 30));
 		labelOne.setForeground(Color.WHITE);
 		labelOne.setIconTextGap(20);
-		
+
 		// Moving the JLabel around our JFrame
 		labelOne.setHorizontalAlignment(JLabel.CENTER);
 		labelOne.setVerticalAlignment(JLabel.CENTER);
-		
+
 		// Changing the layout manager of our JFrame
 		frameOne.setLayout(null);
 		labelOne.setBounds(192, 144, 640, 480); // x y width height
 		// moves its contents to the x y axis within the JFrame
-		
-		// Packing our JFrame, resized it to use only space used by its components (JLabel)
+
+		// Adding a Border to our JLabel
+		Border labelBorder = BorderFactory.createLineBorder(new Color(255, 128, 0));
+		labelOne.setBorder(labelBorder);
+
+		/*
+		 * If the layout of the panel is null, the border will show around the edges of
+		 * the panel. If the layout of the panel is Border layout (default), it will
+		 * show at the edges of the JFrame.
+		 */
+
+		// Packing our JFrame, resized it to use only space used by its components
+		// (JLabel)
 //		frameOne.pack();
 	}
 
