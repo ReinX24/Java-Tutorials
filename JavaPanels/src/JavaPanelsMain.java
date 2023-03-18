@@ -28,7 +28,8 @@ public class JavaPanelsMain {
 		// Creating a JPanel
 		JPanel panelOne = new JPanel();
 		panelOne.setBackground(Color.RED);
-		panelOne.setBounds(0, 0, 512, 384); // x y width height
+		panelOne.setBounds(0, 0, 512, 384); // x y width height, need to set bounds because JFrame is using a null
+											// layout manager
 		panelOne.setLayout(new BorderLayout());
 
 		// Creating more JPanel objects
@@ -60,7 +61,7 @@ public class JavaPanelsMain {
 		labelOne.setVerticalAlignment(JLabel.BOTTOM);
 
 		/* RUNS IF THE LAYOUT IS NULL */
-		// Setting bounds for JLabel if the layout method of the panel is null
+		// Setting bounds for JLabel if the layout method of the JPanel is null
 		labelOne.setBounds(0, 0, 250, 250); // x y width height
 
 		// ImageIcon for our JLabel
