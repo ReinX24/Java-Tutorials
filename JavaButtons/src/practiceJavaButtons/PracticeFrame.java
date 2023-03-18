@@ -91,9 +91,34 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		// Fighter Portrait
 		fighterPortrait = new JLabel();
 		fighterPortrait.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-		fighterPortrait.setBounds(100, 500, 800, 400);
-		fighterPortrait.setVisible(true);
+		fighterPortrait.setBounds(140, 500, 720, 400);
+		fighterPortrait.setVisible(false);
+
+		ImageIcon fighterPortraitImage = new ImageIcon("fighterPortrait.jpeg");
+		fighterPortrait.setIcon(fighterPortraitImage);
 		this.add(fighterPortrait);
+
+		// Magician Portrait
+		wizardPortrait = new JLabel();
+		wizardPortrait.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+		wizardPortrait.setBounds(140, 500, 720, 400);
+		wizardPortrait.setVisible(false);
+
+		ImageIcon wizardPortraitImage = new ImageIcon("wizardPortrait.jpg");
+		wizardPortrait.setIcon(wizardPortraitImage);
+		this.add(wizardPortrait);
+
+		// Healer Portrait
+		healerPortrait = new JLabel();
+		healerPortrait.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+		healerPortrait.setBounds(140, 500, 720, 400);
+		healerPortrait.setVisible(false);
+
+		ImageIcon healerPortraitImage = new ImageIcon("healerPortrait.jpg");
+		healerPortrait.setIcon(healerPortraitImage);
+		this.add(healerPortrait);
+
+		// TODO: Add text to each of the class' portraits & add a title at the top
 
 	}
 
@@ -105,8 +130,10 @@ public class PracticeFrame extends JFrame implements ActionListener {
 			fighterPortrait.setVisible(true);
 		} else if (arg0.getSource() == wizardButton) {
 			System.out.println("[Wizard Chosen!]");
+			wizardPortrait.setVisible(true);
 		} else if (arg0.getSource() == healerButton) {
 			System.out.println("[Healer Chosen!]");
+			healerPortrait.setVisible(true);
 		}
 
 		// Disables the buttons once the user has pressed one
