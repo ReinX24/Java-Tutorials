@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 public class PracticeFrame extends JFrame implements ActionListener {
@@ -32,6 +33,24 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		this.setResizable(false);
 		this.setTitle("[ RPG Class Menu]");
 		this.setLayout(null);
+
+		// Text that says the user should choose a class
+		JLabel classMessage = new JLabel();
+		classMessage.setText("[Pick Character Class]");
+		classMessage.setForeground(Color.BLACK);
+		classMessage.setFont(new Font("Arial", Font.BOLD, 16));
+		classMessage.setHorizontalTextPosition(JLabel.CENTER);
+		classMessage.setVerticalTextPosition(JLabel.CENTER);
+		classMessage.setVisible(true);
+
+		JPanel classMessagePanel = new JPanel();
+		classMessagePanel.setBounds(350, 50, 300, 30);
+		classMessagePanel.setBackground(Color.WHITE);
+		classMessagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		classMessagePanel.setVisible(true);
+		
+		classMessagePanel.add(classMessage);
+		this.add(classMessagePanel);
 
 		// Adding 3 buttons to our JFrame, each button represents a class (Fighter,
 		// Wizard, Healer)
