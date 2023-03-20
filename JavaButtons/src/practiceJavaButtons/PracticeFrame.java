@@ -48,7 +48,7 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		classMessagePanel.setBackground(Color.WHITE);
 		classMessagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		classMessagePanel.setVisible(true);
-		
+
 		classMessagePanel.add(classMessage);
 		this.add(classMessagePanel);
 
@@ -56,6 +56,8 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		// Wizard, Healer)
 		fighterButton = new JButton();
 		fighterButton.setText("[Fighter]");
+		fighterButton.setIconTextGap(20);
+		fighterButton.setForeground(Color.WHITE);
 		fighterButton.setFont(new Font("Arial", Font.BOLD, 16));
 		fighterButton.setBounds(100, 100, 200, 300); // x y width height
 		fighterButton.setFocusable(false);
@@ -69,6 +71,8 @@ public class PracticeFrame extends JFrame implements ActionListener {
 
 		wizardButton = new JButton();
 		wizardButton.setText("[Wizard]");
+		wizardButton.setIconTextGap(20);
+		wizardButton.setForeground(Color.WHITE);
 		wizardButton.setFont(new Font("Arial", Font.BOLD, 16));
 		wizardButton.setBounds(400, 100, 200, 300);
 		wizardButton.setFocusable(false);
@@ -82,6 +86,7 @@ public class PracticeFrame extends JFrame implements ActionListener {
 
 		healerButton = new JButton();
 		healerButton.setText("[Healer]");
+		healerButton.setIconTextGap(20);
 		healerButton.setFont(new Font("Arial", Font.BOLD, 16));
 		healerButton.setBounds(700, 100, 200, 300);
 		healerButton.setFocusable(false);
@@ -109,18 +114,33 @@ public class PracticeFrame extends JFrame implements ActionListener {
 
 		// Fighter Portrait
 		fighterPortrait = new JLabel();
+		fighterPortrait.setText("[Fighter chosen!]");
+		fighterPortrait.setVerticalTextPosition(JLabel.TOP);
+		fighterPortrait.setHorizontalTextPosition(JLabel.CENTER);
+		fighterPortrait.setFont(new Font("Arial", Font.BOLD, 16));
+		fighterPortrait.setIconTextGap(20);
 		fighterPortrait.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-		fighterPortrait.setBounds(140, 500, 720, 400);
+		fighterPortrait.setBounds(140, 430, 720, 500);
+		fighterPortrait.setOpaque(true); // need to be true if applying background to JLabels
+		fighterPortrait.setBackground(Color.WHITE);
 		fighterPortrait.setVisible(false);
 
 		ImageIcon fighterPortraitImage = new ImageIcon("fighterPortrait.jpeg");
 		fighterPortrait.setIcon(fighterPortraitImage);
 		this.add(fighterPortrait);
 
-		// Magician Portrait
+		// Wizard Portrait
 		wizardPortrait = new JLabel();
+		wizardPortrait.setText("[Wizard chosen!]");
+		wizardPortrait.setVerticalTextPosition(JLabel.TOP);
+		wizardPortrait.setHorizontalTextPosition(JLabel.CENTER);
+		wizardPortrait.setFont(new Font("Arial", Font.BOLD, 16));
+		wizardPortrait.setIconTextGap(20);
 		wizardPortrait.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-		wizardPortrait.setBounds(140, 500, 720, 400);
+		wizardPortrait.setBounds(140, 430, 720, 500);
+		wizardPortrait.setOpaque(true);
+		wizardPortrait.setBackground(new Color(33, 33, 71));
+		wizardPortrait.setForeground(Color.WHITE);
 		wizardPortrait.setVisible(false);
 
 		ImageIcon wizardPortraitImage = new ImageIcon("wizardPortrait.jpg");
@@ -129,15 +149,21 @@ public class PracticeFrame extends JFrame implements ActionListener {
 
 		// Healer Portrait
 		healerPortrait = new JLabel();
+		healerPortrait.setText("[Healer chosen!]");
+		healerPortrait.setVerticalTextPosition(JLabel.TOP);
+		healerPortrait.setHorizontalTextPosition(JLabel.CENTER);
+		healerPortrait.setFont(new Font("Arial", Font.BOLD, 16));
+		healerPortrait.setIconTextGap(20);
 		healerPortrait.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-		healerPortrait.setBounds(140, 500, 720, 400);
+		healerPortrait.setBounds(140, 430, 720, 500);
+		healerPortrait.setOpaque(true);
+		healerPortrait.setForeground(Color.BLACK);
+		healerPortrait.setBackground(Color.WHITE);
 		healerPortrait.setVisible(false);
 
 		ImageIcon healerPortraitImage = new ImageIcon("healerPortrait.jpg");
 		healerPortrait.setIcon(healerPortraitImage);
 		this.add(healerPortrait);
-
-		// TODO: Add text to each of the class' portraits & add a title at the top
 
 	}
 
