@@ -34,20 +34,26 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		this.setTitle("[ RPG Class Menu]");
 		this.setLayout(null);
 
+		// Setting the ImageIcon of the program
+		ImageIcon frameIcon = new ImageIcon("rpgGameIcon.png");
+		this.setIconImage(frameIcon.getImage());
+
+		// TODO: Title of the program not centered
+
 		// Text that says the user should choose a class
 		JLabel classMessage = new JLabel();
 		classMessage.setText("[Pick Character Class]");
 		classMessage.setForeground(Color.BLACK);
 		classMessage.setFont(new Font("Arial", Font.BOLD, 16));
-		classMessage.setHorizontalTextPosition(JLabel.CENTER);
-		classMessage.setVerticalTextPosition(JLabel.CENTER);
+		classMessage.setHorizontalAlignment(JLabel.CENTER); // use Horizontal / Vertical Alignment if text only
 		classMessage.setVisible(true);
 
 		JPanel classMessagePanel = new JPanel();
-		classMessagePanel.setBounds(350, 50, 300, 30);
+		classMessagePanel.setBounds(350, 20, 300, 50);
 		classMessagePanel.setBackground(Color.WHITE);
 		classMessagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		classMessagePanel.setVisible(true);
+		classMessagePanel.setLayout(new BorderLayout());
 
 		classMessagePanel.add(classMessage);
 		this.add(classMessagePanel);
@@ -56,7 +62,7 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		// Wizard, Healer)
 		fighterButton = new JButton();
 		fighterButton.setText("[Fighter]");
-		fighterButton.setIconTextGap(20);
+		fighterButton.setIconTextGap(40);
 		fighterButton.setForeground(Color.WHITE);
 		fighterButton.setFont(new Font("Arial", Font.BOLD, 16));
 		fighterButton.setBounds(100, 100, 200, 300); // x y width height
@@ -71,7 +77,7 @@ public class PracticeFrame extends JFrame implements ActionListener {
 
 		wizardButton = new JButton();
 		wizardButton.setText("[Wizard]");
-		wizardButton.setIconTextGap(20);
+		wizardButton.setIconTextGap(40);
 		wizardButton.setForeground(Color.WHITE);
 		wizardButton.setFont(new Font("Arial", Font.BOLD, 16));
 		wizardButton.setBounds(400, 100, 200, 300);
@@ -86,7 +92,7 @@ public class PracticeFrame extends JFrame implements ActionListener {
 
 		healerButton = new JButton();
 		healerButton.setText("[Healer]");
-		healerButton.setIconTextGap(20);
+		healerButton.setIconTextGap(40);
 		healerButton.setFont(new Font("Arial", Font.BOLD, 16));
 		healerButton.setBounds(700, 100, 200, 300);
 		healerButton.setFocusable(false);
