@@ -38,8 +38,6 @@ public class PracticeFrame extends JFrame implements ActionListener {
 		ImageIcon frameIcon = new ImageIcon("rpgGameIcon.png");
 		this.setIconImage(frameIcon.getImage());
 
-		// TODO: Title of the program not centered
-
 		// Text that says the user should choose a class
 		JLabel classMessage = new JLabel();
 		classMessage.setText("[Pick Character Class]");
