@@ -14,6 +14,7 @@ public class RandomColorCreate extends JFrame implements ActionListener {
 
 	JButton randomColorButton;
 	JPanel colorPanel;
+	JLabel colorValues;
 	Random randNum = new Random();
 
 	public RandomColorCreate() {
@@ -32,25 +33,21 @@ public class RandomColorCreate extends JFrame implements ActionListener {
 		randomColorButton.setBorder(BorderFactory.createEtchedBorder());
 		this.add(randomColorButton);
 
+		// Finish creating our JPanel that will show the random color
 		colorPanel = new JPanel();
-//		Random randNum = new Random();
-//		int randomValOne = randNum.nextInt(0, 256);
-//		int randomValTwo = randNum.nextInt(0, 256);
-//		int randomValThree = randNum.nextInt(0, 256);
-//
-//		System.out.println(randomValOne);
-//		System.out.println(randomValTwo);
-//		System.out.println(randomValThree);
-
-//		JLabel colorValues = new JLabel();
-//		colorValues.setText(randomValOne + ", " + randomValTwo + ", " + randomValThree);
-//		colorValues.setForeground(Color.WHITE);
-
 		colorPanel.setBounds(125, 200, 250, 250);
-//		colorPanel.setBackground(new Color(randomValOne, randomValTwo, randomValThree));
 		colorPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-		colorPanel.setVisible(false);
-		this.add(colorPanel);
+		colorPanel.setVisible(false); // set to false for now
+		this.add(colorPanel); // we do not set a background yet
+
+		colorValues = new JLabel();
+		colorValues.setBounds(150, 160, 200, 30);
+		colorValues.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		colorValues.setHorizontalAlignment(JLabel.CENTER);
+		colorValues.setBackground(Color.WHITE);
+		colorValues.setOpaque(true); // for background color
+		colorValues.setVisible(false);
+		this.add(colorValues);
 
 		this.setVisible(true); // should be at the end of the program
 	}
@@ -59,33 +56,15 @@ public class RandomColorCreate extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == randomColorButton) {
 			System.out.println("[Button Pressed!]");
-			JLabel colorValues = new JLabel();
 
-//			colorPanel = new JPanel();
-//			Random randNum = new Random();
 			int randomValOne = randNum.nextInt(0, 256);
 			int randomValTwo = randNum.nextInt(0, 256);
 			int randomValThree = randNum.nextInt(0, 256);
 			colorPanel.setBackground(new Color(randomValOne, randomValTwo, randomValThree));
-
-//			System.out.println(randomValOne);
-//			System.out.println(randomValTwo);
-//			System.out.println(randomValThree);
-//
-//			colorValues.setText(randomValOne + ", " + randomValTwo + ", " + randomValThree);
-
-//			colorPanel.setBounds(125, 200, 250, 250);
-//			colorPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-//			colorPanel.add(colorValues);
-
-//			colorPanel.setVisible(true);
-//			this.add(colorPanel);
-
-//			JLabel colorValues = new JLabel();
-//			colorValues.setText(randomValOne + ", " + randomValTwo + ", " + randomValThree);
-//			colorValues.setForeground(Color.WHITE);
-
 			colorPanel.setVisible(true);
+
+			colorValues.setText("RGB: " + randomValOne + ", " + randomValTwo + ", " + randomValThree);
+			colorValues.setVisible(true);
 		}
 	}
 }
