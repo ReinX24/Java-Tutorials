@@ -1,7 +1,5 @@
 package practiceJOptionPane;
 
-import java.awt.ImageCapabilities;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
