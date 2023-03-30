@@ -20,6 +20,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	public MainFrame() {
 		this.setTitle("[Java Text Field Practice]");
 		this.setLayout(new FlowLayout());
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 
 		mainTextField = new JTextField();
 		// Since FlowLayout, we use setPreferredSize & new Dimension
