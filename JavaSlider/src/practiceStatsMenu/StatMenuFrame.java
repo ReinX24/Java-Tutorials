@@ -2,7 +2,9 @@ package practiceStatsMenu;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -188,6 +190,65 @@ public class StatMenuFrame extends JFrame implements ChangeListener, ActionListe
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == submitStatsButton) {
 			// TODO: Create a new JFrame consisting of information
+			this.dispose(); // disposes current JFrame
+			JFrame characterFrame = new JFrame();
+			characterFrame.setTitle("[Character Information]");
+			characterFrame.setSize(1280, 720);
+			characterFrame.setResizable(false);
+			characterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			characterFrame.getContentPane().setBackground(new Color(0, 128, 128));
+			characterFrame.setLocationRelativeTo(null);
+			characterFrame.setLayout(null);
+
+			JPanel characterSummary = new JPanel();
+			characterSummary.setBounds(320, 100, 640, 480);
+			characterSummary.setBackground(new Color(128, 128, 0));
+			characterSummary.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			characterSummary.setLayout(null);
+
+			JLabel summaryText = new JLabel();
+			summaryText.setText("[Summary Of Stats]");
+			summaryText.setHorizontalAlignment(JLabel.CENTER);
+			summaryText.setFont(new Font("Arial", Font.BOLD, 16));
+			summaryText.setForeground(Color.WHITE);
+			summaryText.setBounds(160, 20, 320, 100);
+
+			JLabel strengthText = new JLabel();
+			strengthText.setText("Strength: " + strengthSlider.getValue());
+			strengthText.setHorizontalAlignment(JLabel.CENTER);
+			strengthText.setFont(new Font("Arial", Font.BOLD, 16));
+			strengthText.setForeground(Color.WHITE);
+			strengthText.setBounds(10, 160, 140, 120);
+
+			JLabel agilityText = new JLabel();
+			agilityText.setText("Agility: " + agilitySlider.getValue());
+			agilityText.setHorizontalAlignment(JLabel.CENTER);
+			agilityText.setFont(new Font("Arial", Font.BOLD, 16));
+			agilityText.setForeground(Color.WHITE);
+			agilityText.setBounds(170, 160, 140, 120);
+
+			JLabel dexterityText = new JLabel();
+			dexterityText.setText("Dexterity: " + dexteritySlider.getValue());
+			dexterityText.setHorizontalAlignment(JLabel.CENTER);
+			dexterityText.setFont(new Font("Arial", Font.BOLD, 16));
+			dexterityText.setForeground(Color.WHITE);
+			dexterityText.setBounds(330, 160, 140, 120);
+
+			JLabel intelligenceText = new JLabel();
+			intelligenceText.setText("Intelligence: " + intelligenceSlider.getValue());
+			intelligenceText.setHorizontalAlignment(JLabel.CENTER);
+			intelligenceText.setFont(new Font("Arial", Font.BOLD, 16));
+			intelligenceText.setForeground(Color.WHITE);
+			intelligenceText.setBounds(490, 160, 140, 120);
+
+			characterSummary.add(summaryText);
+			characterSummary.add(strengthText);
+			characterSummary.add(agilityText);
+			characterSummary.add(dexterityText);
+			characterSummary.add(intelligenceText);
+
+			characterFrame.add(characterSummary);
+			characterFrame.setVisible(true);
 		}
 	}
 
