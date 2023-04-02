@@ -189,7 +189,6 @@ public class StatMenuFrame extends JFrame implements ChangeListener, ActionListe
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == submitStatsButton) {
-			// TODO: Create a new JFrame consisting of information
 			this.dispose(); // disposes current JFrame
 			JFrame characterFrame = new JFrame();
 			characterFrame.setTitle("[Character Information]");
