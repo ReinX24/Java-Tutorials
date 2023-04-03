@@ -90,6 +90,7 @@ public class AudioControlsFrame extends JFrame implements ChangeListener {
 		volumePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		volumeSlider = new JSlider(0, 100, 50);
+		volumeSlider.setPreferredSize(new Dimension(200, 500));
 
 		volumeSlider.setPaintTicks(true);
 		volumeSlider.setMinorTickSpacing(10);
@@ -97,7 +98,17 @@ public class AudioControlsFrame extends JFrame implements ChangeListener {
 		volumeSlider.setPaintTrack(true);
 		volumeSlider.setMajorTickSpacing(25);
 
-		// TODO: finish creating volumeSlider & volumeLabel
+		volumeSlider.setPaintLabels(true);
+		volumeSlider.setOrientation(JSlider.VERTICAL);
+		volumeSlider.addChangeListener(this);
+
+		volumeLabel = new JLabel();
+		volumeLabel.setText("Volume: " + volumeSlider.getValue());
+		volumeLabel.setHorizontalAlignment(JLabel.CENTER);
+		volumeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+		volumePanel.add(volumeSlider);
+		volumePanel.add(volumeLabel);
 
 		this.add(bassPanel);
 		this.add(treblePanel);
@@ -109,6 +120,7 @@ public class AudioControlsFrame extends JFrame implements ChangeListener {
 	public void stateChanged(ChangeEvent arg0) {
 		bassLabel.setText("Bass: " + bassSlider.getValue());
 		trebleLabel.setText("Treble: " + trebleSlider.getValue());
+		volumeLabel.setText("Volume: " + volumeSlider.getValue());
 	}
 
 }
