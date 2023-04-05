@@ -12,18 +12,38 @@ public class IncreasingBarFrame extends JFrame {
 	JProgressBar barMain;
 
 	public IncreasingBarFrame() {
-		// TODO: finish rising bar JProgressBar
-		this.setTitle("[Rising Bar]");
+		this.setTitle("[Increasing Bar]");
 		this.setSize(500, 500);
-			
+		this.setLayout(null);
+
 		barMain = new JProgressBar(0, 100); // min max
 		barMain.setStringPainted(true); // shows percentage
-		barMain.setPreferredSize(new Dimension(300, 50));
+		barMain.setBounds(0, 0, 500, 50);
 		barMain.setFont(new Font("Arial", Font.BOLD, 18));
-		barMain.setForeground(Color.WHITE);
-		barMain.setBackground(Color.GRAY);
+		barMain.setForeground(Color.RED);
+		barMain.setBackground(Color.WHITE);
 
+		this.add(barMain);
 		this.setVisible(true);
+
+		fillBar();
+	}
+
+	public void fillBar() {
+		int barNum = 0;
+
+		while (barNum <= 100) {
+			barMain.setValue(barNum);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			barNum += 1;
+		}
+		
+		barMain.setString("[Full Health!]");
+
 	}
 
 }
