@@ -30,6 +30,11 @@ public class MenuBarFrame extends JFrame implements ActionListener {
 	JMenuItem loadItem;
 	JMenuItem exitItem;
 
+	// editMenu
+	JMenuItem copyItem;
+	JMenuItem pasteItem;
+	JMenuItem renameItem;
+
 	public MenuBarFrame() {
 		this.setTitle("[Menu Bar Practice]");
 		this.setSize(500, 500);
@@ -74,11 +79,26 @@ public class MenuBarFrame extends JFrame implements ActionListener {
 		loadItem.setMnemonic(KeyEvent.VK_L);
 		exitItem.setMnemonic(KeyEvent.VK_X);
 
-		// TODO: Add menu items for each of the menu components
-
 		fileMenu.add(saveItem);
 		fileMenu.add(loadItem);
 		fileMenu.add(exitItem);
+
+		// Creating and adding editMenu items
+		copyItem = new JMenuItem("Copy");
+		pasteItem = new JMenuItem("Paste");
+		renameItem = new JMenuItem("Rename");
+
+		copyItem.addActionListener(this);
+		pasteItem.addActionListener(this);
+		renameItem.addActionListener(this);
+
+		copyItem.setMnemonic(KeyEvent.VK_C);
+		pasteItem.setMnemonic(KeyEvent.VK_P);
+		renameItem.setMnemonic(KeyEvent.VK_R);
+
+		editMenu.add(copyItem);
+		editMenu.add(pasteItem);
+		editMenu.add(renameItem);
 
 		this.setJMenuBar(mainBar);
 		this.setVisible(true);
@@ -93,7 +113,25 @@ public class MenuBarFrame extends JFrame implements ActionListener {
 		} else if (arg0.getSource() == exitItem) {
 			JOptionPane.showMessageDialog(null, "Exited Program!", "[Exit Item]", JOptionPane.INFORMATION_MESSAGE);
 			this.dispose(); // closes our JFrame
+		} else if (arg0.getSource() == copyItem) {
+			JOptionPane.showMessageDialog(null, "Copied Item!", "[Copy Item]", JOptionPane.INFORMATION_MESSAGE);
+		} else if (arg0.getSource() == pasteItem) {
+			JOptionPane.showMessageDialog(null, "Pasted Item!", "[Paste Item]", JOptionPane.INFORMATION_MESSAGE);
+		} else if (arg0.getSource() == renameItem) {
+			String newName = JOptionPane.showInputDialog(null, "Enter new item name: ");
+			int userChoice = JOptionPane.showConfirmDialog(null, "Rename Item to : " + newName + "?");
+			if (userChoice == JOptionPane.YES_OPTION) {
+				JOptionPane.showMessageDialog(null, "Renamed Item to : " + newName, "[Rename Item]",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else if (userChoice == JOptionPane.NO_OPTION) {
+				JOptionPane.showMessageDialog(null, "Rename Cancelled!", "[Rename Item]",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else if (userChoice == JOptionPane.CANCEL_OPTION) {
+				JOptionPane.showMessageDialog(null, "Rename Cancelled", "[Rename Item]",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
+
 	}
 
 }
