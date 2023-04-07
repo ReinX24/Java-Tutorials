@@ -35,6 +35,15 @@ public class MenuBarFrame extends JFrame implements ActionListener {
 	JMenuItem pasteItem;
 	JMenuItem renameItem;
 
+	// helpMenu
+	JMenuItem helpLocal;
+	JMenuItem helpOnline;
+	JMenuItem helpCommunity;
+
+	// aboutMenu
+	JMenuItem aboutApp;
+	JMenuItem aboutCompany;
+
 	public MenuBarFrame() {
 		this.setTitle("[Menu Bar Practice]");
 		this.setSize(500, 500);
@@ -100,6 +109,34 @@ public class MenuBarFrame extends JFrame implements ActionListener {
 		editMenu.add(pasteItem);
 		editMenu.add(renameItem);
 
+		helpLocal = new JMenuItem("Local Help");
+		helpOnline = new JMenuItem("Online Help");
+		helpCommunity = new JMenuItem("Community Help");
+
+		helpLocal.addActionListener(this);
+		helpOnline.addActionListener(this);
+		helpCommunity.addActionListener(this);
+
+		helpLocal.setMnemonic(KeyEvent.VK_L);
+		helpOnline.setMnemonic(KeyEvent.VK_O);
+		helpCommunity.setMnemonic(KeyEvent.VK_C);
+
+		helpMenu.add(helpLocal);
+		helpMenu.add(helpOnline);
+		helpMenu.add(helpCommunity);
+
+		aboutApp = new JMenuItem("About App");
+		aboutCompany = new JMenuItem("About Company");
+
+		aboutApp.addActionListener(this);
+		aboutCompany.addActionListener(this);
+
+		aboutApp.setMnemonic(KeyEvent.VK_A);
+		aboutCompany.setMnemonic(KeyEvent.VK_C);
+
+		aboutMenu.add(aboutApp);
+		aboutMenu.add(aboutCompany);
+
 		this.setJMenuBar(mainBar);
 		this.setVisible(true);
 	}
@@ -130,6 +167,20 @@ public class MenuBarFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Rename Cancelled", "[Rename Item]",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
+		} else if (arg0.getSource() == helpLocal) {
+			JOptionPane.showMessageDialog(null, "Connecting to Local Help...", "[Local Help]",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else if (arg0.getSource() == helpOnline) {
+			JOptionPane.showMessageDialog(null, "Connecting to Online Help...", "[Online Help]",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else if (arg0.getSource() == helpCommunity) {
+			JOptionPane.showMessageDialog(null, "Connecting to Community Help...", "[Community Help]",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else if (arg0.getSource() == aboutApp) {
+			JOptionPane.showMessageDialog(null, "App to edit text", "[About App]", JOptionPane.INFORMATION_MESSAGE);
+		} else if (arg0.getSource() == aboutCompany) {
+			JOptionPane.showMessageDialog(null, "Text Company\nBetter Text, Better Future", "[About Company]",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
