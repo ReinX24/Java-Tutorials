@@ -21,9 +21,10 @@ public class ProgramFrame extends JFrame implements ActionListener {
 	JMenuItem openFile;
 	JMenuItem saveFile;
 	JMenuItem exitApp;
-	
+
 	// Button for opening and saving files
-	JButton fileOpenSaveButton;
+	JButton fileOpenButton;
+	JButton fileSaveButton;
 
 	public ProgramFrame() {
 		this.setTitle("[JMenuBar and JFileChooser]");
@@ -71,21 +72,35 @@ public class ProgramFrame extends JFrame implements ActionListener {
 		if (arg0.getSource() == openFile) {
 			JOptionPane.showMessageDialog(null, "Opening File...");
 			this.dispose();
-			
+
 			JFrame openFileFrame = new JFrame();
 			openFileFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			openFileFrame.setLayout(new FlowLayout());
-			
-			fileOpenSaveButton = new JButton("[Open File]");
-			fileOpenSaveButton.setFocusable(false);
-			
-			openFileFrame.add(fileOpenSaveButton);
+
+			fileOpenButton = new JButton("[Open File]");
+			fileOpenButton.setFocusable(false);
+			fileOpenButton.addActionListener(this);
+
+			openFileFrame.add(fileOpenButton);
 			openFileFrame.pack();
 			openFileFrame.setVisible(true);
-			
-			
+
 		} else if (arg0.getSource() == saveFile) {
 			JOptionPane.showMessageDialog(null, "Saving File...");
+			this.dispose();
+
+			JFrame saveFileFrame = new JFrame();
+			saveFileFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			saveFileFrame.setLayout(new FlowLayout());
+
+			fileSaveButton = new JButton("[Save File]");
+			fileSaveButton.setFocusable(false);
+			fileSaveButton.addActionListener(this);
+
+			saveFileFrame.add(fileSaveButton);
+			saveFileFrame.pack();
+			saveFileFrame.setVisible(true);
+
 		} else if (arg0.getSource() == exitApp) {
 			int userChoice = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "[Exit App]",
 					JOptionPane.YES_NO_OPTION);
@@ -94,9 +109,28 @@ public class ProgramFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "App Exited!", "[Exit App]", JOptionPane.INFORMATION_MESSAGE);
 				this.dispose();
 			}
-		} else if (arg0.getSource() == fileOpenSaveButton) {
+		} else if (arg0.getSource() == fileOpenButton) {
 			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setCurrentDirectory(new File(".")); // goes to current project directory
+			chooseFile.setCurrentDirectory(new File("/home/rein/repos/Bro-Code-Java-Tutorial")); // goes to current
+																									// project directory
+			int userChoice = chooseFile.showOpenDialog(null);
+
+			if (userChoice == JFileChooser.APPROVE_OPTION) {
+				File userFile = new File(chooseFile.getSelectedFile().getAbsolutePath());
+				JOptionPane.showMessageDialog(null, "Selected File Path:\n" + userFile, "[File Path]",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		} else if (arg0.getSource() == fileSaveButton) {
+			JFileChooser chooseFile = new JFileChooser();
+			chooseFile.setCurrentDirectory(new File("/home/rein/repos/Bro-Code-Java-Tutorial"));
+
+			int userChoice = chooseFile.showSaveDialog(null);
+
+			if (userChoice == JFileChooser.APPROVE_OPTION) {
+				File userFile = new File(chooseFile.getSelectedFile().getAbsolutePath());
+				JOptionPane.showMessageDialog(null, "Saved File Path:\n:" + userFile, "[File Path]",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 
 	}
