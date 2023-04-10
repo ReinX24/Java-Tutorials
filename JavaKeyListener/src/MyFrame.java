@@ -5,6 +5,7 @@ import java.awt.*;
 public class MyFrame extends JFrame implements KeyListener {
 
 	JLabel mainLabel;
+	ImageIcon mainIcon;
 
 	public MyFrame() {
 		this.setTitle("[Java KeyListener]");
@@ -16,9 +17,14 @@ public class MyFrame extends JFrame implements KeyListener {
 		this.addKeyListener(this);
 
 		mainLabel = new JLabel();
-		mainLabel.setBounds(0, 0, 100, 100);
+		mainLabel.setBounds(0, 0, 150, 150);
 		mainLabel.setOpaque(true);
 		mainLabel.setBackground(new Color(255, 128, 0));
+		mainLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+		// Adding an icon to the label
+		mainIcon = new ImageIcon("healerStaff.png");
+		mainLabel.setIcon(mainIcon);
 
 		this.add(mainLabel);
 		this.setVisible(true);
@@ -30,20 +36,20 @@ public class MyFrame extends JFrame implements KeyListener {
 		// returns an int
 
 		switch (arg0.getKeyChar()) {
-
-		case 'a': // move to the left
+		// ijkl
+		case 106: // move to the left
 			mainLabel.setLocation(mainLabel.getX() - 10, mainLabel.getY());
 			break;
 
-		case 'w': // move to the north
+		case 105: // move to the north
 			mainLabel.setLocation(mainLabel.getX(), mainLabel.getY() - 10);
 			break;
 
-		case 'd': // move to the right
+		case 108: // move to the right
 			mainLabel.setLocation(mainLabel.getX() + 10, mainLabel.getY());
 			break;
 
-		case 's': // move to the south
+		case 107: // move to the south
 			mainLabel.setLocation(mainLabel.getX(), mainLabel.getY() + 10);
 
 		}
