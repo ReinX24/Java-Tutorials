@@ -43,7 +43,7 @@ public class MoveLocationFrame extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-
+		// Triggers when any key is pressed
 		switch (arg0.getKeyChar()) {
 
 		case 'a':
