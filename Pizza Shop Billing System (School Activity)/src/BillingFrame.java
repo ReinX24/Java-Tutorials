@@ -189,6 +189,7 @@ public class BillingFrame extends JFrame implements ActionListener {
 		billButton = new JButton("Generate Bill");
 		billButton.setBounds(5, 310, 160, 30);
 		billButton.setFocusable(false);
+		billButton.addActionListener(this);
 
 		clearButton = new JButton("Clear");
 		clearButton.setBounds(335, 310, 160, 30);
@@ -214,6 +215,30 @@ public class BillingFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == clearButton) {
 			billArea.setText("");
+		} else if (arg0.getSource() == billButton) {
+
+			String pizzaType = "";
+
+			if (panButton.isSelected()) {
+				pizzaType = panButton.getText();
+			} else if (stuffedButton.isSelected()) {
+				pizzaType = stuffedButton.getText();
+			} else if (regularButton.isSelected()) {
+				pizzaType = regularButton.getText();
+			}
+
+			String orderInfo = "";
+
+			orderInfo += "\nOrder Number: " + orderField.getText();
+			orderInfo += "\nCustomer Name: " + customerField.getText();
+			orderInfo += "\nQuantity: " + quantityField.getText();
+			orderInfo += "\nPizza Type: " + pizzaType;
+			orderInfo += "\nRate Amount: " + rateField.getText();
+			orderInfo += "\nAmount: " + amountField.getText();
+			orderInfo += "\nCost Of Toppings: " + toppingField.getText();
+
+			billArea.setText(orderInfo);
+
 		}
 	}
 
