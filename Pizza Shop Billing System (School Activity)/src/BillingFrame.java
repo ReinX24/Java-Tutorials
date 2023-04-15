@@ -50,7 +50,7 @@ public class BillingFrame extends JFrame implements ActionListener {
 
 	public BillingFrame() {
 		this.setTitle("[Pizza Billing Calculator]");
-		this.setSize(500, 500);
+		this.setSize(500, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLayout(null);
@@ -198,7 +198,7 @@ public class BillingFrame extends JFrame implements ActionListener {
 
 		billArea = new JTextArea();
 		billArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		billArea.setBounds(5, 345, 490, 120);
+		billArea.setBounds(5, 345, 490, 300);
 
 		this.add(titleLabel);
 		this.add(leftPanel);
@@ -214,8 +214,12 @@ public class BillingFrame extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == clearButton) {
+			JOptionPane.showMessageDialog(null, "Receipt Cleared!", "[Clear Message]", JOptionPane.INFORMATION_MESSAGE);
 			billArea.setText("");
 		} else if (arg0.getSource() == billButton) {
+
+			JOptionPane.showMessageDialog(null, "Receipt Generated!", "[Generate Message]",
+					JOptionPane.INFORMATION_MESSAGE);
 
 			String pizzaType = "";
 
@@ -227,15 +231,35 @@ public class BillingFrame extends JFrame implements ActionListener {
 				pizzaType = regularButton.getText();
 			}
 
+			String pizzaToppings = "";
+
+			if (onionBox.isSelected()) {
+				pizzaToppings += "Onions ";
+			}
+			if (cheeseBox.isSelected()) {
+				pizzaToppings += "Cheese ";
+			}
+			if (tomatoBox.isSelected()) {
+				pizzaToppings += "Tomato ";
+			}
+			if (cornBox.isSelected()) {
+				pizzaToppings += "Corn ";
+			}
+
 			String orderInfo = "";
 
+			orderInfo += "[Pizza Order Receipt]";
+			orderInfo += "\n--------------------------------------------------------------------------------------------------------------------------";
 			orderInfo += "\nOrder Number: " + orderField.getText();
 			orderInfo += "\nCustomer Name: " + customerField.getText();
 			orderInfo += "\nQuantity: " + quantityField.getText();
 			orderInfo += "\nPizza Type: " + pizzaType;
+			orderInfo += "\n--------------------------------------------------------------------------------------------------------------------------";
 			orderInfo += "\nRate Amount: " + rateField.getText();
 			orderInfo += "\nAmount: " + amountField.getText();
 			orderInfo += "\nCost Of Toppings: " + toppingField.getText();
+			orderInfo += "\nToppings: " + pizzaToppings;
+			orderInfo += "\n--------------------------------------------------------------------------------------------------------------------------";
 
 			billArea.setText(orderInfo);
 
