@@ -50,7 +50,6 @@ public class MazeFrame extends JFrame {
 		mainLabel.getInputMap().put(KeyStroke.getKeyStroke("D"), "RIGHT_MOVE");
 		mainLabel.getActionMap().put("RIGHT_MOVE", rightAction);
 
-		// TODO: Add x and y lanes
 		xLabel = new JLabel();
 		xLabel.setOpaque(true);
 		xLabel.setBackground(Color.WHITE);
