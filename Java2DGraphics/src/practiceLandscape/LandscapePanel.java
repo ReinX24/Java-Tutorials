@@ -41,8 +41,14 @@ public class LandscapePanel extends JPanel {
 		int[] yRightPoints = { 350, 200, 350 };
 
 		g2D.fillPolygon(xRightPoints, yRightPoints, 3);
-		
-		// TODO: add rectangles at the bottom
+
+		g2D.setPaint(Color.GRAY);
+
+		g2D.fillRect(150, 400, 50, 80);
+
+		g2D.fillRect(225, 375, 50, 80);
+
+		g2D.fillRect(300, 400, 50, 80);
 
 	}
 
