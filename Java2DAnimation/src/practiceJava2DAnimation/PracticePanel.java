@@ -51,9 +51,21 @@ public class PracticePanel extends JPanel implements ActionListener {
 	
 	public void actionPerformed (ActionEvent arg0) {
 		
-		// TODO : add x and y movement, remember to keep bounds in mind
+		// Moving the enemyImage horizontally
+		if (x >= PANEL_WIDTH - enemyImage.getWidth(null) || x < 0) {
+			xVelocity *= -1;
+		}
+		
 		x += xVelocity;
 		
+		// Moving the enemyImage vertically
+		if (y >= PANEL_HEIGHT - enemyImage.getHeight(null) || y < 0) {
+			yVelocity *= -1;
+		}
+		
+		y += yVelocity;
+		
+		// calls the paint method, repaints enemyImage location
 		repaint();
 		
 	}
