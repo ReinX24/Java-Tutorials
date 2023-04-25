@@ -27,7 +27,12 @@ public class MethodChainingMain {
 		nameOne = nameOne.concat(" Champ     ").toUpperCase().trim();
 		
 		System.out.println(nameOne);
-
+		
+		String nameTwo = "Friberg";
+		nameTwo = nameTwo.concat(" Banana King     ").toUpperCase().trim();
+		
+		System.out.println(nameTwo);
+				
 	}
 
 }
