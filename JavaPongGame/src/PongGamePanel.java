@@ -42,10 +42,14 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 	public void newBall() {
 
-//		myRandom = new Random();
-		gameBall = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2),
-				BALL_DIAMETER, BALL_DIAMETER);
+//		gameBall = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2),
+//				BALL_DIAMETER, BALL_DIAMETER);
 		// x, y, width, height
+
+		// random position on the y axis
+		myRandom = new Random();
+		gameBall = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), myRandom.nextInt(GAME_HEIGHT - BALL_DIAMETER),
+				BALL_DIAMETER, BALL_DIAMETER);
 
 	}
 
@@ -75,6 +79,7 @@ public class PongGamePanel extends JPanel implements Runnable {
 		playerOnePaddle.draw(g);
 		playerTwoPaddle.draw(g);
 		gameBall.draw(g);
+		gameScore.draw(g);
 
 	}
 
@@ -110,6 +115,43 @@ public class PongGamePanel extends JPanel implements Runnable {
 		}
 		if (playerTwoPaddle.y >= (GAME_HEIGHT - PADDLE_HEIGHT)) {
 			playerTwoPaddle.y = GAME_HEIGHT - PADDLE_HEIGHT;
+		}
+
+		// bounce ball off paddles
+		if (gameBall.intersects(playerOnePaddle)) { // intersects method from Rectangle class
+			gameBall.xVelocity = Math.abs(gameBall.xVelocity); // makes ball reverse xVelocity
+			gameBall.xVelocity++; // makes ball faster for each time it hits a paddle
+			if (gameBall.yVelocity > 0) { // ball going downward
+				gameBall.yVelocity++; // also makes ball faster each time it hits a paddle
+			} else {
+				gameBall.yVelocity--; // ball going upward
+			}
+			gameBall.setXDirection(gameBall.xVelocity);
+			gameBall.setYDirection(gameBall.yVelocity);
+		}
+
+		if (gameBall.intersects(playerTwoPaddle)) { // intersects method from Rectangle class
+			gameBall.xVelocity = Math.abs(gameBall.xVelocity); // makes ball reverse xVelocity
+			gameBall.xVelocity++; // makes ball faster for each time it hits a paddle
+			if (gameBall.yVelocity > 0) { // ball going downward
+				gameBall.yVelocity++; // also makes ball faster each time it hits a paddle
+			} else {
+				gameBall.yVelocity--; // ball going upward
+			}
+			gameBall.setXDirection(-gameBall.xVelocity);
+			gameBall.setYDirection(gameBall.yVelocity);
+		}
+
+		// give a player a point and creates new Paddles and a new Ball
+		if (gameBall.x <= 0) { // player two scores point
+			gameScore.playerTwoScore++;
+			newPaddles();
+			newBall();
+		}
+		if (gameBall.x >= GAME_WIDTH - BALL_DIAMETER) {
+			gameScore.playerOneScore++;
+			newPaddles();
+			newBall();
 		}
 
 	}

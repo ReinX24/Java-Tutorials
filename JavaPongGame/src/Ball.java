@@ -9,8 +9,6 @@ public class Ball extends Rectangle {
 	int yVelocity;
 	int initialSpeed = 2;
 
-	// TODO : resume Bro Code Pong Game @ 51m 24s mark
-
 	public Ball(int x, int y, int ballWidth, int ballHeight) {
 		super(x, y, ballWidth, ballHeight);
 		myRandom = new Random();
