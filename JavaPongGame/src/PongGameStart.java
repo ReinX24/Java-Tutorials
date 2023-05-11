@@ -12,6 +12,7 @@ public class PongGameStart {
 		 * - Change background color using JColorChooser class 
 		 * - Change ImageIcon of our program 
 		 * - First to a chosen point in in main menu wins
+		 * - Different colors for left and right side of player areas
 		 * 
 		 */
 

@@ -15,8 +15,12 @@ public class PongGameMenu extends JFrame implements ActionListener {
 	JButton aboutButton;
 	JButton exitButton;
 
-	final Font titleFont = new Font("Arial", Font.BOLD, 32);
-	final Font buttonFont = new Font("Arial", Font.PLAIN, 16);
+	final Font titleFont = new Font("Arial", Font.BOLD, 48);
+	final Font buttonFont = new Font("Arial", Font.BOLD, 16);
+
+	final Color backgroundColor = new Color(0, 128, 128);
+	final Color fontColor = new Color(238, 238, 238);
+	final Color buttonColor = new Color(57, 62, 70);
 
 	static ImageIcon PONG_ICON = new ImageIcon("pongGameIcon.png");
 
@@ -32,15 +36,16 @@ public class PongGameMenu extends JFrame implements ActionListener {
 		}
 
 		if (arg0.getSource() == aboutButton) {
-			JOptionPane.showMessageDialog(this, "Pong Game by:"
-					+ "\n\tRein Solis"
-					+ "\n\tJholichi Tempra"
-					+ "\n\tVino Supnet"
-					+ "\n\tJesus Agustin", "About", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Pong Game by:" + "\nRein Solis" + "\nJholichi Tempra"
+					+ "\nVino Supnet" + "\nJesus Agustin", "About", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 		if (arg0.getSource() == exitButton) {
-			this.dispose();
+			int userChoice = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit Pong?", "Exit Confirmation",
+					JOptionPane.YES_NO_OPTION);
+			if (userChoice == JOptionPane.YES_OPTION) {
+				this.dispose();
+			}
 		}
 
 	}
@@ -69,6 +74,7 @@ public class PongGameMenu extends JFrame implements ActionListener {
 		menuPanel.setPreferredSize(PongGamePanel.SCREEN_SIZE);
 		menuPanel.setLayout(new GridLayout(6, 1, 0, 25));
 		menuPanel.setBorder(new EmptyBorder(50, 300, 50, 300));
+		menuPanel.setBackground(backgroundColor);
 		this.add(menuPanel);
 	}
 
@@ -77,10 +83,10 @@ public class PongGameMenu extends JFrame implements ActionListener {
 	}
 
 	public void addTitleLabel() {
-		titleLabel = new JLabel("PONG");
+		titleLabel = new JLabel("-◉ PONG ◉-");
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		titleLabel.setFont(titleFont);
-		titleLabel.setForeground(Color.BLACK);
+		titleLabel.setForeground(fontColor);
 		menuPanel.add(titleLabel);
 	}
 
@@ -113,6 +119,9 @@ public class PongGameMenu extends JFrame implements ActionListener {
 		paraButton.addActionListener(this);
 		paraButton.setFocusable(false);
 		paraButton.setFont(buttonFont);
+		paraButton.setForeground(fontColor);
+		paraButton.setBackground(buttonColor);
+		paraButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		menuPanel.add(paraButton);
 	}
 

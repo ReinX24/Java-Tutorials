@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class PongGamePanel extends JPanel implements Runnable {
@@ -14,6 +17,8 @@ public class PongGamePanel extends JPanel implements Runnable {
 	static final int PADDLE_WIDTH = 25;
 	static final int PADDLE_HEIGHT = 100;
 
+	static int winnerScore = 1;
+
 	Thread gameThread;
 	Image myImage;
 	Graphics myGraphics;
@@ -24,7 +29,7 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 	Ball gameBall;
 	Score gameScore;
-	
+
 	public PongGamePanel() {
 
 		newPaddles();
@@ -75,16 +80,16 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 	public void draw(Graphics g) {
 
+		// TODO : set custom colors for left and right player areas
+//		g.setColor(Color.red);
+//		g.fillRect(0, 0, GAME_WIDTH / 2, GAME_HEIGHT);
+
 		// drawing our Paddle objects
 		playerOnePaddle.draw(g);
 		playerTwoPaddle.draw(g);
 		gameBall.draw(g);
 		gameScore.draw(g);
-		
-		// TODO : set custom colors for left and right player areas
-//		g.fillRect(0, 0, 100, 100);
-//		g.setColor(Color.RED);
-		
+
 	}
 
 	public void move() {
@@ -181,7 +186,19 @@ public class PongGamePanel extends JPanel implements Runnable {
 				deltaNum--;
 			}
 
+			// TODO : test first to 3 points
+			if (gameScore.playerOneScore == winnerScore) {
+				System.out.println("Player 1 wins");
+				break; // TODO: this stops while loop, make show Restart, Main Menu, Exit Game
+				
+			} else if (gameScore.playerTwoScore == winnerScore) {
+				System.out.println("Player 2 wins");
+				break;
+				
+			}
+
 		}
+		
 
 	}
 
