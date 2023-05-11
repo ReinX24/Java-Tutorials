@@ -9,6 +9,9 @@ public class Paddle extends Rectangle {
 
 	final int paddleSpeed = 10;
 
+	Color redPaddle = new Color(172, 58, 62);
+	Color bluePaddle = new Color(69, 91, 132);
+
 	public Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT, int playerID) {
 		super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT); // calling super constructor of Rectangle class
 		this.playerID = playerID;
@@ -30,11 +33,11 @@ public class Paddle extends Rectangle {
 			break;
 
 		case 2:
-			if (e.getKeyCode() == KeyEvent.VK_I) { // I key
+			if (e.getKeyCode() == KeyEvent.VK_UP) { // Up arrow key
 				setYDirection(-paddleSpeed); // move up
 				move();
 			}
-			if (e.getKeyCode() == KeyEvent.VK_K) { // K key
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) { // Down arrow key
 				setYDirection(paddleSpeed); // move down
 				move();
 			}
@@ -59,11 +62,11 @@ public class Paddle extends Rectangle {
 			break;
 
 		case 2:
-			if (e.getKeyCode() == KeyEvent.VK_I) { // I key
+			if (e.getKeyCode() == KeyEvent.VK_UP) { // Up arrow key
 				setYDirection(0); // move up
 				move();
 			}
-			if (e.getKeyCode() == KeyEvent.VK_K) { // K key
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) { // Down key
 				setYDirection(0); // move down
 				move();
 			}
@@ -83,9 +86,9 @@ public class Paddle extends Rectangle {
 	public void draw(Graphics g) {
 
 		if (playerID == 1) {
-			g.setColor(Color.BLUE);
+			g.setColor(bluePaddle);
 		} else {
-			g.setColor(Color.RED);
+			g.setColor(redPaddle);
 		}
 		g.fillRect(x, y, width, height);
 

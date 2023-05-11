@@ -24,7 +24,7 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 	Ball gameBall;
 	Score gameScore;
-
+	
 	public PongGamePanel() {
 
 		newPaddles();
@@ -80,7 +80,11 @@ public class PongGamePanel extends JPanel implements Runnable {
 		playerTwoPaddle.draw(g);
 		gameBall.draw(g);
 		gameScore.draw(g);
-
+		
+		// TODO : set custom colors for left and right player areas
+//		g.fillRect(0, 0, 100, 100);
+//		g.setColor(Color.RED);
+		
 	}
 
 	public void move() {

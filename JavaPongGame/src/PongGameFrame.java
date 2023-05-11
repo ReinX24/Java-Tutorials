@@ -1,19 +1,19 @@
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 public class PongGameFrame extends JFrame {
 
 	PongGamePanel gamePanel; // PongGamePanel object
 
+	Color tableColor = new Color(119, 176, 83);
+
 	public PongGameFrame() {
 
 		// Creating our JFrame
 		this.setTitle("Pong Game");
 		this.setResizable(false);
-		this.setBackground(Color.BLACK);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setBackground(tableColor);
+		this.setIconImage(PongGameMenu.PONG_ICON.getImage());
 
 		// Adding our gamePanel to our JFrame
 		gamePanel = new PongGamePanel();

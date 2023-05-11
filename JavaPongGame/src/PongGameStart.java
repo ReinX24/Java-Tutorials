@@ -1,13 +1,13 @@
-public class PongGameMain {
+public class PongGameStart {
 
 	public static void main(String[] args) {
 
-		new PongGameFrame(); // calling our PongGameFrame constructor
+		new PongGameMenu();
 
 		/*
 		 * Ideas for features to be added:
 		 * 
-		 * - Main Menu before starting the game 
+		 * - Main Menu before starting the game
 		 * - Change paddle colors using JColorChooser class 
 		 * - Change background color using JColorChooser class 
 		 * - Change ImageIcon of our program 
