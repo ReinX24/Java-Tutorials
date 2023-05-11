@@ -36,13 +36,16 @@ public class PongGameMenu extends JFrame implements ActionListener {
 		}
 
 		if (arg0.getSource() == aboutButton) {
-			JOptionPane.showMessageDialog(this, "Pong Game by:" + "\nRein Solis" + "\nJholichi Tempra"
-					+ "\nVino Supnet" + "\nJesus Agustin", "About", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this,
+					"Pong Game by:" + "\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
+					"About", JOptionPane.INFORMATION_MESSAGE);
 		}
+		
+		// TODO : add JColorChooser and Max Points functionality for settingsButton
 
 		if (arg0.getSource() == exitButton) {
-			int userChoice = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit Pong?", "Exit Confirmation",
-					JOptionPane.YES_NO_OPTION);
+			int userChoice = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit Pong?",
+					"Exit Confirmation", JOptionPane.YES_NO_OPTION);
 			if (userChoice == JOptionPane.YES_OPTION) {
 				this.dispose();
 			}
