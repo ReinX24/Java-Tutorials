@@ -34,10 +34,14 @@ public class PongGameMenu extends JFrame implements ActionListener {
 		if (arg0.getSource() == playButton) {
 			new PongGameFrame(); // calling our PongGameFrame constructor
 		}
+		
+		if (arg0.getSource() == instructionsButton) {
+			JOptionPane.showMessageDialog(null, "- Instructions -\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
+		}
 
 		if (arg0.getSource() == aboutButton) {
 			JOptionPane.showMessageDialog(this,
-					"Pong Game by:" + "\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
+					"- Java Pong Game -" + "\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
 					"About", JOptionPane.INFORMATION_MESSAGE);
 		}
 		

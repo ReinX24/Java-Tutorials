@@ -19,8 +19,6 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 	static int winnerScore = 1;
 
-	static boolean isGameOver;
-
 	Thread gameThread;
 	Image myImage;
 	Graphics myGraphics;
@@ -32,9 +30,9 @@ public class PongGamePanel extends JPanel implements Runnable {
 	Ball gameBall;
 	Score gameScore;
 
+	// TODO : make this into a JFrame instead of a JPanel, this is so that when the
+	// game is over, the JFrame that the player will be in will be closed
 	public PongGamePanel() {
-
-		isGameOver = false; // resetting our isGameOver variable
 
 		newPaddles();
 		newBall();
@@ -47,11 +45,6 @@ public class PongGamePanel extends JPanel implements Runnable {
 		gameThread = new Thread(this);
 		gameThread.start();
 
-	}
-
-	// return isGameOver boolean, for closing PongGameFrame
-	public boolean checkGameOver() {
-		return isGameOver;
 	}
 
 	public void newBall() {
@@ -197,15 +190,11 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 			// TODO : test first to 3 points
 			if (gameScore.playerOneScore == winnerScore) {
-//				JOptionPane.showMessageDialog(this, "Player 1 Wins!");
-				System.out.println("Player 1 Wins!");
-				isGameOver = true;
+				JOptionPane.showMessageDialog(this, "Player 1 Wins!\nExit Window to Return to Main Menu");
 				break; // TODO: this stops while loop, make show Restart, Main Menu, Exit Game
 
 			} else if (gameScore.playerTwoScore == winnerScore) {
-//				JOptionPane.showMessageDialog(this, "Player 2 Wins!");
-				System.out.println("Player 2 Wins!");
-				isGameOver = true;
+				JOptionPane.showMessageDialog(this, "Player 2 Wins!\nExit Window to Return to Main Menu");
 				break;
 
 			}

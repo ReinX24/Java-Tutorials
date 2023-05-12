@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class PongGameFrame extends JFrame implements Runnable {
+public class PongGameFrame extends JFrame {
 
 	PongGamePanel gamePanel; // PongGamePanel object
 
@@ -21,24 +21,10 @@ public class PongGameFrame extends JFrame implements Runnable {
 		gamePanel = new PongGamePanel();
 		this.add(gamePanel);
 
-		gameFrameThread = new Thread(this);
-		gameFrameThread.start();
-
 		this.pack(); // packing all of the components of our JFrame
 		this.setLocationRelativeTo(null); // JFrame appears at the center
 		this.setVisible(true);
 
-	}
-
-	@Override
-	public void run() {
-		while (true) { // continually checks if the game is over
-			if (gamePanel.checkGameOver()) {
-				System.out.println("Closed!");
-				this.dispose();
-				break;
-			}
-		}
 	}
 
 }
