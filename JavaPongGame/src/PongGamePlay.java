@@ -6,7 +6,7 @@ import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class PongGamePanel extends JPanel implements Runnable {
+public class PongGamePlay extends JPanel implements Runnable {
 
 	static final int GAME_WIDTH = 1000; // static : share one variable, final : cannot be changed
 	static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.5555)); // ratio of real life ping-pong table
@@ -17,7 +17,7 @@ public class PongGamePanel extends JPanel implements Runnable {
 	static final int PADDLE_WIDTH = 25;
 	static final int PADDLE_HEIGHT = 100;
 
-	static int winnerScore = 1;
+	static int winnerScore = 3;
 
 	Thread gameThread;
 	Image myImage;
@@ -30,9 +30,17 @@ public class PongGamePanel extends JPanel implements Runnable {
 	Ball gameBall;
 	Score gameScore;
 
-	// TODO : make this into a JFrame instead of a JPanel, this is so that when the
-	// game is over, the JFrame that the player will be in will be closed
-	public PongGamePanel() {
+	JFrame gameFrame; // JFrame that will contain our JPanel
+	Color tableColor = new Color(119, 176, 83);
+
+	public PongGamePlay() {
+
+		// Creating our JFrame
+		gameFrame = new JFrame("Pong Game");
+		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gameFrame.setResizable(false);
+		gameFrame.setBackground(tableColor);
+		gameFrame.setIconImage(PongGameMenu.PONG_ICON.getImage());
 
 		newPaddles();
 		newBall();
@@ -41,6 +49,12 @@ public class PongGamePanel extends JPanel implements Runnable {
 		this.setFocusable(true); // so that our JPanel will respond to keystrokes
 		this.addKeyListener(new AL()); // using our own actionListener (AL) class
 		this.setPreferredSize(SCREEN_SIZE);
+
+		gameFrame.add(this);
+
+		gameFrame.pack(); // packing all of the components of our JFrame
+		gameFrame.setLocationRelativeTo(null); // JFrame appears at the center
+		gameFrame.setVisible(true);
 
 		gameThread = new Thread(this);
 		gameThread.start();
@@ -190,17 +204,23 @@ public class PongGamePanel extends JPanel implements Runnable {
 
 			// TODO : test first to 3 points
 			if (gameScore.playerOneScore == winnerScore) {
-				JOptionPane.showMessageDialog(this, "Player 1 Wins!\nExit Window to Return to Main Menu");
+				gameWinnerMessage("Player 1");
 				break; // TODO: this stops while loop, make show Restart, Main Menu, Exit Game
 
 			} else if (gameScore.playerTwoScore == winnerScore) {
-				JOptionPane.showMessageDialog(this, "Player 2 Wins!\nExit Window to Return to Main Menu");
+				gameWinnerMessage("Player 2");
 				break;
 
 			}
 
 		}
 
+	}
+
+	public void gameWinnerMessage(String gameWinner) {
+		JOptionPane.showMessageDialog(this, gameWinner + " Wins!\nReturning to Main Menu");
+		new PongGameMenu();
+		gameFrame.dispose();
 	}
 
 	// Inner class, actionListener

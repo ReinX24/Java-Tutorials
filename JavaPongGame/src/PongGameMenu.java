@@ -3,9 +3,18 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class PongGameMenu extends JFrame implements ActionListener {
+public class PongGameMenu extends JPanel implements ActionListener {
 
-	JPanel menuPanel;
+	static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 48);
+	static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 16);
+
+	static final Color BACKGROUND_COLOR = new Color(0, 128, 128);
+	static final Color FONT_COLOR = new Color(238, 238, 238);
+	static final Color BUTTON_COLOR = new Color(57, 62, 70);
+
+	static final ImageIcon PONG_ICON = new ImageIcon("pongGameIcon.png");
+
+	JFrame menuFrame;
 
 	JLabel titleLabel;
 
@@ -15,86 +24,87 @@ public class PongGameMenu extends JFrame implements ActionListener {
 	JButton aboutButton;
 	JButton exitButton;
 
-	final Font titleFont = new Font("Arial", Font.BOLD, 48);
-	final Font buttonFont = new Font("Arial", Font.BOLD, 16);
-
-	final Color backgroundColor = new Color(0, 128, 128);
-	final Color fontColor = new Color(238, 238, 238);
-	final Color buttonColor = new Color(57, 62, 70);
-
-	static ImageIcon PONG_ICON = new ImageIcon("pongGameIcon.png");
-
 	public PongGameMenu() {
-		createMenuPanel();
+		createMenuFrame();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
 		if (arg0.getSource() == playButton) {
-			new PongGameFrame(); // calling our PongGameFrame constructor
+			new PongGamePlay(); // calling our PongGameFrame constructor
+			menuFrame.dispose();
 		}
-		
+
 		if (arg0.getSource() == instructionsButton) {
-			JOptionPane.showMessageDialog(null, "- Instructions -\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
+			JOptionPane.showMessageDialog(null,
+					"- Instructions -\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
 		}
 
 		if (arg0.getSource() == aboutButton) {
-			JOptionPane.showMessageDialog(this,
+			JOptionPane.showMessageDialog(menuFrame,
 					"- Java Pong Game -" + "\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
 					"About", JOptionPane.INFORMATION_MESSAGE);
 		}
-		
+
 		// TODO : add JColorChooser and Max Points functionality for settingsButton
 
 		if (arg0.getSource() == exitButton) {
-			int userChoice = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit Pong?",
+			int userChoice = JOptionPane.showConfirmDialog(menuFrame, "Are you sure you want to exit Pong?",
 					"Exit Confirmation", JOptionPane.YES_NO_OPTION);
 			if (userChoice == JOptionPane.YES_OPTION) {
-				this.dispose();
+				menuFrame.dispose(); // close our menuFrame
 			}
 		}
 
 	}
 
-	public void createMenuPanel() {
-		this.setTitle("Pong Game Menu");
-		this.setResizable(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public void createMenuFrame() {
+		menuFrame = new JFrame("Pong Game Menu");
+		menuFrame.setResizable(true);
+		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		addMenuDetails();
+		addMenuButtons();
+
+		menuFrame.pack();
+		menuFrame.setLocationRelativeTo(null);
+		menuFrame.setVisible(true);
+	}
+
+	public void addMenuDetails() {
 		addFrameIcon();
 		addMenuPanel();
 		addTitleLabel();
+	}
+
+	public void addMenuButtons() {
 		addPlayButton();
 		addSettingsButton();
 		addInstructionsButton();
 		addAboutButton();
 		addExitButton();
 
-		this.pack();
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
 	}
 
 	public void addMenuPanel() {
-		menuPanel = new JPanel();
-		menuPanel.setPreferredSize(PongGamePanel.SCREEN_SIZE);
-		menuPanel.setLayout(new GridLayout(6, 1, 0, 25));
-		menuPanel.setBorder(new EmptyBorder(50, 300, 50, 300));
-		menuPanel.setBackground(backgroundColor);
-		this.add(menuPanel);
+		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
+		this.setLayout(new GridLayout(6, 1, 0, 25));
+		this.setBorder(new EmptyBorder(50, 300, 50, 300));
+		this.setBackground(BACKGROUND_COLOR);
+		menuFrame.add(this);
 	}
 
 	public void addFrameIcon() {
-		this.setIconImage(PONG_ICON.getImage());
+		menuFrame.setIconImage(PONG_ICON.getImage());
 	}
 
 	public void addTitleLabel() {
 		titleLabel = new JLabel("-◉ PONG ◉-");
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
-		titleLabel.setFont(titleFont);
-		titleLabel.setForeground(fontColor);
-		menuPanel.add(titleLabel);
+		titleLabel.setFont(TITLE_FONT);
+		titleLabel.setForeground(FONT_COLOR);
+		this.add(titleLabel);
 	}
 
 	public void addPlayButton() {
@@ -125,11 +135,11 @@ public class PongGameMenu extends JFrame implements ActionListener {
 	public void createButton(JButton paraButton) {
 		paraButton.addActionListener(this);
 		paraButton.setFocusable(false);
-		paraButton.setFont(buttonFont);
-		paraButton.setForeground(fontColor);
-		paraButton.setBackground(buttonColor);
+		paraButton.setFont(BUTTON_FONT);
+		paraButton.setForeground(FONT_COLOR);
+		paraButton.setBackground(BUTTON_COLOR);
 		paraButton.setBorder(BorderFactory.createRaisedBevelBorder());
-		menuPanel.add(paraButton);
+		this.add(paraButton);
 	}
 
 }
