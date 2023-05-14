@@ -2,7 +2,7 @@ public class PongGameStart {
 
 	public static void main(String[] args) {
 
-		new PongGameMenu();
+		new PongGameMainMenu();
 
 		/*
 		 * Ideas for features to be added:
@@ -13,7 +13,6 @@ public class PongGameStart {
 		 * - Change ImageIcon of our program 
 		 * - First to a chosen point in in main menu wins
 		 * - Different colors for left and right side of player areas
-		 * 
 		 */
 
 	}

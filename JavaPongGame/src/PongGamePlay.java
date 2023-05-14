@@ -40,7 +40,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameFrame.setResizable(false);
 		gameFrame.setBackground(tableColor);
-		gameFrame.setIconImage(PongGameMenu.PONG_ICON.getImage());
+		gameFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
 
 		newPaddles();
 		newBall();
@@ -219,7 +219,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	public void gameWinnerMessage(String gameWinner) {
 		JOptionPane.showMessageDialog(this, gameWinner + " Wins!\nReturning to Main Menu");
-		new PongGameMenu();
+		new PongGameMainMenu();
 		gameFrame.dispose();
 	}
 

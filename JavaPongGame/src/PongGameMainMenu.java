@@ -3,9 +3,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class PongGameMenu extends JPanel implements ActionListener {
+public class PongGameMainMenu extends JPanel implements ActionListener {
 
-	static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 48);
+	static final Font TITLE_FONT = new Font("Arial", Font.ITALIC, 48);
 	static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 16);
 
 	static final Color BACKGROUND_COLOR = new Color(0, 128, 128);
@@ -24,42 +24,7 @@ public class PongGameMenu extends JPanel implements ActionListener {
 	JButton aboutButton;
 	JButton exitButton;
 
-	public PongGameMenu() {
-		createMenuFrame();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
-		if (arg0.getSource() == playButton) {
-			new PongGamePlay(); // calling our PongGameFrame constructor
-			menuFrame.dispose();
-		}
-
-		if (arg0.getSource() == instructionsButton) {
-			JOptionPane.showMessageDialog(null,
-					"- Instructions -\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
-		}
-
-		if (arg0.getSource() == aboutButton) {
-			JOptionPane.showMessageDialog(menuFrame,
-					"- Java Pong Game -" + "\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
-					"About", JOptionPane.INFORMATION_MESSAGE);
-		}
-
-		// TODO : add JColorChooser and Max Points functionality for settingsButton
-
-		if (arg0.getSource() == exitButton) {
-			int userChoice = JOptionPane.showConfirmDialog(menuFrame, "Are you sure you want to exit Pong?",
-					"Exit Confirmation", JOptionPane.YES_NO_OPTION);
-			if (userChoice == JOptionPane.YES_OPTION) {
-				menuFrame.dispose(); // close our menuFrame
-			}
-		}
-
-	}
-
-	public void createMenuFrame() {
+	public PongGameMainMenu() {
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(true);
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,6 +35,62 @@ public class PongGameMenu extends JPanel implements ActionListener {
 		menuFrame.pack();
 		menuFrame.setLocationRelativeTo(null);
 		menuFrame.setVisible(true);
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+
+		if (arg0.getSource() == playButton) {
+			playPongGame();
+		}
+
+		// TODO : add JColorChooser and Max Points functionality for settingsButton
+		if (arg0.getSource() == settingsButton) {
+			gameSettingsMenu();
+		}
+
+		if (arg0.getSource() == instructionsButton) {
+			gameInstructions();
+		}
+
+		if (arg0.getSource() == aboutButton) {
+			gameAbout();
+		}
+
+		if (arg0.getSource() == exitButton) {
+			gameExit();
+		}
+
+	}
+
+	public void playPongGame() {
+		menuFrame.dispose();
+		new PongGamePlay(); // calling our PongGameFrame constructor
+	}
+
+	public void gameSettingsMenu() {
+		menuFrame.dispose();
+		new PongGameSettingsMenu();
+	}
+
+	public void gameInstructions() {
+		JOptionPane.showMessageDialog(null,
+				"- Instructions -\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
+	}
+
+	public void gameAbout() {
+		JOptionPane.showMessageDialog(menuFrame,
+				"- Java Pong Game -" + "\nBy:\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
+				"About", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void gameExit() {
+		int userChoice = JOptionPane.showConfirmDialog(menuFrame, "Are you sure you want to exit Pong?",
+				"Exit Confirmation", JOptionPane.YES_NO_OPTION);
+		if (userChoice == JOptionPane.YES_OPTION) {
+			menuFrame.dispose(); // close our menuFrame
+		}
 	}
 
 	public void addMenuDetails() {
@@ -84,7 +105,6 @@ public class PongGameMenu extends JPanel implements ActionListener {
 		addInstructionsButton();
 		addAboutButton();
 		addExitButton();
-
 	}
 
 	public void addMenuPanel() {
@@ -100,7 +120,7 @@ public class PongGameMenu extends JPanel implements ActionListener {
 	}
 
 	public void addTitleLabel() {
-		titleLabel = new JLabel("-◉ PONG ◉-");
+		titleLabel = new JLabel("PONG");
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		titleLabel.setFont(TITLE_FONT);
 		titleLabel.setForeground(FONT_COLOR);
