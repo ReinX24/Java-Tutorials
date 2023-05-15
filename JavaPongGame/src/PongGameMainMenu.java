@@ -35,7 +35,6 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		menuFrame.pack();
 		menuFrame.setLocationRelativeTo(null);
 		menuFrame.setVisible(true);
-		
 	}
 
 	@Override
@@ -45,7 +44,6 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 			playPongGame();
 		}
 
-		// TODO : add JColorChooser and Max Points functionality for settingsButton
 		if (arg0.getSource() == settingsButton) {
 			gameSettingsMenu();
 		}
@@ -76,7 +74,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	public void gameInstructions() {
 		JOptionPane.showMessageDialog(null,
-				"- Instructions -\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
+				"- Instructions -\nBackspace to Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
 	}
 
 	public void gameAbout() {

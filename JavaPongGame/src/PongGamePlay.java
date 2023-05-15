@@ -190,7 +190,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 		double nanoSec = 1000000000 / amountOfTicks;
 		double deltaNum = 0;
 
-		while (true) {
+		while (!gameThread.isInterrupted()) {
 			long nowTime = System.nanoTime(); // current time
 			deltaNum += (nowTime - lastTime) / nanoSec;
 			lastTime = nowTime;
@@ -202,15 +202,15 @@ public class PongGamePlay extends JPanel implements Runnable {
 				deltaNum--;
 			}
 
-			// TODO : test first to 3 points
 			if (gameScore.playerOneScore == winnerScore) {
 				gameWinnerMessage("Player 1");
-				break; // TODO: this stops while loop, make show Restart, Main Menu, Exit Game
-
-			} else if (gameScore.playerTwoScore == winnerScore) {
-				gameWinnerMessage("Player 2");
 				break;
 
+			}
+
+			if (gameScore.playerTwoScore == winnerScore) {
+				gameWinnerMessage("Player 2");
+				break;
 			}
 
 		}
@@ -227,6 +227,11 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public class AL extends KeyAdapter {
 
 		public void keyPressed(KeyEvent e) {
+
+			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+				askExitGame();
+			} // TODO: add other commands?
+
 			playerOnePaddle.keyPressed(e);
 			playerTwoPaddle.keyPressed(e);
 		}
@@ -236,6 +241,17 @@ public class PongGamePlay extends JPanel implements Runnable {
 			playerTwoPaddle.keyReleased(e);
 		}
 
+	}
+
+	public void askExitGame() {
+		int exitGameChoice = JOptionPane.showConfirmDialog(this, "Exit current game?", "Exit Confirm",
+				JOptionPane.YES_NO_OPTION);
+
+		if (exitGameChoice == JOptionPane.YES_OPTION) {
+			new PongGameMainMenu();
+			gameThread.interrupt();
+			gameFrame.dispose();
+		}
 	}
 
 }

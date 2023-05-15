@@ -9,8 +9,8 @@ public class Paddle extends Rectangle {
 
 	final int paddleSpeed = 10;
 
-	Color redPaddle = new Color(172, 58, 62);
-	Color bluePaddle = new Color(69, 91, 132);
+	static Color redPaddle = new Color(172, 58, 62);
+	static Color bluePaddle = new Color(69, 91, 132);
 
 	public Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT, int playerID) {
 		super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT); // calling super constructor of Rectangle class
