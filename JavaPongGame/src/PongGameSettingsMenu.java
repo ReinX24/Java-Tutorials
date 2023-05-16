@@ -1,7 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.InputMismatchException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -20,12 +27,18 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	JButton exitButton;
 	JButton confirmChangesButton;
 
+	static Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
+
+	File audioFile = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
+	Clip audioClip;
+
 	public PongGameSettingsMenu() {
 		settingsFrame = new JFrame("Pong Game Settings");
 		settingsFrame.setResizable(false);
 		settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		addSettingsComponents();
+		addSettingsMenuMusic();
 		addSettingsButtons();
 
 		settingsFrame.pack();
@@ -93,6 +106,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	public void exitSettingsMenu() {
 		settingsFrame.dispose();
+		audioClip.stop();
 		new PongGameMainMenu();
 	}
 
@@ -114,7 +128,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
 		this.setLayout(new GridLayout(6, 1, 0, 25));
 		this.setBorder(new EmptyBorder(50, 300, 50, 300));
-		this.setBackground(PongGameMainMenu.BACKGROUND_COLOR);
+		this.setBackground(new Color(218, 165, 32));
 		settingsFrame.add(this);
 	}
 
@@ -162,6 +176,22 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		paraButton.setBackground(PongGameMainMenu.BUTTON_COLOR);
 		paraButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		this.add(paraButton);
+	}
+
+	public void addSettingsMenuMusic() {
+
+		AudioInputStream streamAudio;
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

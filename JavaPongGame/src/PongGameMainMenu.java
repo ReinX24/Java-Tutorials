@@ -1,14 +1,22 @@
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.awt.*;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class PongGameMainMenu extends JPanel implements ActionListener {
 
-	static final Font TITLE_FONT = new Font("Arial", Font.ITALIC, 48);
+	static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 42);
 	static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 16);
 
-	static final Color BACKGROUND_COLOR = new Color(0, 128, 128);
+	static final Color MAINMENU_BACKGROUND_COLOR = new Color(0, 128, 128);
 	static final Color FONT_COLOR = new Color(238, 238, 238);
 	static final Color BUTTON_COLOR = new Color(57, 62, 70);
 
@@ -24,12 +32,17 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 	JButton aboutButton;
 	JButton exitButton;
 
+	// File object to store wav file, can only play wav files
+	File audioFile = new File("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
+	Clip audioClip;
+
 	public PongGameMainMenu() {
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(true);
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		addMenuDetails();
+		addMainMenuMusic();
 		addMenuButtons();
 
 		menuFrame.pack();
@@ -64,11 +77,13 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	public void playPongGame() {
 		menuFrame.dispose();
+		audioClip.stop();
 		new PongGamePlay(); // calling our PongGameFrame constructor
 	}
 
 	public void gameSettingsMenu() {
 		menuFrame.dispose();
+		audioClip.stop();
 		new PongGameSettingsMenu();
 	}
 
@@ -109,7 +124,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
 		this.setLayout(new GridLayout(6, 1, 0, 25));
 		this.setBorder(new EmptyBorder(50, 300, 50, 300));
-		this.setBackground(BACKGROUND_COLOR);
+		this.setBackground(MAINMENU_BACKGROUND_COLOR);
 		menuFrame.add(this);
 	}
 
@@ -158,6 +173,25 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		paraButton.setBackground(BUTTON_COLOR);
 		paraButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		this.add(paraButton);
+	}
+
+	public void addMainMenuMusic() {
+
+		AudioInputStream streamAudio;
+		try {
+			// Gets the audio file
+			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			// Clip object to get audio file & use methods on file
+			audioClip = AudioSystem.getClip();
+			// Opens the clip, now we could use methods on audioClip
+			audioClip.open(streamAudio);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

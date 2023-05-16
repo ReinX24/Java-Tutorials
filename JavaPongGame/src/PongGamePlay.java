@@ -1,9 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 public class PongGamePlay extends JPanel implements Runnable {
@@ -32,6 +38,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	JFrame gameFrame; // JFrame that will contain our JPanel
 	Color tableColor = new Color(119, 176, 83);
+
+	File audioFile;
+	Clip audioClip;
 
 	public PongGamePlay() {
 
@@ -144,6 +153,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 		// bounce ball off paddles
 		if (gameBall.intersects(playerOnePaddle)) { // intersects method from Rectangle class
+
+			playPaddleHitSound();
+
 			gameBall.xVelocity = Math.abs(gameBall.xVelocity); // makes ball reverse xVelocity
 			gameBall.xVelocity++; // makes ball faster for each time it hits a paddle
 			if (gameBall.yVelocity > 0) { // ball going downward
@@ -156,6 +168,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 		}
 
 		if (gameBall.intersects(playerTwoPaddle)) { // intersects method from Rectangle class
+
+			playPaddleHitSound();
+
 			gameBall.xVelocity = Math.abs(gameBall.xVelocity); // makes ball reverse xVelocity
 			gameBall.xVelocity++; // makes ball faster for each time it hits a paddle
 			if (gameBall.yVelocity > 0) { // ball going downward
@@ -170,11 +185,13 @@ public class PongGamePlay extends JPanel implements Runnable {
 		// give a player a point and creates new Paddles and a new Ball
 		if (gameBall.x <= 0) { // player two scores point
 			gameScore.playerTwoScore++;
+			playWallHitSound();
 			newPaddles();
 			newBall();
 		}
 		if (gameBall.x >= GAME_WIDTH - BALL_DIAMETER) {
 			gameScore.playerOneScore++;
+			playWallHitSound();
 			newPaddles();
 			newBall();
 		}
@@ -203,13 +220,17 @@ public class PongGamePlay extends JPanel implements Runnable {
 			}
 
 			if (gameScore.playerOneScore == winnerScore) {
+				playVictorySound();
 				gameWinnerMessage("Player 1");
+				audioClip.stop();
 				break;
 
 			}
 
 			if (gameScore.playerTwoScore == winnerScore) {
+				playVictorySound();
 				gameWinnerMessage("Player 2");
+				audioClip.stop();
 				break;
 			}
 
@@ -252,6 +273,57 @@ public class PongGamePlay extends JPanel implements Runnable {
 			gameThread.interrupt();
 			gameFrame.dispose();
 		}
+	}
+
+	public void playPaddleHitSound() {
+
+		audioFile = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
+		AudioInputStream streamAudio;
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void playWallHitSound() {
+
+		audioFile = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
+		AudioInputStream streamAudio;
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void playVictorySound() {
+
+		audioFile = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
+		AudioInputStream streamAudio;
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
