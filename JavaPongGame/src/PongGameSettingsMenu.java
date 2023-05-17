@@ -30,6 +30,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	static Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
 
 	File audioFile = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
+	AudioInputStream streamAudio;
 	Clip audioClip;
 
 	public PongGameSettingsMenu() {
@@ -72,6 +73,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	}
 
 	public void changeGameScore() {
+		// TODO: change to JSpinner inside of a JPanel instead of showInputDialog
 		try {
 			PongGamePlay.winnerScore = Integer.parseInt(JOptionPane.showInputDialog(this,
 					"Current Max Score: " + PongGamePlay.winnerScore + "\nEnter New Max Score"));
@@ -180,7 +182,6 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	public void addSettingsMenuMusic() {
 
-		AudioInputStream streamAudio;
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(audioFile);
 			audioClip = AudioSystem.getClip();

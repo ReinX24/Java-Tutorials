@@ -34,6 +34,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	// File object to store wav file, can only play wav files
 	File audioFile = new File("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
+	AudioInputStream streamAudio;
 	Clip audioClip;
 
 	public PongGameMainMenu() {
@@ -177,7 +178,6 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	public void addMainMenuMusic() {
 
-		AudioInputStream streamAudio;
 		try {
 			// Gets the audio file
 			streamAudio = AudioSystem.getAudioInputStream(audioFile);

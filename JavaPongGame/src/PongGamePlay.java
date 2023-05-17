@@ -40,7 +40,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 	Color tableColor = new Color(119, 176, 83);
 
 	File audioFile;
+	AudioInputStream streamAudio;
 	Clip audioClip;
+	Clip fightingClip;
 
 	public PongGamePlay() {
 
@@ -51,6 +53,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 		gameFrame.setBackground(tableColor);
 		gameFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
 
+		playGameFightMusic();
 		newPaddles();
 		newBall();
 
@@ -201,6 +204,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	// gameThread calls the run method because our class implements the runnable
 	// interface
 	public void run() {
+
 		// game loop so that the program would run in 60fps
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -220,17 +224,15 @@ public class PongGamePlay extends JPanel implements Runnable {
 			}
 
 			if (gameScore.playerOneScore == winnerScore) {
-				playVictorySound();
+				fightingClip.stop();
 				gameWinnerMessage("Player 1");
-				audioClip.stop();
 				break;
 
 			}
 
 			if (gameScore.playerTwoScore == winnerScore) {
-				playVictorySound();
+				fightingClip.stop();
 				gameWinnerMessage("Player 2");
-				audioClip.stop();
 				break;
 			}
 
@@ -239,9 +241,13 @@ public class PongGamePlay extends JPanel implements Runnable {
 	}
 
 	public void gameWinnerMessage(String gameWinner) {
+		gameThread.interrupt();
+		playVictorySound();
 		JOptionPane.showMessageDialog(this, gameWinner + " Wins!\nReturning to Main Menu");
-		new PongGameMainMenu();
+		audioClip.stop();
 		gameFrame.dispose();
+		new PongGameMainMenu();
+		
 	}
 
 	// Inner class, actionListener
@@ -274,6 +280,23 @@ public class PongGamePlay extends JPanel implements Runnable {
 			gameFrame.dispose();
 		}
 	}
+	
+	public void playGameFightMusic() {
+
+		audioFile = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			fightingClip = AudioSystem.getClip();
+			fightingClip.open(streamAudio);
+			fightingClip.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 
 	public void playPaddleHitSound() {
 
@@ -291,11 +314,10 @@ public class PongGamePlay extends JPanel implements Runnable {
 		}
 
 	}
-	
+
 	public void playWallHitSound() {
 
 		audioFile = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
-		AudioInputStream streamAudio;
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(audioFile);
 			audioClip = AudioSystem.getClip();
@@ -308,11 +330,10 @@ public class PongGamePlay extends JPanel implements Runnable {
 		}
 
 	}
-	
+
 	public void playVictorySound() {
 
 		audioFile = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
-		AudioInputStream streamAudio;
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(audioFile);
 			audioClip = AudioSystem.getClip();
