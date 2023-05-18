@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.util.*;
 
 import javax.imageio.ImageIO;
@@ -43,6 +44,8 @@ public class PongGamePlay extends JPanel implements Runnable {
 	AudioInputStream streamAudio;
 	Clip audioClip;
 	Clip fightingClip;
+
+	String gameWinner = null;
 
 	public PongGamePlay() {
 
@@ -224,15 +227,15 @@ public class PongGamePlay extends JPanel implements Runnable {
 			}
 
 			if (gameScore.playerOneScore == winnerScore) {
-				fightingClip.stop();
-				gameWinnerMessage("Player 1");
+				gameWinner = "Player 1";
+				gameWinnerMessage();
 				break;
 
 			}
 
 			if (gameScore.playerTwoScore == winnerScore) {
-				fightingClip.stop();
-				gameWinnerMessage("Player 2");
+				gameWinner = "Player 2";
+				gameWinnerMessage();
 				break;
 			}
 
@@ -240,14 +243,33 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	}
 
-	public void gameWinnerMessage(String gameWinner) {
-		gameThread.interrupt();
+	public void gameWinnerMessage() {
+		fightingClip.stop();
+		victoryMessage();
+	}
+
+	public void victoryMessage() {
+
 		playVictorySound();
-		JOptionPane.showMessageDialog(this, gameWinner + " Wins!\nReturning to Main Menu");
-		audioClip.stop();
-		gameFrame.dispose();
-		new PongGameMainMenu();
-		
+
+		String[] responsesArr = { "Main Menu", "Restart Game", "Exit Game" };
+
+		int userChoice = JOptionPane.showOptionDialog(this, gameWinner + " Wins!", "Winner Message",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responsesArr, null);
+
+		if (userChoice == 0) { // user chooses to return to Main Menu
+			audioClip.stop();
+			gameFrame.dispose();
+			new PongGameMainMenu();
+		} else if (userChoice == 1) { // user chooses to restart game
+			audioClip.stop();
+			gameFrame.dispose();
+			new PongGamePlay();
+		} else if (userChoice == 2) { // user chooses to exit game
+			audioClip.stop();
+			gameFrame.dispose();
+		}
+
 	}
 
 	// Inner class, actionListener
@@ -275,12 +297,13 @@ public class PongGamePlay extends JPanel implements Runnable {
 				JOptionPane.YES_NO_OPTION);
 
 		if (exitGameChoice == JOptionPane.YES_OPTION) {
-			new PongGameMainMenu();
+			fightingClip.stop();
 			gameThread.interrupt();
 			gameFrame.dispose();
+			new PongGameMainMenu();
 		}
 	}
-	
+
 	public void playGameFightMusic() {
 
 		audioFile = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
@@ -296,7 +319,6 @@ public class PongGamePlay extends JPanel implements Runnable {
 		}
 
 	}
-
 
 	public void playPaddleHitSound() {
 

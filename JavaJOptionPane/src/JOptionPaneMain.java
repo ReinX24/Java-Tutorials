@@ -41,6 +41,8 @@ public class JOptionPaneMain {
 
 		JOptionPane.showOptionDialog(null, "You are awesome!", "[Secret Message]", JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.INFORMATION_MESSAGE, iconOne, responsesArr, 0);
+		// Parent window, window message, title, type of choices, type of window, icon
+		// in window, responses, initial value
 	}
 
 }

@@ -90,7 +90,8 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	public void gameInstructions() {
 		JOptionPane.showMessageDialog(null,
-				"- Instructions -\nBackspace to Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down");
+				"- Instructions -\n ← or Backspace to Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down",
+				"Game Instructions", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void gameAbout() {
