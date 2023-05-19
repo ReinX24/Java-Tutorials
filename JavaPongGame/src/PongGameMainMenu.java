@@ -39,12 +39,15 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 	Clip audioClip;
 
 	public PongGameMainMenu() {
+
+		setGameTheme();
+
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(true);
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		addMenuDetails();
 		playMainMenuMusic();
+		addMenuDetails();
 		addMenuButtons();
 
 		menuFrame.pack();
@@ -194,6 +197,21 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void setGameTheme() {
+		// TODO : research and experiment on setLookAndFeel
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

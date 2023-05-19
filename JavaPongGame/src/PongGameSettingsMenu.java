@@ -35,6 +35,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	Clip audioClip;
 
 	public PongGameSettingsMenu() {
+
 		settingsFrame = new JFrame("Pong Game Settings");
 		settingsFrame.setResizable(false);
 		settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,15 +76,30 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	public void changeGameScore() {
 		// TODO: change to JSpinner inside of a JPanel instead of showInputDialog
-		try {
-			PongGamePlay.winnerScore = Integer.parseInt(JOptionPane.showInputDialog(this,
-					"Current Max Score: " + PongGamePlay.winnerScore + "\nEnter New Max Score"));
+
+		SpinnerModel gameScoreSpinnerValues = new SpinnerNumberModel(3, 1, 10, 1);
+		// initial score, lowest, highest, increments per click
+		JSpinner gameScoreSpinner = new JSpinner(gameScoreSpinnerValues);
+		gameScoreSpinner.setPreferredSize(new Dimension(300, 100));
+		gameScoreSpinner.setEditor(new JSpinner.DefaultEditor(gameScoreSpinner)); // make JSpinner not editable
+
+		int changeGameScore = JOptionPane.showConfirmDialog(this, gameScoreSpinner);
+
+		if (changeGameScore == JOptionPane.YES_OPTION) {
+			PongGamePlay.winnerScore = (int) gameScoreSpinner.getValue();
 			changeGameScoreButton.setText("Change Score Limit: " + PongGamePlay.winnerScore);
-		} catch (InputMismatchException e) { // if a String is entered instead of a number
-			JOptionPane.showMessageDialog(this, "Error Occurred!");
-		} catch (NumberFormatException e) { // if nothing is typed in
-			// Do nothing
 		}
+
+//		try {
+//			PongGamePlay.winnerScore = Integer.parseInt(JOptionPane.showInputDialog(this,
+//					"Current Max Score: " + PongGamePlay.winnerScore + "\nEnter New Max Score"));
+//			changeGameScoreButton.setText("Change Score Limit: " + PongGamePlay.winnerScore);
+//		} catch (InputMismatchException e) { // if a String is entered instead of a number
+//			JOptionPane.showMessageDialog(this, "Error Occurred!");
+//		} catch (NumberFormatException e) { // if nothing is typed in
+//			// Do nothing
+//		}
+
 	}
 
 	public void changePaddleOneColor() {
