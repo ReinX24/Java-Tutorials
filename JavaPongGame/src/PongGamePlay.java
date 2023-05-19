@@ -40,12 +40,18 @@ public class PongGamePlay extends JPanel implements Runnable {
 	JFrame gameFrame; // JFrame that will contain our JPanel
 	Color tableColor = new Color(119, 176, 83);
 
-	File audioFile;
+	String gameWinner = null;
+	static String playerOneName = "Player One";
+	static String playerTwoName = "Player Two";
+
+	final File FIGHTING_MUSIC = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
+	final File PADDLE_HIT_SOUND = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
+	final File WALL_HIT_SCORE_SOUND = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
+	final File GAME_VICTORY_MUSIC = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
+
 	AudioInputStream streamAudio;
 	Clip audioClip;
 	Clip fightingClip;
-
-	String gameWinner = null;
 
 	public PongGamePlay() {
 
@@ -227,14 +233,14 @@ public class PongGamePlay extends JPanel implements Runnable {
 			}
 
 			if (gameScore.playerOneScore == winnerScore) {
-				gameWinner = "Player 1";
+				gameWinner = playerOneName;
 				gameWinnerMessage();
 				break;
 
 			}
 
 			if (gameScore.playerTwoScore == winnerScore) {
-				gameWinner = "Player 2";
+				gameWinner = playerTwoName;
 				gameWinnerMessage();
 				break;
 			}
@@ -251,9 +257,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public void victoryMessage() {
 
 		playVictorySound();
-
 		String[] responsesArr = { "Main Menu", "Restart Game", "Exit Game" };
-
 		int userChoice = JOptionPane.showOptionDialog(this, gameWinner + " Wins!", "Winner Message",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responsesArr, null);
 
@@ -293,22 +297,33 @@ public class PongGamePlay extends JPanel implements Runnable {
 	}
 
 	public void askExitGame() {
-		int exitGameChoice = JOptionPane.showConfirmDialog(this, "Exit current game?", "Exit Confirm",
-				JOptionPane.YES_NO_OPTION);
 
-		if (exitGameChoice == JOptionPane.YES_OPTION) {
+		String[] responsesArr = { "Main Menu", "Restart Game", "Exit Game" };
+		int userChoice = JOptionPane.showOptionDialog(this, "Game Ongoing!", "Warning Message",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, responsesArr, null);
+
+		if (userChoice == 0) {
 			fightingClip.stop();
 			gameThread.interrupt();
 			gameFrame.dispose();
 			new PongGameMainMenu();
+		} else if (userChoice == 1) {
+			fightingClip.stop();
+			gameThread.interrupt();
+			gameFrame.dispose();
+			new PongGamePlay();
+		} else if (userChoice == 2) {
+			fightingClip.stop();
+			gameThread.interrupt();
+			gameFrame.dispose();
 		}
+
 	}
 
 	public void playGameFightMusic() {
 
-		audioFile = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			streamAudio = AudioSystem.getAudioInputStream(FIGHTING_MUSIC);
 			fightingClip = AudioSystem.getClip();
 			fightingClip.open(streamAudio);
 			fightingClip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -322,10 +337,8 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	public void playPaddleHitSound() {
 
-		audioFile = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
-		AudioInputStream streamAudio;
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			streamAudio = AudioSystem.getAudioInputStream(PADDLE_HIT_SOUND);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();
@@ -339,9 +352,8 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	public void playWallHitSound() {
 
-		audioFile = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			streamAudio = AudioSystem.getAudioInputStream(WALL_HIT_SCORE_SOUND);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();
@@ -355,9 +367,8 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	public void playVictorySound() {
 
-		audioFile = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			streamAudio = AudioSystem.getAudioInputStream(GAME_VICTORY_MUSIC);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();

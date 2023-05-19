@@ -27,9 +27,10 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	JButton exitButton;
 	JButton confirmChangesButton;
 
-	static Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
+	final Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
 
-	File audioFile = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
+	final File SETTINGS_MENU_MUSIC = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
+
 	AudioInputStream streamAudio;
 	Clip audioClip;
 
@@ -39,7 +40,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		addSettingsComponents();
-		addSettingsMenuMusic();
+		playSettingsMenuMusic();
 		addSettingsButtons();
 
 		settingsFrame.pack();
@@ -180,10 +181,10 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		this.add(paraButton);
 	}
 
-	public void addSettingsMenuMusic() {
+	public void playSettingsMenuMusic() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			streamAudio = AudioSystem.getAudioInputStream(SETTINGS_MENU_MUSIC);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();

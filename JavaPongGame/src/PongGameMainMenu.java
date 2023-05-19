@@ -33,7 +33,8 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 	JButton exitButton;
 
 	// File object to store wav file, can only play wav files
-	File audioFile = new File("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
+	final File MAIN_MENU_MUSIC = new File("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
+
 	AudioInputStream streamAudio;
 	Clip audioClip;
 
@@ -43,7 +44,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		addMenuDetails();
-		addMainMenuMusic();
+		playMainMenuMusic();
 		addMenuButtons();
 
 		menuFrame.pack();
@@ -90,7 +91,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	public void gameInstructions() {
 		JOptionPane.showMessageDialog(null,
-				"- Instructions -\n ← or Backspace to Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down",
+				"- Instructions -\n ← or Backspace to Return to Main Menu / Restart / Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down",
 				"Game Instructions", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -177,11 +178,11 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		this.add(paraButton);
 	}
 
-	public void addMainMenuMusic() {
+	public void playMainMenuMusic() {
 
 		try {
 			// Gets the audio file
-			streamAudio = AudioSystem.getAudioInputStream(audioFile);
+			streamAudio = AudioSystem.getAudioInputStream(MAIN_MENU_MUSIC);
 			// Clip object to get audio file & use methods on file
 			audioClip = AudioSystem.getClip();
 			// Opens the clip, now we could use methods on audioClip
