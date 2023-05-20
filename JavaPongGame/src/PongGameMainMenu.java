@@ -6,6 +6,7 @@ import java.awt.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -18,8 +19,8 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	static final Color MAINMENU_BACKGROUND_COLOR = new Color(0, 128, 128);
 	static final Color FONT_COLOR = new Color(238, 238, 238);
-	static final Color BUTTON_COLOR = new Color(57, 62, 70);
-	
+	static final Color BUTTON_COLOR = new Color(42, 52, 57);
+
 	static final ImageIcon PONG_ICON = new ImageIcon("pongGameIcon.png");
 
 	JFrame menuFrame;
@@ -189,6 +190,11 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 			audioClip = AudioSystem.getClip();
 			// Opens the clip, now we could use methods on audioClip
 			audioClip.open(streamAudio);
+			
+			// Lowering the volume of our main menu music
+			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+			
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -202,9 +208,6 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		// TODO : research and experiment on setLookAndFeel
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//			UIManager.put("nimbusBase", new Color(0, 128, 128));
-//			UIManager.put("nimbusBlueGrey", new Color(0, 128, 128));
-//			UIManager.put("control", new Color(250, 249, 246));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {

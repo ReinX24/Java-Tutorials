@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -53,6 +54,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 	AudioInputStream streamAudio;
 	Clip audioClip;
 	Clip fightingClip;
+	
+	boolean isAtMatchPointPlayedPlayerOne = true;
+	boolean isAtmatchPointPlayedPlayerTwo = true;
 
 	public PongGamePlay() {
 
@@ -140,7 +144,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	}
 
 	public void checkCollision() {
-
+		
 		// bounce the ball off the top and bottom window edges
 		if (gameBall.y <= 0) {
 			gameBall.setYDirection(-gameBall.yVelocity); // goes into the opposite direction
@@ -232,7 +236,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 				repaint();
 				deltaNum--;
 			}
-
+			
 			if (gameScore.playerOneScore == winnerScore) {
 				gameWinner = playerOneName;
 				gameWinnerMessage();
@@ -245,9 +249,24 @@ public class PongGamePlay extends JPanel implements Runnable {
 				gameWinnerMessage();
 				break;
 			}
+			
+			checkMatchPoint(); // checks if one of the players are at match point
 
 		}
 
+	}
+	
+	public void checkMatchPoint() {
+		if (gameScore.playerOneScore == winnerScore - 1 && isAtMatchPointPlayedPlayerOne) {
+			isAtMatchPointPlayedPlayerOne = false;
+			playMatchPointSound();
+		}
+		
+		if (gameScore.playerTwoScore == winnerScore - 1 && isAtmatchPointPlayedPlayerTwo) {
+			isAtmatchPointPlayedPlayerTwo = false;
+			playMatchPointSound();
+		}
+		
 	}
 
 	public void gameWinnerMessage() {
@@ -327,6 +346,10 @@ public class PongGamePlay extends JPanel implements Runnable {
 			streamAudio = AudioSystem.getAudioInputStream(FIGHTING_MUSIC);
 			fightingClip = AudioSystem.getClip();
 			fightingClip.open(streamAudio);
+			
+			FloatControl gainControl = (FloatControl) fightingClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+			
 			fightingClip.loop(Clip.LOOP_CONTINUOUSLY);
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -387,6 +410,10 @@ public class PongGamePlay extends JPanel implements Runnable {
 			streamAudio = AudioSystem.getAudioInputStream(GAME_MATCH_POINT_SOUND);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
+			
+			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(6.0f);
+			
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();

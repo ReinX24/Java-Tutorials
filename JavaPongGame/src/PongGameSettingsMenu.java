@@ -2,11 +2,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.InputMismatchException;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -24,8 +24,10 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	JButton pTwoColorChangeButton;
 	JButton resetColorsButton;
 
-	JButton exitButton;
-	JButton confirmChangesButton;
+	JButton changePlayerOneNameButton;
+	JButton changePlayerTwoNameButton;
+
+	JButton exitSettingsMenuButton;
 
 	final Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
 
@@ -37,8 +39,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	final SpinnerModel gameScoreSpinnerValues = new SpinnerNumberModel(3, 1, 10, 1);
 	// initial score, lowest, highest, increments per click
 	JSpinner gameScoreSpinner;
-	
-	
+
 	public PongGameSettingsMenu() {
 
 		settingsFrame = new JFrame("Pong Game Settings");
@@ -73,27 +74,37 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 			resetAllPaddleColors();
 		}
 
-		if (arg0.getSource() == exitButton) {
+		if (arg0.getSource() == exitSettingsMenuButton) {
 			exitSettingsMenu();
+		}
+
+		if (arg0.getSource() == changePlayerOneNameButton) {
+			PongGamePlay.playerOneName = JOptionPane.showInputDialog(this, "Enter New Name",
+					PongGamePlay.playerOneName);
+			changePlayerOneNameButton.setText("Change Name: " + PongGamePlay.playerOneName);
+		}
+		
+		if (arg0.getSource() == changePlayerTwoNameButton) {
+			PongGamePlay.playerTwoName = JOptionPane.showInputDialog(this, "Enter New Name",
+					PongGamePlay.playerTwoName);
+			changePlayerTwoNameButton.setText("Change Name: " + PongGamePlay.playerTwoName);
 		}
 
 	}
 
 	public void changeGameScore() {
-		// TODO: change to JSpinner inside of a JPanel instead of showInputDialog
 		gameScoreSpinner = new JSpinner(gameScoreSpinnerValues);
 		gameScoreSpinner.setPreferredSize(new Dimension(300, 100));
 		gameScoreSpinner.setEditor(new JSpinner.DefaultEditor(gameScoreSpinner)); // make JSpinner not editable
 
-//		int changeGameScore = JOptionPane.showConfirmDialog(this, gameScoreSpinner, "Game Score", JOptionPane.YES_NO_OPTION);
-		String[] changeGameScoreChoices = {"Confirm", "Cancel"};
-		int changeGameScore = JOptionPane.showOptionDialog(this, gameScoreSpinner, "Game Score", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, changeGameScoreChoices, null);
-		
+		String[] changeGameScoreChoices = { "Confirm", "Cancel" };
+		int changeGameScore = JOptionPane.showOptionDialog(this, gameScoreSpinner, "Game Score",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, changeGameScoreChoices, null);
+
 		if (changeGameScore == JOptionPane.YES_OPTION) {
 			PongGamePlay.winnerScore = (int) gameScoreSpinner.getValue();
 			changeGameScoreButton.setText("Change Score Limit: " + PongGamePlay.winnerScore);
 		}
-
 	}
 
 	public void changePaddleOneColor() {
@@ -134,12 +145,14 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		addChangeOnePaddleColor();
 		addChangeTwoPaddleColor();
 		addResetColorsButton();
+		addChangePlayerOneNameButton();
+		addChangePlayerTwoNameButton();
 		addExitButton();
 	}
 
 	public void addSettingsDetails() {
 		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
-		this.setLayout(new GridLayout(6, 1, 0, 25));
+		this.setLayout(new GridLayout(8, 1, 0, 10));
 		this.setBorder(new EmptyBorder(50, 300, 50, 300));
 		this.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
 		settingsFrame.add(this);
@@ -176,9 +189,19 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		createButton(resetColorsButton);
 	}
 
+	public void addChangePlayerOneNameButton() {
+		changePlayerOneNameButton = new JButton("Change Name: " + PongGamePlay.playerOneName);
+		createButton(changePlayerOneNameButton);
+	}
+
+	public void addChangePlayerTwoNameButton() {
+		changePlayerTwoNameButton = new JButton("Change Name: " + PongGamePlay.playerTwoName);
+		createButton(changePlayerTwoNameButton);
+	}
+
 	public void addExitButton() {
-		exitButton = new JButton("Exit To Main Menu");
-		createButton(exitButton);
+		exitSettingsMenuButton = new JButton("Exit To Main Menu");
+		createButton(exitSettingsMenuButton);
 	}
 
 	public void createButton(JButton paraButton) {
@@ -187,7 +210,6 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		paraButton.setFont(PongGameMainMenu.BUTTON_FONT);
 		paraButton.setForeground(PongGameMainMenu.FONT_COLOR);
 		paraButton.setBackground(PongGameMainMenu.BUTTON_COLOR);
-		paraButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		this.add(paraButton);
 	}
 
@@ -197,6 +219,10 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 			streamAudio = AudioSystem.getAudioInputStream(SETTINGS_MENU_MUSIC);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
+			
+			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+			
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();

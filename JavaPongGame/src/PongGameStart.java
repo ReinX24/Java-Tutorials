@@ -13,11 +13,11 @@ public class PongGameStart {
 		 * - TODO: Change ball color using JColorChooser class
 		 * - Change ImageIcon of our program X
 		 * - First to a set point wins the game X
-		 * - Different colors for left and right side of player areas ?
+		 * - TODO: Different colors for left and right side of player areas ?
 		 * - Add main menu music and when ball hits paddle sound X
 		 * - Add game over sound X
-		 * - TODO: Add match point sound effect or when players are 1 point away
-		 * - TODO: Add Option to change player one and two names in Settings
+		 * - Add match point sound effect or when players are 1 point away X
+		 * - Add Option to change player one and two names in Settings X
 		 *
 		 */
 		
