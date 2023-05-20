@@ -48,6 +48,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	final File PADDLE_HIT_SOUND = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
 	final File WALL_HIT_SCORE_SOUND = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
 	final File GAME_VICTORY_MUSIC = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
+	final File GAME_MATCH_POINT_SOUND = new File("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
@@ -378,6 +379,20 @@ public class PongGamePlay extends JPanel implements Runnable {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void playMatchPointSound() {
+
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(GAME_MATCH_POINT_SOUND);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

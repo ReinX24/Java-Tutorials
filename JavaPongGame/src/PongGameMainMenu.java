@@ -19,7 +19,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 	static final Color MAINMENU_BACKGROUND_COLOR = new Color(0, 128, 128);
 	static final Color FONT_COLOR = new Color(238, 238, 238);
 	static final Color BUTTON_COLOR = new Color(57, 62, 70);
-
+	
 	static final ImageIcon PONG_ICON = new ImageIcon("pongGameIcon.png");
 
 	JFrame menuFrame;
@@ -177,7 +177,6 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		paraButton.setFont(BUTTON_FONT);
 		paraButton.setForeground(FONT_COLOR);
 		paraButton.setBackground(BUTTON_COLOR);
-		paraButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		this.add(paraButton);
 	}
 
@@ -203,6 +202,9 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		// TODO : research and experiment on setLookAndFeel
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+//			UIManager.put("nimbusBase", new Color(0, 128, 128));
+//			UIManager.put("nimbusBlueGrey", new Color(0, 128, 128));
+//			UIManager.put("control", new Color(250, 249, 246));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {

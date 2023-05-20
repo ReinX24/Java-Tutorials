@@ -34,6 +34,11 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	AudioInputStream streamAudio;
 	Clip audioClip;
 
+	final SpinnerModel gameScoreSpinnerValues = new SpinnerNumberModel(3, 1, 10, 1);
+	// initial score, lowest, highest, increments per click
+	JSpinner gameScoreSpinner;
+	
+	
 	public PongGameSettingsMenu() {
 
 		settingsFrame = new JFrame("Pong Game Settings");
@@ -76,29 +81,18 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	public void changeGameScore() {
 		// TODO: change to JSpinner inside of a JPanel instead of showInputDialog
-
-		SpinnerModel gameScoreSpinnerValues = new SpinnerNumberModel(3, 1, 10, 1);
-		// initial score, lowest, highest, increments per click
-		JSpinner gameScoreSpinner = new JSpinner(gameScoreSpinnerValues);
+		gameScoreSpinner = new JSpinner(gameScoreSpinnerValues);
 		gameScoreSpinner.setPreferredSize(new Dimension(300, 100));
 		gameScoreSpinner.setEditor(new JSpinner.DefaultEditor(gameScoreSpinner)); // make JSpinner not editable
 
-		int changeGameScore = JOptionPane.showConfirmDialog(this, gameScoreSpinner);
-
+//		int changeGameScore = JOptionPane.showConfirmDialog(this, gameScoreSpinner, "Game Score", JOptionPane.YES_NO_OPTION);
+		String[] changeGameScoreChoices = {"Confirm", "Cancel"};
+		int changeGameScore = JOptionPane.showOptionDialog(this, gameScoreSpinner, "Game Score", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, changeGameScoreChoices, null);
+		
 		if (changeGameScore == JOptionPane.YES_OPTION) {
 			PongGamePlay.winnerScore = (int) gameScoreSpinner.getValue();
 			changeGameScoreButton.setText("Change Score Limit: " + PongGamePlay.winnerScore);
 		}
-
-//		try {
-//			PongGamePlay.winnerScore = Integer.parseInt(JOptionPane.showInputDialog(this,
-//					"Current Max Score: " + PongGamePlay.winnerScore + "\nEnter New Max Score"));
-//			changeGameScoreButton.setText("Change Score Limit: " + PongGamePlay.winnerScore);
-//		} catch (InputMismatchException e) { // if a String is entered instead of a number
-//			JOptionPane.showMessageDialog(this, "Error Occurred!");
-//		} catch (NumberFormatException e) { // if nothing is typed in
-//			// Do nothing
-//		}
 
 	}
 
@@ -147,7 +141,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
 		this.setLayout(new GridLayout(6, 1, 0, 25));
 		this.setBorder(new EmptyBorder(50, 300, 50, 300));
-		this.setBackground(new Color(218, 165, 32));
+		this.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
 		settingsFrame.add(this);
 	}
 
@@ -168,12 +162,12 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	}
 
 	public void addChangeOnePaddleColor() {
-		pOneColorChangeButton = new JButton("Change Player 1 Paddle Color");
+		pOneColorChangeButton = new JButton("Change " + PongGamePlay.playerOneName + " Paddle Color");
 		createButton(pOneColorChangeButton);
 	}
 
 	public void addChangeTwoPaddleColor() {
-		pTwoColorChangeButton = new JButton("Change Player 2 Paddle Color");
+		pTwoColorChangeButton = new JButton("Change " + PongGamePlay.playerTwoName + " Paddle Color");
 		createButton(pTwoColorChangeButton);
 	}
 
