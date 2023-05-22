@@ -18,13 +18,14 @@ public class PongGameStart {
 		 * - Add game over sound X
 		 * - Add match point sound effect or when players are 1 point away X
 		 * - Add Option to change player one and two names in Settings X
+		 * - TODO: Add a "reset all to defaults" button
 		 *
 		 */
 		
 		/*
 		 * Other Debugging and Code Maintenance Tasks
 		 * - Clean Java Audio code, make File objects before classes X
-		 * 
+		 * - TODO: Find a way to make PongGameSettingsMenu layout cleaner
 		 */
 
 	}

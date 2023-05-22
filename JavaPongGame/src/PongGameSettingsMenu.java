@@ -32,6 +32,8 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	JButton exitSettingsMenuButton;
 
+	JPanel settingsMenuButtonsPanel;
+
 	final Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
 
 	final File SETTINGS_MENU_MUSIC = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
@@ -51,6 +53,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 		playSettingsMenuMusic();
 		addSettingsComponents();
+		addSettingsMenuButtonsPanel();
 		addSettingsButtons();
 
 		settingsFrame.pack();
@@ -76,28 +79,32 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		addExitButton();
 	}
 
-	public void addSettingsDetails() {
-		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
-		this.setLayout(new GridLayout(5, 2, 0, 10));
-		this.setBorder(new EmptyBorder(50, 150, 50, 150));
-		this.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
-		settingsFrame.add(this);
-	}
-
 	public void addFrameIcon() {
 		settingsFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
 	}
 
-	// TODO: Make Settings in the center
-	/*
-	 * Proposed Solution: Create a JPanel that will have the grid layout of 2 rows
-	 * and 1 column, will contain title then buttons
-	 */
+	public void addSettingsDetails() {
+		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
+		this.setLayout(new FlowLayout(FlowLayout.CENTER));
+		this.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
+		settingsFrame.add(this);
+	}
+
 	public void addSettingsTitle() {
 		settingsTitleLabel = new JLabel("SETTINGS", JLabel.CENTER);
 		settingsTitleLabel.setForeground(PongGameMainMenu.FONT_COLOR);
 		settingsTitleLabel.setFont(PongGameMainMenu.TITLE_FONT);
-		this.add(settingsTitleLabel);
+		settingsTitleLabel.setPreferredSize(new Dimension(1000, 150));
+		this.add(settingsTitleLabel); // adding our title to our JPanel
+	}
+
+	public void addSettingsMenuButtonsPanel() { // JPanel that will contain our JButtons
+		settingsMenuButtonsPanel = new JPanel();
+		settingsMenuButtonsPanel.setLayout(new GridLayout(5, 2));
+		settingsMenuButtonsPanel.setPreferredSize(new Dimension(1000, 300));
+		settingsMenuButtonsPanel.setBorder(new EmptyBorder(0, 150, 0, 150));
+		settingsMenuButtonsPanel.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
+		this.add(settingsMenuButtonsPanel); // adding JPanel that will contain our JButtons
 	}
 
 	@Override
@@ -260,7 +267,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		paraButton.setFont(PongGameMainMenu.BUTTON_FONT);
 		paraButton.setForeground(PongGameMainMenu.FONT_COLOR);
 		paraButton.setBackground(PongGameMainMenu.BUTTON_COLOR);
-		this.add(paraButton);
+		settingsMenuButtonsPanel.add(paraButton);
 	}
 
 	public void playSettingsMenuMusic() {
