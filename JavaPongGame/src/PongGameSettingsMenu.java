@@ -27,6 +27,9 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	JButton changePlayerOneNameButton;
 	JButton changePlayerTwoNameButton;
 
+	JButton changeTableColorButton;
+	JButton resetTableColorButton;
+
 	JButton exitSettingsMenuButton;
 
 	final Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
@@ -46,13 +49,55 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		settingsFrame.setResizable(false);
 		settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		addSettingsComponents();
 		playSettingsMenuMusic();
+		addSettingsComponents();
 		addSettingsButtons();
 
 		settingsFrame.pack();
 		settingsFrame.setLocationRelativeTo(null);
 		settingsFrame.setVisible(true);
+	}
+
+	public void addSettingsComponents() {
+		addFrameIcon();
+		addSettingsDetails();
+		addSettingsTitle();
+	}
+
+	public void addSettingsButtons() {
+		addScoreButton();
+		addChangeOnePaddleColorButton();
+		addChangeTwoPaddleColorButton();
+		addResetColorsButton();
+		addChangePlayerOneNameButton();
+		addChangePlayerTwoNameButton();
+		addChangeTableColorButton();
+		addResetTableColorButton();
+		addExitButton();
+	}
+
+	public void addSettingsDetails() {
+		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
+		this.setLayout(new GridLayout(5, 2, 0, 10));
+		this.setBorder(new EmptyBorder(50, 150, 50, 150));
+		this.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
+		settingsFrame.add(this);
+	}
+
+	public void addFrameIcon() {
+		settingsFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
+	}
+
+	// TODO: Make Settings in the center
+	/*
+	 * Proposed Solution: Create a JPanel that will have the grid layout of 2 rows
+	 * and 1 column, will contain title then buttons
+	 */
+	public void addSettingsTitle() {
+		settingsTitleLabel = new JLabel("SETTINGS", JLabel.CENTER);
+		settingsTitleLabel.setForeground(PongGameMainMenu.FONT_COLOR);
+		settingsTitleLabel.setFont(PongGameMainMenu.TITLE_FONT);
+		this.add(settingsTitleLabel);
 	}
 
 	@Override
@@ -79,15 +124,20 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		}
 
 		if (arg0.getSource() == changePlayerOneNameButton) {
-			PongGamePlay.playerOneName = JOptionPane.showInputDialog(this, "Enter New Name",
-					PongGamePlay.playerOneName);
-			changePlayerOneNameButton.setText("Change Name: " + PongGamePlay.playerOneName);
+			changePlayerOneName();
 		}
-		
+
 		if (arg0.getSource() == changePlayerTwoNameButton) {
-			PongGamePlay.playerTwoName = JOptionPane.showInputDialog(this, "Enter New Name",
-					PongGamePlay.playerTwoName);
-			changePlayerTwoNameButton.setText("Change Name: " + PongGamePlay.playerTwoName);
+			changePlayerTwoName();
+		}
+
+		if (arg0.getSource() == changeTableColorButton) {
+			System.out.println("Change Table Colors!");
+			changeTableColor();
+		}
+
+		if (arg0.getSource() == resetTableColorButton) {
+			System.out.println("Reset Table Colors!");
 		}
 
 	}
@@ -128,45 +178,35 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	}
 
+	public void changePlayerOneName() {
+		PongGamePlay.playerOneName = JOptionPane.showInputDialog(this, "Enter New Name", PongGamePlay.playerOneName);
+		changePlayerOneNameButton.setText("Change Name: " + PongGamePlay.playerOneName);
+	}
+
+	public void changePlayerTwoName() {
+		PongGamePlay.playerTwoName = JOptionPane.showInputDialog(this, "Enter New Name", PongGamePlay.playerTwoName);
+		changePlayerTwoNameButton.setText("Change Name: " + PongGamePlay.playerTwoName);
+	}
+
+	public void changeTableColor() {
+		new JColorChooser();
+		PongGamePlay.TABLE_COLOR = JColorChooser.showDialog(this, "Pick A Color", new Color(119, 176, 83));
+	}
+
+	public void resetTableColor() {
+		int resetPaddleChoice = JOptionPane.showConfirmDialog(this, "Reset Table Color?", "Reset Table Color",
+				JOptionPane.YES_NO_OPTION);
+
+		if (resetPaddleChoice == JOptionPane.YES_OPTION) {
+			PongGamePlay.TABLE_COLOR = new Color(119, 176, 83);
+		}
+
+	}
+
 	public void exitSettingsMenu() {
 		settingsFrame.dispose();
 		audioClip.stop();
 		new PongGameMainMenu();
-	}
-
-	public void addSettingsComponents() {
-		addFrameIcon();
-		addSettingsDetails();
-		addSettingsTitle();
-	}
-
-	public void addSettingsButtons() {
-		addScoreButton();
-		addChangeOnePaddleColor();
-		addChangeTwoPaddleColor();
-		addResetColorsButton();
-		addChangePlayerOneNameButton();
-		addChangePlayerTwoNameButton();
-		addExitButton();
-	}
-
-	public void addSettingsDetails() {
-		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
-		this.setLayout(new GridLayout(8, 1, 0, 10));
-		this.setBorder(new EmptyBorder(50, 300, 50, 300));
-		this.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
-		settingsFrame.add(this);
-	}
-
-	public void addFrameIcon() {
-		settingsFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
-	}
-
-	public void addSettingsTitle() {
-		settingsTitleLabel = new JLabel("SETTINGS", JLabel.CENTER);
-		settingsTitleLabel.setForeground(PongGameMainMenu.FONT_COLOR);
-		settingsTitleLabel.setFont(PongGameMainMenu.TITLE_FONT);
-		this.add(settingsTitleLabel);
 	}
 
 	public void addScoreButton() {
@@ -174,12 +214,12 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		createButton(changeGameScoreButton);
 	}
 
-	public void addChangeOnePaddleColor() {
+	public void addChangeOnePaddleColorButton() {
 		pOneColorChangeButton = new JButton("Change " + PongGamePlay.playerOneName + " Paddle Color");
 		createButton(pOneColorChangeButton);
 	}
 
-	public void addChangeTwoPaddleColor() {
+	public void addChangeTwoPaddleColorButton() {
 		pTwoColorChangeButton = new JButton("Change " + PongGamePlay.playerTwoName + " Paddle Color");
 		createButton(pTwoColorChangeButton);
 	}
@@ -197,6 +237,16 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	public void addChangePlayerTwoNameButton() {
 		changePlayerTwoNameButton = new JButton("Change Name: " + PongGamePlay.playerTwoName);
 		createButton(changePlayerTwoNameButton);
+	}
+
+	public void addChangeTableColorButton() {
+		changeTableColorButton = new JButton("Change Table Color");
+		createButton(changeTableColorButton);
+	}
+
+	public void addResetTableColorButton() {
+		resetTableColorButton = new JButton("Reset Table Color");
+		createButton(resetTableColorButton);
 	}
 
 	public void addExitButton() {
@@ -219,10 +269,10 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 			streamAudio = AudioSystem.getAudioInputStream(SETTINGS_MENU_MUSIC);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
-			
+
 			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(-6.0f);
-			
+
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();

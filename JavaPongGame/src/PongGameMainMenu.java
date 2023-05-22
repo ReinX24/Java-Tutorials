@@ -190,11 +190,11 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 			audioClip = AudioSystem.getClip();
 			// Opens the clip, now we could use methods on audioClip
 			audioClip.open(streamAudio);
-			
+
 			// Lowering the volume of our main menu music
 			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(-6.0f);
-			
+
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
