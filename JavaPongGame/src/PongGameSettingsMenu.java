@@ -46,7 +46,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	AudioInputStream streamAudio;
 	Clip audioClip;
 
-	final SpinnerModel gameScoreSpinnerValues = new SpinnerNumberModel(3, 1, 10, 1);
+	SpinnerModel gameScoreSpinnerValues;
 	// initial score, lowest, highest, increments per click
 	JSpinner gameScoreSpinner;
 
@@ -119,7 +119,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 
 		if (arg0.getSource() == changeGameScoreButton) {
-			changeGameScore();
+			changeWinnerScorePrompt();
 		}
 
 		if (arg0.getSource() == pOneColorChangeButton) {
@@ -135,11 +135,11 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		}
 
 		if (arg0.getSource() == changePlayerOneNameButton) {
-			changePlayerOneName();
+			changePlayerOneNamePrompt();
 		}
 
 		if (arg0.getSource() == changePlayerTwoNameButton) {
-			changePlayerTwoName();
+			changePlayerTwoNamePrompt();
 		}
 
 		if (arg0.getSource() == changeTableColorButton) {
@@ -168,7 +168,8 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	}
 
-	public void changeGameScore() {
+	public void changeWinnerScorePrompt() {
+		gameScoreSpinnerValues = new SpinnerNumberModel(PongGamePlay.winnerScore, 1, 10, 1);
 		gameScoreSpinner = new JSpinner(gameScoreSpinnerValues);
 		gameScoreSpinner.setPreferredSize(new Dimension(300, 100));
 		gameScoreSpinner.setEditor(new JSpinner.DefaultEditor(gameScoreSpinner)); // make JSpinner not editable
@@ -178,9 +179,13 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, changeGameScoreChoices, null);
 
 		if (changeGameScore == JOptionPane.YES_OPTION) {
-			PongGamePlay.winnerScore = (int) gameScoreSpinner.getValue();
-			changeGameScoreButton.setText("Change Score Limit: " + PongGamePlay.winnerScore);
+			changeWinnerScore((int) gameScoreSpinner.getValue());
 		}
+	}
+
+	public void changeWinnerScore(int newWinnerScore) {
+		PongGamePlay.winnerScore = newWinnerScore;
+		changeGameScoreButton.setText("Change Score Limit: " + newWinnerScore);
 	}
 
 	public void changePaddleOneColor() {
@@ -204,14 +209,22 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	}
 
-	public void changePlayerOneName() {
+	public void changePlayerOneNamePrompt() {
 		PongGamePlay.playerOneName = JOptionPane.showInputDialog(this, "Enter New Name", PongGamePlay.playerOneName);
-		changePlayerOneNameButton.setText("Change Name: " + PongGamePlay.playerOneName);
+		changePlayerOneName(PongGamePlay.playerOneName);
 	}
 
-	public void changePlayerTwoName() {
+	public void changePlayerOneName(String newPlayerOneName) {
+		changePlayerOneNameButton.setText("Change Name: " + newPlayerOneName);
+	}
+
+	public void changePlayerTwoNamePrompt() {
 		PongGamePlay.playerTwoName = JOptionPane.showInputDialog(this, "Enter New Name", PongGamePlay.playerTwoName);
-		changePlayerTwoNameButton.setText("Change Name: " + PongGamePlay.playerTwoName);
+		changePlayerTwoName(PongGamePlay.playerTwoName);
+	}
+
+	public void changePlayerTwoName(String newPlayerTwoName) {
+		changePlayerTwoNameButton.setText("Change Name: " + newPlayerTwoName);
 	}
 
 	public void changeTableColor() {
@@ -256,6 +269,11 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 			PongGamePlay.winnerScore = 3;
 			PongGamePlay.playerOneName = "Player One";
 			PongGamePlay.playerTwoName = "Player Two";
+
+			changePlayerOneName(PongGamePlay.playerOneName);
+			changePlayerTwoName(PongGamePlay.playerTwoName);
+			changeWinnerScore(PongGamePlay.winnerScore);
+
 		}
 
 	}

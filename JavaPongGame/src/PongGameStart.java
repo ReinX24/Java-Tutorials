@@ -18,7 +18,7 @@ public class PongGameStart {
 		 * - Add game over sound X
 		 * - Add match point sound effect or when players are 1 point away X
 		 * - Add Option to change player one and two names in Settings X
-		 * - TODO: Add and implement "reset all to defaults" button
+		 * - TODO: Add and implement "reset all to defaults" button (Debugging)
 		 *
 		 */
 		
