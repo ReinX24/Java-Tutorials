@@ -30,6 +30,11 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	JButton changeTableColorButton;
 	JButton resetTableColorButton;
 
+	JButton changeBallColorButton;
+	JButton resetBallColorButton;
+
+	JButton settingsResetButton;
+
 	JButton exitSettingsMenuButton;
 
 	JPanel settingsMenuButtonsPanel;
@@ -69,13 +74,16 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	public void addSettingsButtons() {
 		addScoreButton();
+		addResetColorsButton();
 		addChangeOnePaddleColorButton();
 		addChangeTwoPaddleColorButton();
-		addResetColorsButton();
 		addChangePlayerOneNameButton();
 		addChangePlayerTwoNameButton();
 		addChangeTableColorButton();
 		addResetTableColorButton();
+		addChangeBallColorButton();
+		addResetBallColorButton();
+		addSettingsResetButton();
 		addExitButton();
 	}
 
@@ -94,14 +102,14 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		settingsTitleLabel = new JLabel("SETTINGS", JLabel.CENTER);
 		settingsTitleLabel.setForeground(PongGameMainMenu.FONT_COLOR);
 		settingsTitleLabel.setFont(PongGameMainMenu.TITLE_FONT);
-		settingsTitleLabel.setPreferredSize(new Dimension(1000, 150));
+		settingsTitleLabel.setPreferredSize(new Dimension(1000, 120));
 		this.add(settingsTitleLabel); // adding our title to our JPanel
 	}
 
 	public void addSettingsMenuButtonsPanel() { // JPanel that will contain our JButtons
 		settingsMenuButtonsPanel = new JPanel();
-		settingsMenuButtonsPanel.setLayout(new GridLayout(5, 2));
-		settingsMenuButtonsPanel.setPreferredSize(new Dimension(1000, 300));
+		settingsMenuButtonsPanel.setLayout(new GridLayout(6, 2, 10, 10));
+		settingsMenuButtonsPanel.setPreferredSize(new Dimension(1000, 370));
 		settingsMenuButtonsPanel.setBorder(new EmptyBorder(0, 150, 0, 150));
 		settingsMenuButtonsPanel.setBackground(SETTINGSMENU_BACKGROUND_COLOR);
 		this.add(settingsMenuButtonsPanel); // adding JPanel that will contain our JButtons
@@ -126,10 +134,6 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 			resetAllPaddleColors();
 		}
 
-		if (arg0.getSource() == exitSettingsMenuButton) {
-			exitSettingsMenu();
-		}
-
 		if (arg0.getSource() == changePlayerOneNameButton) {
 			changePlayerOneName();
 		}
@@ -139,12 +143,27 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 		}
 
 		if (arg0.getSource() == changeTableColorButton) {
-			System.out.println("Change Table Colors!");
 			changeTableColor();
 		}
 
 		if (arg0.getSource() == resetTableColorButton) {
-			System.out.println("Reset Table Colors!");
+			resetTableColor();
+		}
+
+		if (arg0.getSource() == settingsResetButton) {
+			System.out.println("Game Settings Reset");
+		}
+
+		if (arg0.getSource() == changeBallColorButton) {
+			changeBallColor();
+		}
+
+		if (arg0.getSource() == resetBallColorButton) {
+			resetBallColor();
+		}
+
+		if (arg0.getSource() == exitSettingsMenuButton) {
+			exitSettingsMenu();
 		}
 
 	}
@@ -210,6 +229,24 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	}
 
+	public void changeBallColor() {
+		new JColorChooser();
+		Ball.BALL_COLOR = JColorChooser.showDialog(this, "Pick A Color", Color.WHITE);
+	}
+
+	public void resetBallColor() {
+		int resetBallColorChoice = JOptionPane.showConfirmDialog(this, "Reset Ball Color?", "Reset Ball Color",
+				JOptionPane.YES_NO_OPTION);
+
+		if (resetBallColorChoice == JOptionPane.YES_OPTION) {
+			Ball.BALL_COLOR = Color.WHITE;
+		}
+	}
+
+	public void resetSettings() { // TODO: Implement button that resets all settings to default
+
+	}
+
 	public void exitSettingsMenu() {
 		settingsFrame.dispose();
 		audioClip.stop();
@@ -254,6 +291,21 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 	public void addResetTableColorButton() {
 		resetTableColorButton = new JButton("Reset Table Color");
 		createButton(resetTableColorButton);
+	}
+
+	public void addChangeBallColorButton() {
+		changeBallColorButton = new JButton("Change Ball Color");
+		createButton(changeBallColorButton);
+	}
+
+	public void addResetBallColorButton() {
+		resetBallColorButton = new JButton("Reset Ball Color");
+		createButton(resetBallColorButton);
+	}
+
+	public void addSettingsResetButton() {
+		settingsResetButton = new JButton("Reset All Settings");
+		createButton(settingsResetButton);
 	}
 
 	public void addExitButton() {
