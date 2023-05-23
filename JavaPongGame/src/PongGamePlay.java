@@ -39,7 +39,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	Score gameScore;
 
 	JFrame gameFrame; // JFrame that will contain our JPanel
-	static Color TABLE_COLOR = new Color(119, 176, 83);
+	static Color tableColor = new Color(119, 176, 83);
 
 	String gameWinner = null;
 	static String playerOneName = "Player One";
@@ -64,7 +64,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 		gameFrame = new JFrame("Pong Game");
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameFrame.setResizable(false);
-		gameFrame.setBackground(TABLE_COLOR);
+		gameFrame.setBackground(tableColor);
 		gameFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
 
 		playGameFightMusic();

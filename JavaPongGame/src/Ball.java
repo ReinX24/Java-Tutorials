@@ -9,7 +9,7 @@ public class Ball extends Rectangle {
 	int yVelocity;
 	int initialSpeed = 2;
 
-	static Color BALL_COLOR = Color.WHITE;
+	static Color ballColor = Color.WHITE;
 
 	public Ball(int x, int y, int ballWidth, int ballHeight) {
 		super(x, y, ballWidth, ballHeight);
@@ -42,7 +42,7 @@ public class Ball extends Rectangle {
 	}
 
 	public void draw(Graphics g) {
-		g.setColor(BALL_COLOR);
+		g.setColor(ballColor);
 		g.fillOval(x, y, height, width);
 	}
 

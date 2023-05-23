@@ -150,16 +150,16 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 			resetTableColor();
 		}
 
-		if (arg0.getSource() == settingsResetButton) {
-			System.out.println("Game Settings Reset");
-		}
-
 		if (arg0.getSource() == changeBallColorButton) {
 			changeBallColor();
 		}
 
 		if (arg0.getSource() == resetBallColorButton) {
 			resetBallColor();
+		}
+
+		if (arg0.getSource() == settingsResetButton) {
+			settingsReset();
 		}
 
 		if (arg0.getSource() == exitSettingsMenuButton) {
@@ -216,7 +216,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 
 	public void changeTableColor() {
 		new JColorChooser();
-		PongGamePlay.TABLE_COLOR = JColorChooser.showDialog(this, "Pick A Color", new Color(119, 176, 83));
+		PongGamePlay.tableColor = JColorChooser.showDialog(this, "Pick A Color", new Color(119, 176, 83));
 	}
 
 	public void resetTableColor() {
@@ -224,14 +224,14 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 				JOptionPane.YES_NO_OPTION);
 
 		if (resetPaddleChoice == JOptionPane.YES_OPTION) {
-			PongGamePlay.TABLE_COLOR = new Color(119, 176, 83);
+			PongGamePlay.tableColor = new Color(119, 176, 83);
 		}
 
 	}
 
 	public void changeBallColor() {
 		new JColorChooser();
-		Ball.BALL_COLOR = JColorChooser.showDialog(this, "Pick A Color", Color.WHITE);
+		Ball.ballColor = JColorChooser.showDialog(this, "Pick A Color", Color.WHITE);
 	}
 
 	public void resetBallColor() {
@@ -239,11 +239,24 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener {
 				JOptionPane.YES_NO_OPTION);
 
 		if (resetBallColorChoice == JOptionPane.YES_OPTION) {
-			Ball.BALL_COLOR = Color.WHITE;
+			Ball.ballColor = Color.WHITE;
 		}
 	}
 
-	public void resetSettings() { // TODO: Implement button that resets all settings to default
+	public void settingsReset() { // TODO: Implement button that resets all settings to default
+
+		int resetSettingsOption = JOptionPane.showConfirmDialog(this, "Reset All Settings?", "Reset All Settings",
+				JOptionPane.YES_NO_OPTION);
+
+		if (resetSettingsOption == JOptionPane.YES_OPTION) { // TODO: settings menu buttons update to default values
+			Paddle.bluePaddle = new Color(69, 91, 132);
+			Paddle.redPaddle = new Color(172, 58, 62);
+			Ball.ballColor = Color.WHITE;
+			PongGamePlay.tableColor = new Color(119, 176, 83);
+			PongGamePlay.winnerScore = 3;
+			PongGamePlay.playerOneName = "Player One";
+			PongGamePlay.playerTwoName = "Player Two";
+		}
 
 	}
 
