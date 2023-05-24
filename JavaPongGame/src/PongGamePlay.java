@@ -1,17 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.text.BreakIterator;
+import java.io.*;
 import java.util.*;
 
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class PongGamePlay extends JPanel implements Runnable {
@@ -57,6 +49,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	boolean isAtMatchPointPlayedPlayerOne = true;
 	boolean isAtmatchPointPlayedPlayerTwo = true;
+
+	static Color leftFieldColor = tableColor; // default values will be our tableColor
+	static Color rightFieldColor = tableColor;
 
 	public PongGamePlay() {
 
@@ -122,16 +117,25 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	public void draw(Graphics g) {
 
-		// TODO : set custom colors for left and right player areas
-//		g.setColor(Color.red);
-//		g.fillRect(0, 0, GAME_WIDTH / 2, GAME_HEIGHT);
-
+		// Set the colors for our left and right fields
+		fillLeftField(g);
+		fillRightField(g);
 		// drawing our Paddle objects
 		playerOnePaddle.draw(g);
 		playerTwoPaddle.draw(g);
 		gameBall.draw(g);
 		gameScore.draw(g);
 
+	}
+
+	public void fillLeftField(Graphics g) {
+		g.setColor(PongGamePlay.leftFieldColor);
+		g.fillRect(0, 0, PongGamePlay.GAME_WIDTH / 2, PongGamePlay.GAME_HEIGHT);
+	}
+
+	public void fillRightField(Graphics g) {
+		g.setColor(PongGamePlay.rightFieldColor);
+		g.fillRect(GAME_WIDTH / 2, 0, GAME_WIDTH / 2, PongGamePlay.GAME_HEIGHT);
 	}
 
 	public void move() {
@@ -301,7 +305,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 		public void keyPressed(KeyEvent e) {
 
-			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				askExitGame();
 			} // TODO: add other commands?
 

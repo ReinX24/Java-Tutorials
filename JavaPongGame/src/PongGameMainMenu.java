@@ -1,18 +1,12 @@
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class PongGameMainMenu extends JPanel implements ActionListener {
+public class PongGameMainMenu extends JPanel implements ActionListener, KeyListener {
 
 	static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 42);
 	static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 16);
@@ -38,14 +32,16 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
+	FloatControl gainControl;
 
 	public PongGameMainMenu() {
 
 		setGameTheme();
 
 		menuFrame = new JFrame("Pong Game Menu");
-		menuFrame.setResizable(true);
+		menuFrame.setResizable(false);
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuFrame.addKeyListener(this);
 
 		playMainMenuMusic();
 		addMenuDetails();
@@ -54,63 +50,6 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		menuFrame.pack();
 		menuFrame.setLocationRelativeTo(null);
 		menuFrame.setVisible(true);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
-		if (arg0.getSource() == playButton) {
-			playPongGame();
-		}
-
-		if (arg0.getSource() == settingsButton) {
-			gameSettingsMenu();
-		}
-
-		if (arg0.getSource() == instructionsButton) {
-			gameInstructions();
-		}
-
-		if (arg0.getSource() == aboutButton) {
-			gameAbout();
-		}
-
-		if (arg0.getSource() == exitButton) {
-			gameExit();
-		}
-
-	}
-
-	public void playPongGame() {
-		menuFrame.dispose();
-		audioClip.stop();
-		new PongGamePlay(); // calling our PongGameFrame constructor
-	}
-
-	public void gameSettingsMenu() {
-		menuFrame.dispose();
-		audioClip.stop();
-		new PongGameSettingsMenu();
-	}
-
-	public void gameInstructions() {
-		JOptionPane.showMessageDialog(null,
-				"- Instructions -\n ← or Backspace to Return to Main Menu / Restart / Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down",
-				"Game Instructions", JOptionPane.INFORMATION_MESSAGE);
-	}
-
-	public void gameAbout() {
-		JOptionPane.showMessageDialog(menuFrame,
-				"- Java Pong Game -" + "\nBy:\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
-				"About", JOptionPane.INFORMATION_MESSAGE);
-	}
-
-	public void gameExit() {
-		int userChoice = JOptionPane.showConfirmDialog(menuFrame, "Are you sure you want to exit Pong?",
-				"Exit Confirmation", JOptionPane.YES_NO_OPTION);
-		if (userChoice == JOptionPane.YES_OPTION) {
-			menuFrame.dispose(); // close our menuFrame
-		}
 	}
 
 	public void addMenuDetails() {
@@ -127,16 +66,16 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		addExitButton();
 	}
 
+	public void addFrameIcon() {
+		menuFrame.setIconImage(PONG_ICON.getImage());
+	}
+
 	public void addMenuPanel() {
 		this.setPreferredSize(PongGamePlay.SCREEN_SIZE);
 		this.setLayout(new GridLayout(6, 1, 0, 25));
 		this.setBorder(new EmptyBorder(50, 300, 50, 300));
 		this.setBackground(MAINMENU_BACKGROUND_COLOR);
 		menuFrame.add(this);
-	}
-
-	public void addFrameIcon() {
-		menuFrame.setIconImage(PONG_ICON.getImage());
 	}
 
 	public void addTitleLabel() {
@@ -181,6 +120,63 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		this.add(paraButton);
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+
+		if (arg0.getSource() == playButton) {
+			playPongGame();
+		}
+
+		if (arg0.getSource() == settingsButton) {
+			gameSettingsMenu();
+		}
+
+		if (arg0.getSource() == instructionsButton) {
+			gameInstructions();
+		}
+
+		if (arg0.getSource() == aboutButton) {
+			gameAbout();
+		}
+
+		if (arg0.getSource() == exitButton) {
+			gameExit();
+		}
+
+	}
+
+	public void playPongGame() {
+		menuFrame.dispose();
+		audioClip.stop();
+		new PongGamePlay(); // calling our PongGameFrame constructor
+	}
+
+	public void gameSettingsMenu() {
+		menuFrame.dispose();
+		audioClip.stop();
+		new PongGameSettingsMenu();
+	}
+
+	public void gameInstructions() {
+		JOptionPane.showMessageDialog(null,
+				"- Instructions -\n Esc or Escape to Return to Main Menu / Restart / Exit Game\n\nPlayer One:\nW to go Up\nS to go Down\n\nPlayer Two:\n↑ to go Up\n↓ to go Down",
+				"Game Instructions", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void gameAbout() {
+		JOptionPane.showMessageDialog(menuFrame,
+				"- Java Pong Game -" + "\nBy:\nRein Solis" + "\nJholichi Tempra" + "\nVino Supnet" + "\nJesus Agustin",
+				"About", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void gameExit() {
+		int userChoice = JOptionPane.showConfirmDialog(menuFrame, "Are you sure you want to exit Pong?",
+				"Exit Confirmation", JOptionPane.YES_NO_OPTION);
+		if (userChoice == JOptionPane.YES_OPTION) {
+			menuFrame.dispose(); // close our menuFrame
+		}
+	}
+
 	public void playMainMenuMusic() {
 
 		try {
@@ -192,7 +188,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 			audioClip.open(streamAudio);
 
 			// Lowering the volume of our main menu music
-			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(-6.0f);
 
 			audioClip.start();
@@ -205,7 +201,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 	}
 
 	public void setGameTheme() {
-		// TODO : research and experiment on setLookAndFeel
+
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException e) {
@@ -217,6 +213,25 @@ public class PongGameMainMenu extends JPanel implements ActionListener {
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+
+		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			exitButton.doClick();
+		}
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+
 	}
 
 }
