@@ -139,12 +139,10 @@ public class PongGamePlay extends JPanel implements Runnable {
 	}
 
 	public void move() {
-
 		// making our Paddles move smoother, used in run() method
 		playerOnePaddle.move();
 		playerTwoPaddle.move();
 		gameBall.move();
-
 	}
 
 	public void checkCollision() {

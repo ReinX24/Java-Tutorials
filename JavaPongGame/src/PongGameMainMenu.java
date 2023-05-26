@@ -87,27 +87,27 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 	}
 
 	public void addPlayButton() {
-		playButton = new JButton("Play Pong!");
+		playButton = new JButton("<html><u>P</u>lay Pong!</html>");
 		createButton(playButton);
 	}
 
 	public void addSettingsButton() {
-		settingsButton = new JButton("Settings");
+		settingsButton = new JButton("<html><u>S</u>ettings</html>");
 		createButton(settingsButton);
 	}
 
 	public void addInstructionsButton() {
-		instructionsButton = new JButton("Instructions");
+		instructionsButton = new JButton("<html><u>I</u>nstructions</html>");
 		createButton(instructionsButton);
 	}
 
 	public void addAboutButton() {
-		aboutButton = new JButton("About");
+		aboutButton = new JButton("<html><u>A</u>bout</html>");
 		createButton(aboutButton);
 	}
 
 	public void addExitButton() {
-		exitButton = new JButton("Exit");
+		exitButton = new JButton("<html><u>E</u>xit</html>");
 		createButton(exitButton);
 	}
 
@@ -218,7 +218,23 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 
-		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		if (arg0.getKeyCode() == KeyEvent.VK_P) {
+			playButton.doClick();
+		}
+
+		if (arg0.getKeyCode() == KeyEvent.VK_S) {
+			settingsButton.doClick();
+		}
+
+		if (arg0.getKeyCode() == KeyEvent.VK_I) {
+			instructionsButton.doClick();
+		}
+
+		if (arg0.getKeyCode() == KeyEvent.VK_A) {
+			aboutButton.doClick();
+		}
+
+		if (arg0.getKeyCode() == KeyEvent.VK_E || arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			exitButton.doClick();
 		}
 

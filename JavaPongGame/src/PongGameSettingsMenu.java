@@ -187,7 +187,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 	}
 
 	public void addExitButton() {
-		exitSettingsMenuButton = new JButton("Exit To Main Menu");
+		exitSettingsMenuButton = new JButton("<html><u>E</u>xit To Main Menu</html>");
 		createButton(exitSettingsMenuButton);
 	}
 
@@ -392,9 +392,15 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 	}
 
 	public void exitSettingsMenu() {
-		settingsFrame.dispose();
-		audioClip.stop();
-		new PongGameMainMenu();
+		int exitSettingsChoice = JOptionPane.showConfirmDialog(this, "Return to Main Menu?", "Exit Settings Menu",
+				JOptionPane.YES_NO_OPTION);
+
+		if (exitSettingsChoice == JOptionPane.YES_OPTION) {
+			settingsFrame.dispose();
+			audioClip.stop();
+			new PongGameMainMenu();
+		}
+
 	}
 
 	public void playSettingsMenuMusic() {
@@ -419,7 +425,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 
-		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		if (arg0.getKeyCode() == KeyEvent.VK_E || arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			exitSettingsMenuButton.doClick();
 		}
 
