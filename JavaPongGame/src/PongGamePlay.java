@@ -42,10 +42,12 @@ public class PongGamePlay extends JPanel implements Runnable {
 	final File WALL_HIT_SCORE_SOUND = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
 	final File GAME_VICTORY_MUSIC = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
 	final File GAME_MATCH_POINT_SOUND = new File("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
+	final File GAME_WALL_HIT_SOUND = new File("Retro impact hit ｜ Sound Effect.wav");
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
 	Clip fightingClip;
+	FloatControl gainControl; // for adjusting audio volume
 
 	boolean isAtMatchPointPlayedPlayerOne = true;
 	boolean isAtmatchPointPlayedPlayerTwo = true;
@@ -149,9 +151,11 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 		// bounce the ball off the top and bottom window edges
 		if (gameBall.y <= 0) {
+			playWallHitSound();
 			gameBall.setYDirection(-gameBall.yVelocity); // goes into the opposite direction
 		}
 		if (gameBall.y >= GAME_HEIGHT - BALL_DIAMETER) {
+			playWallHitSound();
 			gameBall.setYDirection(-gameBall.yVelocity);
 		}
 
@@ -204,13 +208,13 @@ public class PongGamePlay extends JPanel implements Runnable {
 		// give a player a point and creates new Paddles and a new Ball
 		if (gameBall.x <= 0) { // player two scores point
 			gameScore.playerTwoScore++;
-			playWallHitSound();
+			playWallScoreHitSound();
 			newPaddles();
 			newBall();
 		}
 		if (gameBall.x >= GAME_WIDTH - BALL_DIAMETER) {
 			gameScore.playerOneScore++;
-			playWallHitSound();
+			playWallScoreHitSound();
 			newPaddles();
 			newBall();
 		}
@@ -305,7 +309,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				askExitGame();
-			} // TODO: add other commands?
+			}
 
 			playerOnePaddle.keyPressed(e);
 			playerTwoPaddle.keyPressed(e);
@@ -335,11 +339,20 @@ public class PongGamePlay extends JPanel implements Runnable {
 			gameFrame.dispose();
 			new PongGamePlay();
 		} else if (userChoice == 2) {
+			exitGameConfirmation();
+		}
+
+	}
+
+	public void exitGameConfirmation() {
+		int confirmChoice = JOptionPane.showConfirmDialog(this, "Exit Game?", "Exit Game Confirmation",
+				JOptionPane.YES_NO_OPTION);
+
+		if (confirmChoice == JOptionPane.YES_OPTION) {
 			fightingClip.stop();
 			gameThread.interrupt();
 			gameFrame.dispose();
 		}
-
 	}
 
 	public void playGameFightMusic() {
@@ -349,8 +362,8 @@ public class PongGamePlay extends JPanel implements Runnable {
 			fightingClip = AudioSystem.getClip();
 			fightingClip.open(streamAudio);
 
-			FloatControl gainControl = (FloatControl) fightingClip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-6.0f);
+			gainControl = (FloatControl) fightingClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-10.0f);
 
 			fightingClip.loop(Clip.LOOP_CONTINUOUSLY);
 		} catch (UnsupportedAudioFileException | IOException e) {
@@ -376,7 +389,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 
 	}
 
-	public void playWallHitSound() {
+	public void playWallScoreHitSound() {
 
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(WALL_HIT_SCORE_SOUND);
@@ -413,7 +426,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 
-			FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(6.0f);
 
 			audioClip.start();
@@ -422,6 +435,25 @@ public class PongGamePlay extends JPanel implements Runnable {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void playWallHitSound() {
+
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(GAME_WALL_HIT_SOUND);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

@@ -19,7 +19,7 @@ public class PongGameStart {
 		 * - Add match point sound effect or when players are 1 point away X
 		 * - Add Option to change player one and two names in Settings X
 		 * - Add and implement "reset all to defaults" button X
-		 * - TODO: add sound effects if the ball hits the ceiling or floor of the JFrame
+		 * - Add sound effects if the ball hits the ceiling or floor of the JFrame X
 		 *
 		 */
 		
@@ -27,7 +27,7 @@ public class PongGameStart {
 		 * Other Debugging and Code Maintenance Tasks
 		 * - Clean Java Audio code, make File objects before classes X
 		 * - Find a way to make PongGameSettingsMenu layout cleaner X
-		 * - TODO: Fix Code Format into the following: Creating JFrame, JFrame Settings, JButtons & Settings, Others.
+		 * - Fix Code Format into the following: Creating JFrame, JFrame Settings, JButtons & Settings, Others X
 		 */
 
 	}
