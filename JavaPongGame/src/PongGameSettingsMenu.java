@@ -195,7 +195,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 		paraButton.addActionListener(this);
 		paraButton.setFocusable(false);
 		paraButton.setFont(PongGameMainMenu.BUTTON_FONT);
-		paraButton.setForeground(PongGameMainMenu.FONT_COLOR);
+//		paraButton.setForeground(PongGameMainMenu.FONT_COLOR);
 		paraButton.setBackground(PongGameMainMenu.BUTTON_COLOR);
 		settingsMenuButtonsPanel.add(paraButton);
 	}
