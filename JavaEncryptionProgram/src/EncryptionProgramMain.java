@@ -13,7 +13,7 @@ public class EncryptionProgramMain {
 		 * 
 		 */
 
-		EncryptionProgram myEncrypProgram = new EncryptionProgram();
+		new EncryptionProgram();
 
 	}
 

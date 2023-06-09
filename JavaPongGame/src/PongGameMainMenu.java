@@ -36,7 +36,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	public PongGameMainMenu() {
 
-		setGameTheme(); 
+		setGameTheme();
 
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(false);
@@ -201,12 +201,12 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 	}
 
 	public void setGameTheme() {
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
-			}
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

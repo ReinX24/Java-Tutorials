@@ -9,7 +9,6 @@ public class EncryptionProgram {
 	private char myChar;
 	private String myLine;
 	private char[] myLetters;
-	private char[] mySecretLetters;
 
 	EncryptionProgram() {
 
@@ -68,32 +67,86 @@ public class EncryptionProgram {
 		myChar = ' ';
 		charList.clear();
 		shuffledList.clear();
-		
-		// adding symbols between ASCII of space and tilde (~)
+
+		// adding symbols between ASCII of space and tilde (~) to charList
 		for (int i = 32; i < 127; i++) {
-			charList.add(Character.valueOf(myChar));
-			myChar++;
+			charList.add(Character.valueOf(myChar)); // add myChar to charList
+			myChar++; // add myChar value, next ASCII value
 		}
-		
+
 		shuffledList = new ArrayList<Character>(charList); // copying charList to shuffledList
 		Collections.shuffle(shuffledList); // shuffles our shuffledList
 		System.out.println("*A new key has been generated*");
-		
+
 	}
 
 	private void getKey() {
-
+		// Printing the contents of our shuffledList
+		System.out.println("Key: ");
+		// Non shuffled charList
+		for (Character eachCharacter : charList) {
+			System.out.print(eachCharacter);
+		}
+		System.out.println();
+		// shuffledList of charList
+		for (Character eachCharacter : shuffledList) {
+			System.out.print(eachCharacter);
+		}
+		System.out.println();
 	}
 
 	private void encryptText() {
+		userInput.nextLine(); // to fix formatting before typing in text
+		System.out.println("Enter a message to be encrypted: ");
+		String userMessage = userInput.nextLine();
 
+		myLetters = userMessage.toCharArray(); // converts userMessage into a char array
+
+		for (int i = 0; i < myLetters.length; i++) {
+			for (int j = 0; j < charList.size(); j++) {
+				// check if the element in myLetters is similar to one in charList
+				if (myLetters[i] == charList.get(j)) {
+					// replace the char in myLetters with the one in shuffledList
+					myLetters[i] = shuffledList.get(j);
+					break;
+				}
+			}
+		}
+		// Printing encrypted message
+		System.out.println("Encrypted message: ");
+		for (char eachChar : myLetters) {
+			System.out.print(eachChar);
+		}
+		System.out.println();
 	}
 
 	private void decryptText() {
+		userInput.nextLine(); // to fix formatting before typing in text
+		System.out.println("Enter a message to be decrypted: ");
+		String userMessage = userInput.nextLine();
 
+		myLetters = userMessage.toCharArray(); // converts userMessage into a char array
+
+		for (int i = 0; i < myLetters.length; i++) {
+			for (int j = 0; j < shuffledList.size(); j++) {
+				// check if the element in myLetters is similar to one in shuffledList
+				if (myLetters[i] == shuffledList.get(j)) {
+					// replace the char in myLetters with the one in charList (non shuffled key)
+					myLetters[i] = charList.get(j);
+					break;
+				}
+			}
+		}
+		// Printing encrypted message
+		System.out.println("Decrypted message: ");
+		for (char eachChar : myLetters) {
+			System.out.print(eachChar);
+		}
+		System.out.println();
 	}
 
 	private void quitProgram() {
+		System.out.println("Thank you, have a nice day bro!");
 		System.exit(0);
 	}
 
