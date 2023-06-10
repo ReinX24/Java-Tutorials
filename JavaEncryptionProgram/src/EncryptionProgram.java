@@ -3,18 +3,15 @@ import java.util.*;
 public class EncryptionProgram {
 
 	private Scanner userInput;
-	private Random myRand;
 	private ArrayList<Character> charList;
 	private ArrayList<Character> shuffledList;
 	private char myChar;
-	private String myLine;
 	private char[] myLetters;
 
 	EncryptionProgram() {
 
 		// Finish instantiating some variables that we will be using for our program
 		userInput = new Scanner(System.in);
-		myRand = new Random();
 		charList = new ArrayList<Character>();
 		shuffledList = new ArrayList<Character>();
 		myChar = ' ';
