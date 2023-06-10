@@ -85,10 +85,12 @@ public class EncryptionProgram {
 
 		System.out.println("Key: ");
 
+		// Printing non shuffled charList
 		for (int i = 0; i < charList.size(); i++) {
 			System.out.print(charList.get(i));
 		}
 		System.out.println();
+		// Printing shuffledList
 		for (int i = 0; i < shuffledList.size(); i++) {
 			System.out.print(shuffledList.get(i));
 		}
