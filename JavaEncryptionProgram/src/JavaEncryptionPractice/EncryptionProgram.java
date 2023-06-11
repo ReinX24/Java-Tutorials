@@ -1,5 +1,6 @@
 package JavaEncryptionPractice;
 
+import java.beans.beancontext.BeanContextMembershipEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -83,7 +84,7 @@ public class EncryptionProgram {
 
 	public void getKey() {
 
-		System.out.println("Key: ");
+		System.out.println("Key:");
 
 		// Printing non shuffled charList
 		for (int i = 0; i < charList.size(); i++) {
@@ -98,13 +99,42 @@ public class EncryptionProgram {
 
 	}
 
-	// TODO: finish encrypt message method
+	// DONE: finish encrypt message method
 	public void encryptMessage() {
+		userInput.nextLine();
+		System.out.println("Enter message to be encrypted:");
+		String userString = userInput.nextLine();
 
+		myCharArr = userString.toCharArray();
+
+		System.out.println("Encrypted message:");
+		for (int i = 0; i < myCharArr.length; i++) {
+			for (int j = 0; j < charList.size(); j++) {
+				if (myCharArr[i] == charList.get(j)) {
+					System.out.print(shuffledList.get(j));
+				}
+			}
+		}
+		System.out.println();
 	}
 
-	// TODO: finish decrypt message method
+	// DONE: finish decrypt message method
 	public void decryptMessage() {
+		userInput.nextLine();
+		System.out.println("Enter message to be decrypted: ");
+		String encryptedString = userInput.nextLine();
+
+		myCharArr = encryptedString.toCharArray();
+
+		System.out.println("Decrypted message:");
+		for (int i = 0; i < myCharArr.length; i++) {
+			for (int j = 0; j < charList.size(); j++) {
+				if (myCharArr[i] == shuffledList.get(j)) {
+					System.out.print(charList.get(j));
+				}
+			}
+		}
+		System.out.println();
 
 	}
 
