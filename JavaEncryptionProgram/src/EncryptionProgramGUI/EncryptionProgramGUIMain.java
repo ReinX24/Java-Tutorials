@@ -6,14 +6,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.nimbus.AbstractRegionPainter;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	final Dimension PROGRAM_SCREEN_SIZE = new Dimension(1336, 768);
 	final Color BACKGROUND_COLOR = new Color(0, 128, 128);
-	final Font TITLE_FONT = new Font("Arial", Font.BOLD, 24);
+	final Font TITLE_FONT = new Font("Arial", Font.BOLD, 32);
 	final Font PROGRAM_FONT = new Font("Arial", Font.BOLD, 16);
 	final Color FONT_COLOR = Color.WHITE;
 	final Color FONT_BACKGROUND_COLOR = Color.LIGHT_GRAY;
@@ -29,13 +32,18 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	JButton exitProgramButton;
 
 	JButton[] programButtons;
-	
+
 	ArrayList<Character> plainCharList;
 	ArrayList<Character> shuffledCharList;
-	
+
+	String currentKey;
+	String plainMessage;
+	String encryptedMessage;
+
 	char currentChar;
-	char[] userStringCharArr;
-	
+	char[] messageCharArr;
+
+	JTextField encryptedMessageField;
 
 	public static void main(String[] args) {
 
@@ -47,11 +55,24 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	public EncryptionProgramGUIMain() {
 
+		setLookAndFeel();
 		createFrame();
 
 	}
 
+	public void setLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void createFrame() {
+
+		newKey(); // generates a new key
+
 		this.setTitle("Encryption Program");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
@@ -113,66 +134,132 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		if (arg0.getSource() == newKeyButton) {
 			// newKey function
-		} 
-		
+			newKey();
+		}
+
 		if (arg0.getSource() == getKeyButton) {
 			// getKey function
+			getKey();
 		}
-		
+
 		if (arg0.getSource() == encryptMessageButton) {
 			// encryptMessage function
+			encryptMessage();
 		}
-		
+
 		if (arg0.getSource() == decryptMessageButton) {
 			// decryptMessage function
+			decryptMessage();
 		}
-		
+
 		if (arg0.getSource() == aboutProgramButton) {
 			// aboutProgram function
+			aboutProgram();
 		}
-		
+
 		if (arg0.getSource() == exitProgramButton) {
 			// exitProgram function
 			exitProgram();
 		}
-				
+
 	}
-	
-	// TODO: finish getKey function
+
 	public void getKey() {
-		
-		plainCharList = new ArrayList<Character>();
-		
-		
-		
-		for (int i = 32; i < 127; i++) {
-			
+
+		currentKey = "";
+
+		for (Character eachPlainChar : plainCharList) {
+			currentKey += eachPlainChar;
 		}
-		
+
+		currentKey += "\n"; // currentKey String breaks into a new line
+
+		for (Character eachShuffledChar : shuffledCharList) {
+			currentKey += eachShuffledChar;
+		}
+
+		JOptionPane.showMessageDialog(this, "Current Key:\n" + currentKey, "GET KEY", JOptionPane.INFORMATION_MESSAGE);
+		System.out.println(plainCharList);
+		System.out.println(shuffledCharList);
+
 	}
-	
+
 	public void newKey() {
-		
+
+		// TODO: add confirmation message before generating a new key
+		currentChar = ' ';
+		plainCharList = new ArrayList<Character>();
+
+		for (int i = 32; i < 127; i++) {
+			plainCharList.add(currentChar++);
+		}
+
+		shuffledCharList = new ArrayList<Character>(plainCharList);
+		// copies plainCharList to shuffledCharList
+		Collections.shuffle(shuffledCharList); // shuffles shuffledCharList
+
 	}
-	
+
 	public void encryptMessage() {
-		
+
+		// TODO: research about exception in console when user chooses 'Cancel' in
+		// showInputDialog
+		plainMessage = JOptionPane.showInputDialog(this, "Enter message to be encrypted", "ENCRYPT MESSAGE",
+				JOptionPane.QUESTION_MESSAGE);
+
+		encryptedMessage = "";
+
+		messageCharArr = plainMessage.toCharArray();
+
+		for (int i = 0; i < messageCharArr.length; i++) {
+			for (int j = 0; j < plainCharList.size(); j++) {
+				if (messageCharArr[i] == plainCharList.get(j)) {
+					encryptedMessage += shuffledCharList.get(j);
+				}
+			}
+		}
+
+		showEncryptedMessage();
+
 	}
-	
+
+	public void showEncryptedMessage() {
+		encryptedMessageField = new JTextField(encryptedMessage);
+		encryptedMessageField.setEditable(false);
+
+		String encryptDialogChoices[] = { "Confirm", "Copy" };
+		int encryptDialogUserChoice = JOptionPane.showOptionDialog(this, "Encrypted Message:\n" + encryptedMessage,
+				"ENCRYPTED MESSAGE", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+				encryptDialogChoices, encryptDialogChoices[0]);
+
+		if (encryptDialogUserChoice == 1) {
+			JOptionPane.showMessageDialog(this, "Encrypted message copied to clipboard!", "COPY ENCRYPTED MESSAGE",
+					JOptionPane.INFORMATION_MESSAGE);
+			// Copying encrypted message into clip board, can now be pasted by user
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(encryptedMessage), null);
+		}
+	}
+
 	public void decryptMessage() {
-		
+
 	}
-	
+
 	public void aboutProgram() {
-		
+
 	}
-	
+
 	public void exitProgram() {
 		// TODO: add a confirmation prompt before closing program
-		System.exit(0);
+
+		int exitConfirmChoice = JOptionPane.showConfirmDialog(this, "Exit?", "CONFIRM EXIT", JOptionPane.YES_NO_OPTION);
+
+		if (exitConfirmChoice == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
+
 	}
 
 }
