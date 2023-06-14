@@ -45,6 +45,10 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	JTextField encryptedMessageField;
 
+	int newKeyConfirm;
+	String[] dialogChoices = { "Confirm", "Copy" };
+	int dialogUserChoice;
+
 	public static void main(String[] args) {
 
 		// TODO: recreate encryption program using Java Swing GUI components
@@ -71,7 +75,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	public void createFrame() {
 
-		newKey(); // generates a new key
+		createNewKey(); // generates a new key
 
 		this.setTitle("Encryption Program");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,7 +96,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		mainPanel.setLayout(new GridLayout(7, 1, 0, 20)); // 6 rows, 1 column
 		mainPanel.setBorder(new EmptyBorder(25, 400, 50, 400));
 
-		// TODO: add titleLabel attributes
+		// DONE: add titleLabel attributes
 		titleLabel = new JLabel("ASCII ENCRYPTION PROGRAM");
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		titleLabel.setFont(TITLE_FONT);
@@ -182,14 +186,25 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		}
 
 		JOptionPane.showMessageDialog(this, "Current Key:\n" + currentKey, "GET KEY", JOptionPane.INFORMATION_MESSAGE);
-		System.out.println(plainCharList);
-		System.out.println(shuffledCharList);
 
 	}
 
 	public void newKey() {
 
 		// TODO: add confirmation message before generating a new key
+		newKeyConfirm = JOptionPane.showConfirmDialog(this, "Create new key?", "NEW KEY CONFIRM",
+				JOptionPane.YES_NO_OPTION);
+
+		if (newKeyConfirm == JOptionPane.YES_OPTION) {
+			// TODO: change into showOptionDialog and have getKey as one of the choices
+			JOptionPane.showMessageDialog(this, "New key generated!", "NEW KEY MESSAGE",
+					JOptionPane.INFORMATION_MESSAGE);
+			createNewKey();
+		}
+
+	}
+
+	public void createNewKey() {
 		currentChar = ' ';
 		plainCharList = new ArrayList<Character>();
 
@@ -200,29 +215,28 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		shuffledCharList = new ArrayList<Character>(plainCharList);
 		// copies plainCharList to shuffledCharList
 		Collections.shuffle(shuffledCharList); // shuffles shuffledCharList
-
 	}
 
 	public void encryptMessage() {
 
-		// TODO: research about exception in console when user chooses 'Cancel' in
-		// showInputDialog
 		plainMessage = JOptionPane.showInputDialog(this, "Enter message to be encrypted", "ENCRYPT MESSAGE",
 				JOptionPane.QUESTION_MESSAGE);
 
-		encryptedMessage = "";
+		if (plainMessage != null) { // checks if plainMessage is empty
+			encryptedMessage = "";
+			messageCharArr = plainMessage.toCharArray();
 
-		messageCharArr = plainMessage.toCharArray();
-
-		for (int i = 0; i < messageCharArr.length; i++) {
-			for (int j = 0; j < plainCharList.size(); j++) {
-				if (messageCharArr[i] == plainCharList.get(j)) {
-					encryptedMessage += shuffledCharList.get(j);
+			for (int i = 0; i < messageCharArr.length; i++) {
+				for (int j = 0; j < plainCharList.size(); j++) {
+					if (messageCharArr[i] == plainCharList.get(j)) {
+						encryptedMessage += shuffledCharList.get(j);
+					}
 				}
 			}
-		}
 
-		showEncryptedMessage();
+			showEncryptedMessage();
+
+		}
 
 	}
 
@@ -230,12 +244,11 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		encryptedMessageField = new JTextField(encryptedMessage);
 		encryptedMessageField.setEditable(false);
 
-		String encryptDialogChoices[] = { "Confirm", "Copy" };
-		int encryptDialogUserChoice = JOptionPane.showOptionDialog(this, "Encrypted Message:\n" + encryptedMessage,
-				"ENCRYPTED MESSAGE", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-				encryptDialogChoices, encryptDialogChoices[0]);
+		dialogUserChoice = JOptionPane.showOptionDialog(this, "Encrypted Message:\n" + encryptedMessage,
+				"ENCRYPTED MESSAGE", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, dialogChoices,
+				dialogChoices[0]);
 
-		if (encryptDialogUserChoice == 1) {
+		if (dialogUserChoice == 1) {
 			JOptionPane.showMessageDialog(this, "Encrypted message copied to clipboard!", "COPY ENCRYPTED MESSAGE",
 					JOptionPane.INFORMATION_MESSAGE);
 			// Copying encrypted message into clip board, can now be pasted by user
@@ -245,21 +258,55 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	public void decryptMessage() {
 
+		encryptedMessage = JOptionPane.showInputDialog(this, "Enter message to be decrypted", "DECRYPT MESSAGE",
+				JOptionPane.INFORMATION_MESSAGE);
+
+		if (encryptedMessage != null) {
+			plainMessage = "";
+			messageCharArr = encryptedMessage.toCharArray();
+
+			for (int i = 0; i < messageCharArr.length; i++) {
+				for (int j = 0; j < shuffledCharList.size(); j++) {
+					if (messageCharArr[i] == shuffledCharList.get(j)) {
+						plainMessage += plainCharList.get(j);
+					}
+				}
+			}
+
+			showDecryptedMessage();
+
+		}
+
 	}
 
+	public void showDecryptedMessage() {
+		encryptedMessageField = new JTextField(plainMessage);
+		encryptedMessageField.setEditable(false);
+
+		dialogUserChoice = JOptionPane.showOptionDialog(this, "Decrypted Message:\n" + plainMessage,
+				"ENCRYPTED MESSAGE", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, dialogChoices,
+				dialogChoices[0]);
+
+		if (dialogUserChoice == 1) {
+			JOptionPane.showMessageDialog(this, "Decrypted message copied to clipboard!", "COPY DECRYPTED MESSAGE",
+					JOptionPane.INFORMATION_MESSAGE);
+			// Copying encrypted message into clip board, can now be pasted by user
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(plainMessage), null);
+		}
+	}
+
+	// TODO: add an aboutProgram messageDialog that explains the functions of the
+	// program
 	public void aboutProgram() {
 
 	}
 
 	public void exitProgram() {
-		// TODO: add a confirmation prompt before closing program
-
+		// DONE: add a confirmation prompt before closing program
 		int exitConfirmChoice = JOptionPane.showConfirmDialog(this, "Exit?", "CONFIRM EXIT", JOptionPane.YES_NO_OPTION);
-
 		if (exitConfirmChoice == JOptionPane.YES_OPTION) {
 			System.exit(0);
 		}
-
 	}
 
 }
