@@ -1,15 +1,12 @@
 package EncryptionProgramGUI;
 
-import javax.lang.model.type.IntersectionType;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
@@ -46,12 +43,15 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	JTextField encryptedMessageField;
 
 	int newKeyConfirm;
-	String[] dialogChoices = { "Confirm", "Copy" };
+	final String[] dialogChoices = { "Confirm", "Copy" };
+	final String[] newKeyChoices = { "Confirm", "Get Key" };
 	int dialogUserChoice;
 
 	public static void main(String[] args) {
 
 		// TODO: recreate encryption program using Java Swing GUI components
+		// TODO: export the program into a jar file with an icon
+		// TODO: add music or background sounds to program
 		new EncryptionProgramGUIMain();
 		// TODO: add ImageIcon for our program
 
@@ -185,21 +185,27 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 			currentKey += eachShuffledChar;
 		}
 
+		// TODO: add an option where the user can copy the key to their clip board
 		JOptionPane.showMessageDialog(this, "Current Key:\n" + currentKey, "GET KEY", JOptionPane.INFORMATION_MESSAGE);
 
 	}
 
 	public void newKey() {
 
-		// TODO: add confirmation message before generating a new key
+		// DONE: add confirmation message before generating a new key
 		newKeyConfirm = JOptionPane.showConfirmDialog(this, "Create new key?", "NEW KEY CONFIRM",
 				JOptionPane.YES_NO_OPTION);
 
 		if (newKeyConfirm == JOptionPane.YES_OPTION) {
-			// TODO: change into showOptionDialog and have getKey as one of the choices
-			JOptionPane.showMessageDialog(this, "New key generated!", "NEW KEY MESSAGE",
-					JOptionPane.INFORMATION_MESSAGE);
+			// DONE: change into showOptionDialog and have getKey as one of the choices
 			createNewKey();
+		}
+
+		dialogUserChoice = JOptionPane.showOptionDialog(this, "New key generated", "NEW KEY MESSAGE",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, newKeyChoices, newKeyChoices[0]);
+
+		if (dialogUserChoice == 1) {
+			getKey();
 		}
 
 	}
@@ -290,16 +296,19 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		if (dialogUserChoice == 1) {
 			JOptionPane.showMessageDialog(this, "Decrypted message copied to clipboard!", "COPY DECRYPTED MESSAGE",
 					JOptionPane.INFORMATION_MESSAGE);
-			// Copying encrypted message into clip board, can now be pasted by user
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(plainMessage), null);
 		}
 	}
 
-	// TODO: add an aboutProgram messageDialog that explains the functions of the
+	// DONE: add an aboutProgram messageDialog that explains the functions of the
 	// program
 	public void aboutProgram() {
-
+		JOptionPane.showMessageDialog(this,
+				"ASCII Encryption Program\n(American Standard Code for Information Interchange)\nReplaces a character randomly with another character in an ASCII Table.",
+				"ABOUT PROGRAM", JOptionPane.INFORMATION_MESSAGE);
 	}
+
+	// TODO: add another button that shows the ascii table
 
 	public void exitProgram() {
 		// DONE: add a confirmation prompt before closing program
