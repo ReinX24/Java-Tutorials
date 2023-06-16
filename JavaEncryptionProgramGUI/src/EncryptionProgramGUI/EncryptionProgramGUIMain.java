@@ -50,8 +50,12 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	JTextArea keyArea;
 	JScrollPane keyPane;
-	
-	final ImageIcon encryptIcon = new ImageIcon("encryptionButton.png");
+
+	final ImageIcon encryptIcon = new ImageIcon("encryptionPhoto.png");
+	final ImageIcon decryptIcon = new ImageIcon("decryptionPhoto.png");
+	final ImageIcon getKeyIcon = new ImageIcon("getKeyPhoto.png");
+	final ImageIcon newKeyIcon = new ImageIcon("newKeyPhoto.png");
+	final ImageIcon aboutProgramIcon = new ImageIcon("aboutProgramPhoto.png");
 
 	public static void main(String[] args) {
 
@@ -119,13 +123,21 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		programButtons = new JButton[7];
 
 		newKeyButton = new JButton("New Key");
+		newKeyButton.setIcon(newKeyIcon);
+
 		getKeyButton = new JButton("Get Key");
-		
+		getKeyButton.setIcon(getKeyIcon);
+
 		encryptMessageButton = new JButton("Encrypt Message");
 		encryptMessageButton.setIcon(encryptIcon);
-		
+
 		decryptMessageButton = new JButton("Decrypt Message");
+		decryptMessageButton.setIcon(decryptIcon);
+
 		aboutProgramButton = new JButton("About Program");
+		aboutProgramButton.setIcon(aboutProgramIcon);
+
+		// TODO: add ASCII table icon an finish ascii table function
 		asciiTableButton = new JButton("ASCII Table");
 		exitProgramButton = new JButton("Exit");
 
@@ -141,6 +153,9 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 			programButtons[i].addActionListener(this);
 			programButtons[i].setFocusable(false);
 			programButtons[i].setFont(PROGRAM_FONT);
+			programButtons[i].setHorizontalAlignment(JButton.LEFT);
+			programButtons[i].setBorder(new EmptyBorder(0, 50, 0, 0));
+			programButtons[i].setIconTextGap(20);
 
 			mainPanel.add(programButtons[i]);
 		}
