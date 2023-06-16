@@ -26,6 +26,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	JButton encryptMessageButton;
 	JButton decryptMessageButton;
 	JButton aboutProgramButton;
+	JButton asciiTableButton;
 	JButton exitProgramButton;
 
 	JButton[] programButtons;
@@ -46,6 +47,11 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	final String[] dialogChoices = { "Confirm", "Copy" };
 	final String[] newKeyChoices = { "Confirm", "Get Key" };
 	int dialogUserChoice;
+
+	JTextArea keyArea;
+	JScrollPane keyPane;
+	
+	final ImageIcon encryptIcon = new ImageIcon("encryptionButton.png");
 
 	public static void main(String[] args) {
 
@@ -93,7 +99,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		mainPanel = new JPanel();
 		mainPanel.setPreferredSize(PROGRAM_SCREEN_SIZE); // takes up entire screen
 		mainPanel.setBackground(BACKGROUND_COLOR);
-		mainPanel.setLayout(new GridLayout(7, 1, 0, 20)); // 6 rows, 1 column
+		mainPanel.setLayout(new GridLayout(8, 1, 0, 20)); // 6 rows, 1 column
 		mainPanel.setBorder(new EmptyBorder(25, 400, 50, 400));
 
 		// DONE: add titleLabel attributes
@@ -110,13 +116,17 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	public void addButtons() {
 
 		// TODO: add icons for our JButtons? (to be tested if feasible)
-		programButtons = new JButton[6];
+		programButtons = new JButton[7];
 
 		newKeyButton = new JButton("New Key");
 		getKeyButton = new JButton("Get Key");
+		
 		encryptMessageButton = new JButton("Encrypt Message");
+		encryptMessageButton.setIcon(encryptIcon);
+		
 		decryptMessageButton = new JButton("Decrypt Message");
 		aboutProgramButton = new JButton("About Program");
+		asciiTableButton = new JButton("ASCII Table");
 		exitProgramButton = new JButton("Exit");
 
 		programButtons[0] = newKeyButton;
@@ -124,7 +134,8 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		programButtons[2] = encryptMessageButton;
 		programButtons[3] = decryptMessageButton;
 		programButtons[4] = aboutProgramButton;
-		programButtons[5] = exitProgramButton;
+		programButtons[5] = asciiTableButton;
+		programButtons[6] = exitProgramButton;
 
 		for (int i = 0; i < programButtons.length; i++) {
 			programButtons[i].addActionListener(this);
@@ -164,6 +175,10 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 			aboutProgram();
 		}
 
+		if (arg0.getSource() == asciiTableButton) {
+			showAsciiTable();
+		}
+
 		if (arg0.getSource() == exitProgramButton) {
 			// exitProgram function
 			exitProgram();
@@ -175,18 +190,20 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 		currentKey = "";
 
-		for (Character eachPlainChar : plainCharList) {
-			currentKey += eachPlainChar;
+		for (int i = 0; i < plainCharList.size(); i++) {
+			currentKey += plainCharList.get(i) + "   " + shuffledCharList.get(i) + "\n";
 		}
 
-		currentKey += "\n"; // currentKey String breaks into a new line
+		JTextArea keyArea = new JTextArea(20, 20);
+		keyArea.setText("Current Key:\n" + currentKey);
+		keyArea.setEditable(false);
 
-		for (Character eachShuffledChar : shuffledCharList) {
-			currentKey += eachShuffledChar;
-		}
+		JScrollPane keyPane = new JScrollPane(keyArea);
+		keyPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		keyPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		// TODO: add an option where the user can copy the key to their clip board
-		JOptionPane.showMessageDialog(this, "Current Key:\n" + currentKey, "GET KEY", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, keyPane, "GET KEY", JOptionPane.INFORMATION_MESSAGE);
 
 	}
 
@@ -199,13 +216,14 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		if (newKeyConfirm == JOptionPane.YES_OPTION) {
 			// DONE: change into showOptionDialog and have getKey as one of the choices
 			createNewKey();
-		}
 
-		dialogUserChoice = JOptionPane.showOptionDialog(this, "New key generated", "NEW KEY MESSAGE",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, newKeyChoices, newKeyChoices[0]);
+			dialogUserChoice = JOptionPane.showOptionDialog(this, "New key generated", "NEW KEY MESSAGE",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, newKeyChoices, newKeyChoices[0]);
 
-		if (dialogUserChoice == 1) {
-			getKey();
+			if (dialogUserChoice == 1) {
+				getKey();
+			}
+
 		}
 
 	}
@@ -304,11 +322,14 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	// program
 	public void aboutProgram() {
 		JOptionPane.showMessageDialog(this,
-				"ASCII Encryption Program\n(American Standard Code for Information Interchange)\nReplaces a character randomly with another character in an ASCII Table.",
+				"ASCII Encryption Program\n(American Standard Code for Information Interchange)\n\nReplaces a character randomly with another character in an ASCII Table.",
 				"ABOUT PROGRAM", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	// TODO: add another button that shows the ascii table
+	public void showAsciiTable() {
+		System.out.println("Testing");
+	}
 
 	public void exitProgram() {
 		// DONE: add a confirmation prompt before closing program
