@@ -40,7 +40,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(false);
-		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		menuFrame.addKeyListener(this);
 
 		playMainMenuMusic();
@@ -145,16 +145,18 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	}
 
+	// TODO: test if this opens normally when exported into a jar file
 	public void playPongGame() {
 		menuFrame.dispose();
-		audioClip.stop();
 		new PongGamePlay(); // calling our PongGameFrame constructor
+		audioClip.stop();
+	
 	}
 
 	public void gameSettingsMenu() {
 		menuFrame.dispose();
-		audioClip.stop();
 		new PongGameSettingsMenu();
+		audioClip.stop();
 	}
 
 	public void gameInstructions() {
