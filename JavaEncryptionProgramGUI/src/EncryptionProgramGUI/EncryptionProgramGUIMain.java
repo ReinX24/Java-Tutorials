@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
+public class EncryptionProgramGUIMain extends JFrame implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 1L; // added to get rid of warning
 
@@ -53,7 +53,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	JTextArea keyArea;
 	JScrollPane keyPane;
 
-	// TODO: find another icon for program, an icon with a more solid background
+	// DONE: find another icon for program, an icon with a more solid background
 	final ImageIcon encryptionProgramIcon = new ImageIcon("encryptionProgramPhoto.png");
 	final ImageIcon encryptIcon = new ImageIcon("encryptionPhoto.png");
 	final ImageIcon decryptIcon = new ImageIcon("decryptionPhoto.png");
@@ -73,7 +73,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		// TODO: export the program into a jar file with an icon
 		// TODO: add music or background sounds to program
 		new EncryptionProgramGUIMain();
-		// TODO: add ImageIcon for our program
+		// DONE: add ImageIcon for our program
 
 	}
 
@@ -97,9 +97,10 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 		createNewKey(); // generates a new key
 
-		this.setIconImage(encryptionProgramIcon.getImage());
+		this.setIconImage(encryptionProgramIcon.getImage()); // setting icon for our JFrame
 
 		this.setTitle("Encryption Program");
+		this.addKeyListener(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 
@@ -136,24 +137,31 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 		newKeyButton = new JButton("New Key");
 		newKeyButton.setIcon(newKeyIcon);
+		newKeyButton.setMnemonic(KeyEvent.VK_N); // adds an underline to a specified character
 
 		getKeyButton = new JButton("Get Key");
 		getKeyButton.setIcon(getKeyIcon);
+		getKeyButton.setMnemonic(KeyEvent.VK_G);
 
 		encryptMessageButton = new JButton("Encrypt Message");
 		encryptMessageButton.setIcon(encryptIcon);
+		encryptMessageButton.setMnemonic(KeyEvent.VK_E);
 
 		decryptMessageButton = new JButton("Decrypt Message");
 		decryptMessageButton.setIcon(decryptIcon);
+		decryptMessageButton.setMnemonic(KeyEvent.VK_D);
 
 		aboutProgramButton = new JButton("About Program");
 		aboutProgramButton.setIcon(aboutProgramIcon);
+		aboutProgramButton.setMnemonic(KeyEvent.VK_A);
 
 		asciiTableButton = new JButton("ASCII Table");
 		asciiTableButton.setIcon(asciiTableIcon);
+		asciiTableButton.setMnemonic(KeyEvent.VK_I);
 
 		exitProgramButton = new JButton("Exit");
 		exitProgramButton.setIcon(exitIcon);
+		exitProgramButton.setMnemonic(KeyEvent.VK_X);
 
 		programButtons[0] = newKeyButton;
 		programButtons[1] = getKeyButton;
@@ -384,6 +392,21 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		if (exitConfirmChoice == JOptionPane.YES_OPTION) {
 			System.exit(0);
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		System.out.println(arg0.getKeyChar());
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+
 	}
 
 }
