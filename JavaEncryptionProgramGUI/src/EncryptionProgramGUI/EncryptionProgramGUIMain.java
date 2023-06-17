@@ -1,11 +1,18 @@
 package EncryptionProgramGUI;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -66,6 +73,10 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 	String asciiTableValues;
 	JTextArea asciiTableArea;
 	JScrollPane asciiTablePane;
+	
+	AudioInputStream streamAudio;
+	Clip audioClip;
+	FloatControl gainControl;
 
 	public static void main(String[] args) {
 
@@ -89,6 +100,28 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void playProgramMenuAudio() {
+		try {
+			// TODO: add audio file here
+			// Gets the audio file
+			streamAudio = AudioSystem.getAudioInputStream();
+			// Clip object to get audio file & use methods on file
+			audioClip = AudioSystem.getClip();
+			// Opens the clip, now we could use methods on audioClip
+			audioClip.open(streamAudio);
+
+			// Lowering the volume of our main menu music
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
 	}
@@ -240,8 +273,14 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 		keyPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		keyPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		// TODO: add an option where the user can copy the key to their clip board
-		JOptionPane.showMessageDialog(this, keyPane, "GET KEY", JOptionPane.INFORMATION_MESSAGE);
+		dialogUserChoice = JOptionPane.showOptionDialog(this, keyPane, "GET KEY", JOptionPane.DEFAULT_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, null, dialogChoices, dialogChoices[0]);
+
+		if (dialogUserChoice == 1) {
+			JOptionPane.showMessageDialog(this, "Encryption key copied to clipboard!", "COPY ENCRYPTION KEY",
+					JOptionPane.INFORMATION_MESSAGE);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(currentKey), null);
+		}
 
 	}
 
@@ -401,7 +440,37 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		System.out.println(arg0.getKeyChar());
+		switch (arg0.getKeyChar()) {
+
+		case 'n':
+			newKeyButton.doClick();
+			break;
+
+		case 'g':
+			getKeyButton.doClick();
+			break;
+
+		case 'e':
+			encryptMessageButton.doClick();
+			break;
+
+		case 'd':
+			decryptMessageButton.doClick();
+			break;
+
+		case 'a':
+			aboutProgramButton.doClick();
+			break;
+
+		case 'i':
+			asciiTableButton.doClick();
+			break;
+
+		case 'x':
+			exitProgramButton.doClick();
+			break;
+
+		}
 	}
 
 	@Override
