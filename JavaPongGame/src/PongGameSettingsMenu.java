@@ -396,9 +396,9 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 				JOptionPane.YES_NO_OPTION);
 
 		if (exitSettingsChoice == JOptionPane.YES_OPTION) {
+			new PongGameMainMenu();
 			settingsFrame.dispose();
 			audioClip.stop();
-			new PongGameMainMenu();
 		}
 
 	}

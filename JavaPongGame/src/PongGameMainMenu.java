@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URL;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -28,7 +29,8 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 	JButton exitButton;
 
 	// File object to store wav file, can only play wav files
-	final File MAIN_MENU_MUSIC = new File("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
+	URL MAIN_MENU_MUSIC_URL = getClass().getResource("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
+//	final File MAIN_MENU_MUSIC = new File("Hero Dance Party - Chiptune⧸8-bit - Royalty Free Music.wav");
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
@@ -40,7 +42,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(false);
-		menuFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		menuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		menuFrame.addKeyListener(this);
 
 		playMainMenuMusic();
@@ -145,7 +147,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	}
 
-	// TODO: test if this opens normally when exported into a jar file
+	// TODO: add this to existing Pong game in Programming 2 
 	public void playPongGame() {
 		menuFrame.dispose();
 		new PongGamePlay(); // calling our PongGameFrame constructor
@@ -153,6 +155,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 	
 	}
 
+	// TODO: add this to existing Pong game in Programming 2 
 	public void gameSettingsMenu() {
 		menuFrame.dispose();
 		new PongGameSettingsMenu();
@@ -176,6 +179,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 				"Exit Confirmation", JOptionPane.YES_NO_OPTION);
 		if (userChoice == JOptionPane.YES_OPTION) {
 			menuFrame.dispose(); // close our menuFrame
+			System.exit(0);
 		}
 	}
 
@@ -183,7 +187,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 		try {
 			// Gets the audio file
-			streamAudio = AudioSystem.getAudioInputStream(MAIN_MENU_MUSIC);
+			streamAudio = AudioSystem.getAudioInputStream(MAIN_MENU_MUSIC_URL);
 			// Clip object to get audio file & use methods on file
 			audioClip = AudioSystem.getClip();
 			// Opens the clip, now we could use methods on audioClip

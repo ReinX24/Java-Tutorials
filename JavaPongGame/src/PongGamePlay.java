@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import javax.sound.sampled.*;
@@ -37,12 +38,20 @@ public class PongGamePlay extends JPanel implements Runnable {
 	static String playerOneName = "Player One";
 	static String playerTwoName = "Player Two";
 
-	final File FIGHTING_MUSIC = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
-	final File PADDLE_HIT_SOUND = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
-	final File WALL_HIT_SCORE_SOUND = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
-	final File GAME_VICTORY_MUSIC = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
-	final File GAME_MATCH_POINT_SOUND = new File("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
-	final File GAME_WALL_HIT_SOUND = new File("Retro impact hit ｜ Sound Effect.wav");
+	URL FIGHTING_MUSIC_URL = getClass().getResource("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
+	URL PADDLE_HIT_SOUND_URL = getClass().getResource("8- Bit Bounce sound effect ｜ sound effects.wav");
+	URL WALL_HIT_SCORE_SOUND_URL = getClass().getResource("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
+	URL GAME_VICTORY_MUSIC_URL = getClass().getResource("Final Fantasy VII - Victory Fanfare [HD].wav");
+	URL GAME_MATCH_POINT_SOUND_URL = getClass().getResource("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
+	URL GAME_WALL_HIT_SOUND_URL = getClass().getResource("Retro impact hit ｜ Sound Effect.wav");
+
+	// TODO: move all music files to their own folder and export them with jar file
+//	final File FIGHTING_MUSIC = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
+//	final File PADDLE_HIT_SOUND = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
+//	final File WALL_HIT_SCORE_SOUND = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
+//	final File GAME_VICTORY_MUSIC = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
+//	final File GAME_MATCH_POINT_SOUND = new File("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
+//	final File GAME_WALL_HIT_SOUND = new File("Retro impact hit ｜ Sound Effect.wav");
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
@@ -287,6 +296,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 		int userChoice = JOptionPane.showOptionDialog(this, gameWinner + " Wins!", "Winner Message",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responsesArr, null);
 
+		// TODO: check if this works properly
 		if (userChoice == 0) { // user chooses to return to Main Menu
 			audioClip.stop();
 			gameFrame.dispose();
@@ -323,21 +333,22 @@ public class PongGamePlay extends JPanel implements Runnable {
 	}
 
 	public void askExitGame() {
-
+		// TODO: check if this works properly
 		String[] responsesArr = { "Main Menu", "Restart Game", "Exit Game" };
 		int userChoice = JOptionPane.showOptionDialog(this, "Game Ongoing!", "Warning Message",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, responsesArr, null);
 
+		// TODO: add this to existing Pong game in Programming 2
 		if (userChoice == 0) {
-			fightingClip.stop();
-			gameThread.interrupt();
 			gameFrame.dispose();
 			new PongGameMainMenu();
-		} else if (userChoice == 1) {
 			fightingClip.stop();
 			gameThread.interrupt();
+		} else if (userChoice == 1) {
 			gameFrame.dispose();
 			new PongGamePlay();
+			fightingClip.stop();
+			gameThread.interrupt();
 		} else if (userChoice == 2) {
 			exitGameConfirmation();
 		}
@@ -349,16 +360,14 @@ public class PongGamePlay extends JPanel implements Runnable {
 				JOptionPane.YES_NO_OPTION);
 
 		if (confirmChoice == JOptionPane.YES_OPTION) {
-			fightingClip.stop();
-			gameThread.interrupt();
-			gameFrame.dispose();
+			System.exit(0);
 		}
 	}
 
 	public void playGameFightMusic() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(FIGHTING_MUSIC);
+			streamAudio = AudioSystem.getAudioInputStream(FIGHTING_MUSIC_URL);
 			fightingClip = AudioSystem.getClip();
 			fightingClip.open(streamAudio);
 
@@ -377,7 +386,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public void playPaddleHitSound() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(PADDLE_HIT_SOUND);
+			streamAudio = AudioSystem.getAudioInputStream(PADDLE_HIT_SOUND_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();
@@ -392,7 +401,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public void playWallScoreHitSound() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(WALL_HIT_SCORE_SOUND);
+			streamAudio = AudioSystem.getAudioInputStream(WALL_HIT_SCORE_SOUND_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();
@@ -407,7 +416,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public void playVictorySound() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(GAME_VICTORY_MUSIC);
+			streamAudio = AudioSystem.getAudioInputStream(GAME_VICTORY_MUSIC_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.start();
@@ -422,7 +431,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public void playMatchPointSound() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(GAME_MATCH_POINT_SOUND);
+			streamAudio = AudioSystem.getAudioInputStream(GAME_MATCH_POINT_SOUND_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 
@@ -440,7 +449,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 	public void playWallHitSound() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(GAME_WALL_HIT_SOUND);
+			streamAudio = AudioSystem.getAudioInputStream(GAME_WALL_HIT_SOUND_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 
