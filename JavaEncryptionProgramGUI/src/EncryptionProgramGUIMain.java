@@ -8,6 +8,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import java.net.URL;
 
 public class EncryptionProgramGUIMain extends JFrame implements ActionListener, KeyListener {
 
@@ -54,14 +55,23 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 	JScrollPane keyPane;
 
 	// DONE: find another icon for program, an icon with a more solid background
-	final ImageIcon encryptionProgramIcon = new ImageIcon("src/EncryptionPhotos/encryptionProgramPhoto.png");
-	final ImageIcon encryptIcon = new ImageIcon("src/EncryptionPhotos/encryptionPhoto.png");
-	final ImageIcon decryptIcon = new ImageIcon("src/EncryptionPhotos/decryptionPhoto.png");
-	final ImageIcon getKeyIcon = new ImageIcon("src/EncryptionPhotos/getKeyPhoto.png");
-	final ImageIcon newKeyIcon = new ImageIcon("src/EncryptionPhotos/newKeyPhoto.png");
-	final ImageIcon aboutProgramIcon = new ImageIcon("src/EncryptionPhotos/aboutProgramPhoto.png");
-	final ImageIcon asciiTableIcon = new ImageIcon("src/EncryptionPhotos/asciiPhoto.png");
-	final ImageIcon exitIcon = new ImageIcon("src/EncryptionPhotos/exitPhoto.png");
+	URL encryptionProgramIconURL = getClass().getResource("encryptionProgramPhoto.png");
+	URL encryptIconURL = getClass().getResource("encryptionPhoto.png");
+	URL decryptIconURL = getClass().getResource("decryptionPhoto.png");
+	URL getKeyIconURL = getClass().getResource("getKeyPhoto.png");
+	URL newKeyIconURL = getClass().getResource("newKeyPhoto.png");
+	URL aboutProgramIconURL = getClass().getResource("aboutProgramPhoto.png");
+	URL asciiTableIconURL = getClass().getResource("asciiPhoto.png");
+	URL exitIconURL = getClass().getResource("exitPhoto.png");
+
+	final ImageIcon encryptionProgramIcon = new ImageIcon(encryptionProgramIconURL);
+	final ImageIcon encryptIcon = new ImageIcon(encryptIconURL);
+	final ImageIcon decryptIcon = new ImageIcon(decryptIconURL);
+	final ImageIcon getKeyIcon = new ImageIcon(getKeyIconURL);
+	final ImageIcon newKeyIcon = new ImageIcon(newKeyIconURL);
+	final ImageIcon aboutProgramIcon = new ImageIcon(aboutProgramIconURL);
+	final ImageIcon asciiTableIcon = new ImageIcon(asciiTableIconURL);
+	final ImageIcon exitIcon = new ImageIcon(exitIconURL);
 
 	String asciiTableValues;
 	JTextArea asciiTableArea;
@@ -71,9 +81,22 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 	Clip audioClip;
 	FloatControl gainControl;
 
-	final File MAIN_MENU_AUDIO = new File(
-			"src/EncryptionAudio/Zardonic ⧸ Superhot： Mind Control Delete OST： 01 - Hallway Alpha [HQ].X-L7HlCQ.wav");
-	final File BUTTON_CLICK_AUDIO = new File("src/EncryptionAudio/Sound Effects - Atm cash machine key press [FREE].wav");
+	/*
+	 * ADDING AUDIO INSTRUCTIONS:
+	 * 
+	 * - Separate the program's resources such as photos and audio in a folder
+	 * outside src
+	 * 
+	 * - Go to properties, build path, and add these folders
+	 * 
+	 * - Once these folders are added, make sure you are using the URL, getClass,
+	 * and getResouce functions for photos and audio
+	 */
+
+	final URL MENU_AUDIO_URL = getClass()
+			.getResource("Zardonic ⧸ Superhot： Mind Control Delete OST： 01 - Hallway Alpha [HQ].X-L7HlCQ.wav");
+	final URL BUTTON_CLICK_AUDIO_URL = getClass().getResource("Sound Effects - Atm cash machine key press [FREE].wav");
+	final URL EXIT_PROGRAM_URL = getClass().getResource("Computer Boop - Sound Effect.wav");
 
 	public static void main(String[] args) {
 
@@ -104,10 +127,42 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	public void playProgramMenuAudio() {
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(MAIN_MENU_AUDIO);
+			streamAudio = AudioSystem.getAudioInputStream(MENU_AUDIO_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-16.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playButtonPressedAudio() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(BUTTON_CLICK_AUDIO_URL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-16.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playExitProgramAudio() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(EXIT_PROGRAM_URL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
 
 			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(-16.0f);
@@ -212,6 +267,8 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
+		playButtonPressedAudio(); // button click sound when a button is pressed
 
 		if (arg0.getSource() == newKeyButton) {
 			// newKey function
@@ -421,14 +478,21 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 	public void exitProgram() {
 		// DONE: add a confirmation prompt before closing program
 		int exitConfirmChoice = JOptionPane.showConfirmDialog(this, "Exit?", "CONFIRM EXIT", JOptionPane.YES_NO_OPTION);
+
 		if (exitConfirmChoice == JOptionPane.YES_OPTION) {
+			playExitProgramAudio();
+			try {
+				Thread.sleep(1000); // pause for 1 second
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			System.exit(0);
 		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO: add sound effect of a button being pressed when the user clicks on it
+
 	}
 
 	@Override
@@ -468,7 +532,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		
+
 	}
 
 }
