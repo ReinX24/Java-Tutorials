@@ -11,6 +11,8 @@ import java.util.Collections;
 
 public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L; // added to get rid of warning
+
 	final Dimension PROGRAM_SCREEN_SIZE = new Dimension(1336, 768);
 	final Color BACKGROUND_COLOR = new Color(0, 128, 128);
 	final Font TITLE_FONT = new Font("Arial", Font.BOLD, 32);
@@ -51,11 +53,19 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	JTextArea keyArea;
 	JScrollPane keyPane;
 
+	// TODO: find another icon for program, an icon with a more solid background
+	final ImageIcon encryptionProgramIcon = new ImageIcon("encryptionProgramPhoto.png");
 	final ImageIcon encryptIcon = new ImageIcon("encryptionPhoto.png");
 	final ImageIcon decryptIcon = new ImageIcon("decryptionPhoto.png");
 	final ImageIcon getKeyIcon = new ImageIcon("getKeyPhoto.png");
 	final ImageIcon newKeyIcon = new ImageIcon("newKeyPhoto.png");
 	final ImageIcon aboutProgramIcon = new ImageIcon("aboutProgramPhoto.png");
+	final ImageIcon asciiTableIcon = new ImageIcon("asciiPhoto.png");
+	final ImageIcon exitIcon = new ImageIcon("exitPhoto.png");
+
+	String asciiTableValues;
+	JTextArea asciiTableArea;
+	JScrollPane asciiTablePane;
 
 	public static void main(String[] args) {
 
@@ -86,6 +96,8 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 	public void createFrame() {
 
 		createNewKey(); // generates a new key
+
+		this.setIconImage(encryptionProgramIcon.getImage());
 
 		this.setTitle("Encryption Program");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,7 +131,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	public void addButtons() {
 
-		// TODO: add icons for our JButtons? (to be tested if feasible)
+		// DONE: add icons for our JButtons? (to be tested if feasible)
 		programButtons = new JButton[7];
 
 		newKeyButton = new JButton("New Key");
@@ -137,9 +149,11 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 		aboutProgramButton = new JButton("About Program");
 		aboutProgramButton.setIcon(aboutProgramIcon);
 
-		// TODO: add ASCII table icon an finish ascii table function
 		asciiTableButton = new JButton("ASCII Table");
+		asciiTableButton.setIcon(asciiTableIcon);
+
 		exitProgramButton = new JButton("Exit");
+		exitProgramButton.setIcon(exitIcon);
 
 		programButtons[0] = newKeyButton;
 		programButtons[1] = getKeyButton;
@@ -203,17 +217,18 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 
 	public void getKey() {
 
-		currentKey = "";
+		currentKey = "Current Key:\n";
 
 		for (int i = 0; i < plainCharList.size(); i++) {
 			currentKey += plainCharList.get(i) + "   " + shuffledCharList.get(i) + "\n";
 		}
 
-		JTextArea keyArea = new JTextArea(20, 20);
-		keyArea.setText("Current Key:\n" + currentKey);
+		keyArea = new JTextArea(20, 20);
+		keyArea.setText(currentKey);
 		keyArea.setEditable(false);
+		keyArea.setCaretPosition(0); // start at the top of JTextArea
 
-		JScrollPane keyPane = new JScrollPane(keyArea);
+		keyPane = new JScrollPane(keyArea);
 		keyPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		keyPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -341,9 +356,26 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener {
 				"ABOUT PROGRAM", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	// TODO: add another button that shows the ascii table
+	// DONE: add another button that shows the ASCII table
 	public void showAsciiTable() {
-		System.out.println("Testing");
+
+		asciiTableValues = "ASCII Table Values:\nDec Chr\n";
+
+		for (int i = 32; i < 127; i++) {
+			asciiTableValues += i + "   " + (char) i + "\n";
+		}
+
+		asciiTableArea = new JTextArea(20, 20);
+		asciiTableArea.setText(asciiTableValues);
+		asciiTableArea.setEditable(false);
+		asciiTableArea.setCaretPosition(0);
+
+		asciiTablePane = new JScrollPane(asciiTableArea);
+		asciiTablePane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		asciiTablePane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+		JOptionPane.showMessageDialog(this, asciiTablePane, "ASCII TABLE", JOptionPane.INFORMATION_MESSAGE);
+
 	}
 
 	public void exitProgram() {
