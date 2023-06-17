@@ -1,20 +1,13 @@
-package EncryptionProgramGUI;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
+import java.io.*;
 
 public class EncryptionProgramGUIMain extends JFrame implements ActionListener, KeyListener {
 
@@ -61,28 +54,32 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 	JScrollPane keyPane;
 
 	// DONE: find another icon for program, an icon with a more solid background
-	final ImageIcon encryptionProgramIcon = new ImageIcon("encryptionProgramPhoto.png");
-	final ImageIcon encryptIcon = new ImageIcon("encryptionPhoto.png");
-	final ImageIcon decryptIcon = new ImageIcon("decryptionPhoto.png");
-	final ImageIcon getKeyIcon = new ImageIcon("getKeyPhoto.png");
-	final ImageIcon newKeyIcon = new ImageIcon("newKeyPhoto.png");
-	final ImageIcon aboutProgramIcon = new ImageIcon("aboutProgramPhoto.png");
-	final ImageIcon asciiTableIcon = new ImageIcon("asciiPhoto.png");
-	final ImageIcon exitIcon = new ImageIcon("exitPhoto.png");
+	final ImageIcon encryptionProgramIcon = new ImageIcon("src/EncryptionPhotos/encryptionProgramPhoto.png");
+	final ImageIcon encryptIcon = new ImageIcon("src/EncryptionPhotos/encryptionPhoto.png");
+	final ImageIcon decryptIcon = new ImageIcon("src/EncryptionPhotos/decryptionPhoto.png");
+	final ImageIcon getKeyIcon = new ImageIcon("src/EncryptionPhotos/getKeyPhoto.png");
+	final ImageIcon newKeyIcon = new ImageIcon("src/EncryptionPhotos/newKeyPhoto.png");
+	final ImageIcon aboutProgramIcon = new ImageIcon("src/EncryptionPhotos/aboutProgramPhoto.png");
+	final ImageIcon asciiTableIcon = new ImageIcon("src/EncryptionPhotos/asciiPhoto.png");
+	final ImageIcon exitIcon = new ImageIcon("src/EncryptionPhotos/exitPhoto.png");
 
 	String asciiTableValues;
 	JTextArea asciiTableArea;
 	JScrollPane asciiTablePane;
-	
+
 	AudioInputStream streamAudio;
 	Clip audioClip;
 	FloatControl gainControl;
+
+	final File MAIN_MENU_AUDIO = new File(
+			"src/EncryptionAudio/Zardonic ⧸ Superhot： Mind Control Delete OST： 01 - Hallway Alpha [HQ].X-L7HlCQ.wav");
+	final File BUTTON_CLICK_AUDIO = new File("src/EncryptionAudio/Sound Effects - Atm cash machine key press [FREE].wav");
 
 	public static void main(String[] args) {
 
 		// TODO: recreate encryption program using Java Swing GUI components
 		// TODO: export the program into a jar file with an icon
-		// TODO: add music or background sounds to program
+		// DONE: add music or background sounds to program
 		new EncryptionProgramGUIMain();
 		// DONE: add ImageIcon for our program
 
@@ -91,6 +88,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 	public EncryptionProgramGUIMain() {
 
 		setLookAndFeel();
+		playProgramMenuAudio();
 		createFrame();
 
 	}
@@ -103,21 +101,16 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void playProgramMenuAudio() {
 		try {
-			// TODO: add audio file here
-			// Gets the audio file
-			streamAudio = AudioSystem.getAudioInputStream();
-			// Clip object to get audio file & use methods on file
+			streamAudio = AudioSystem.getAudioInputStream(MAIN_MENU_AUDIO);
 			audioClip = AudioSystem.getClip();
-			// Opens the clip, now we could use methods on audioClip
 			audioClip.open(streamAudio);
+			audioClip.loop(Clip.LOOP_CONTINUOUSLY);
 
-			// Lowering the volume of our main menu music
 			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-6.0f);
-
+			gainControl.setValue(-16.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -435,7 +428,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-
+		// TODO: add sound effect of a button being pressed when the user clicks on it
 	}
 
 	@Override
@@ -475,7 +468,7 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-
+		
 	}
 
 }
