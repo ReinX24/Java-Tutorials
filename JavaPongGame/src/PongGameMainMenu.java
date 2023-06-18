@@ -41,7 +41,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	public PongGameMainMenu() {
 
-//		setGameTheme(); // disabling this for now, this is because in windows, the GTK look and feel is not installed
+		setGameTheme();
 
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(false);
@@ -209,7 +209,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	public void setGameTheme() {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();

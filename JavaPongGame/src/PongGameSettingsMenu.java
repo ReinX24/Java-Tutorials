@@ -292,12 +292,12 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 
 	public void changePaddleOneColor() {
 		new JColorChooser();
-		Paddle.bluePaddle = JColorChooser.showDialog(this, "Pick A Color", new Color(172, 58, 62));
+		Paddle.bluePaddle = JColorChooser.showDialog(this, "Pick A Color", new Color(69, 91, 132));
 	}
 
 	public void changePaddleTwoColor() {
 		new JColorChooser();
-		Paddle.redPaddle = JColorChooser.showDialog(this, "Pick A Color", new Color(69, 91, 132));
+		Paddle.redPaddle = JColorChooser.showDialog(this, "Pick A Color", new Color(172, 58, 62));
 	}
 
 	public void resetAllPaddleColors() {
