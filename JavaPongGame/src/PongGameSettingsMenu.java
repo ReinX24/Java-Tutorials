@@ -1,12 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URL;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyListener {
+
+	private static final long serialVersionUID = 1L;
 
 	JFrame settingsFrame;
 	JLabel settingsTitleLabel;
@@ -38,7 +41,9 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 
 	final Color SETTINGSMENU_BACKGROUND_COLOR = new Color(218, 165, 32);
 
-	final File SETTINGS_MENU_MUSIC = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
+	URL SETTINGS_MENU_MUSIC_URL = getClass()
+			.getResource("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
+//	final File SETTINGS_MENU_MUSIC = new File("8 Bit Think! Calm Puzzle Chiptune Game Music by HeatleyBros.wav");
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
@@ -46,6 +51,9 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 
 	SpinnerModel gameScoreSpinnerValues;
 	JSpinner gameScoreSpinner;
+
+	URL PONG_ICON_URL = getClass().getResource("pongGameIcon.png");
+	final ImageIcon PONG_ICON = new ImageIcon(PONG_ICON_URL);
 
 	public PongGameSettingsMenu() {
 
@@ -71,7 +79,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 	}
 
 	public void addFrameIcon() {
-		settingsFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
+		settingsFrame.setIconImage(PONG_ICON.getImage());
 	}
 
 	public void addSettingsDetails() {
@@ -195,7 +203,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 		paraButton.addActionListener(this);
 		paraButton.setFocusable(false);
 		paraButton.setFont(PongGameMainMenu.BUTTON_FONT);
-//		paraButton.setForeground(PongGameMainMenu.FONT_COLOR);
+		paraButton.setForeground(PongGameMainMenu.FONT_COLOR);
 		paraButton.setBackground(PongGameMainMenu.BUTTON_COLOR);
 		settingsMenuButtonsPanel.add(paraButton);
 	}
@@ -406,7 +414,7 @@ public class PongGameSettingsMenu extends JPanel implements ActionListener, KeyL
 	public void playSettingsMenuMusic() {
 
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(SETTINGS_MENU_MUSIC);
+			streamAudio = AudioSystem.getAudioInputStream(SETTINGS_MENU_MUSIC_URL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 

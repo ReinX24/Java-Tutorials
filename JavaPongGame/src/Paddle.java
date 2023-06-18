@@ -3,6 +3,8 @@ import java.awt.event.*;
 
 public class Paddle extends Rectangle {
 
+	private static final long serialVersionUID = 1L;
+
 	int playerID; // for player ids
 
 	int yVelocity; // vertical movement speed

@@ -100,8 +100,8 @@ public class EncryptionProgramGUIMain extends JFrame implements ActionListener, 
 
 	public static void main(String[] args) {
 
-		// TODO: recreate encryption program using Java Swing GUI components
-		// TODO: export the program into a jar file with an icon
+		// DONE: recreate encryption program using Java Swing GUI components
+		// DONE: export the program into a jar file with an icon
 		// DONE: add music or background sounds to program
 		new EncryptionProgramGUIMain();
 		// DONE: add ImageIcon for our program

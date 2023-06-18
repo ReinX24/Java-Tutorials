@@ -2,6 +2,8 @@ import java.awt.*;
 
 public class Score extends Rectangle {
 
+	private static final long serialVersionUID = 1L;
+
 	static int GAME_WIDTH;
 	static int GAME_HEIGHT;
 

@@ -9,6 +9,8 @@ import javax.swing.*;
 
 public class PongGamePlay extends JPanel implements Runnable {
 
+	private static final long serialVersionUID = 1L;
+
 	static final int GAME_WIDTH = 1000; // static : share one variable, final : cannot be changed
 	static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.5555)); // ratio of real life ping-pong table
 	static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
@@ -42,16 +44,11 @@ public class PongGamePlay extends JPanel implements Runnable {
 	URL PADDLE_HIT_SOUND_URL = getClass().getResource("8- Bit Bounce sound effect ｜ sound effects.wav");
 	URL WALL_HIT_SCORE_SOUND_URL = getClass().getResource("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
 	URL GAME_VICTORY_MUSIC_URL = getClass().getResource("Final Fantasy VII - Victory Fanfare [HD].wav");
-	URL GAME_MATCH_POINT_SOUND_URL = getClass().getResource("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
+	URL GAME_MATCH_POINT_SOUND_URL = getClass()
+			.getResource("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
 	URL GAME_WALL_HIT_SOUND_URL = getClass().getResource("Retro impact hit ｜ Sound Effect.wav");
 
-	// TODO: move all music files to their own folder and export them with jar file
-//	final File FIGHTING_MUSIC = new File("FFVII REMAKE： 闘う者達 -なんでも屋の仕事-.wav");
-//	final File PADDLE_HIT_SOUND = new File("8- Bit Bounce sound effect ｜ sound effects.wav");
-//	final File WALL_HIT_SCORE_SOUND = new File("Wall Hit 8 Bit - GAMEBOY STARTUP SOUND.wav");
-//	final File GAME_VICTORY_MUSIC = new File("Final Fantasy VII - Victory Fanfare [HD].wav");
-//	final File GAME_MATCH_POINT_SOUND = new File("Matchpoint Female Voiceline Valorant Gaming Sound Effect HD.wav");
-//	final File GAME_WALL_HIT_SOUND = new File("Retro impact hit ｜ Sound Effect.wav");
+	// DONE: move all music files to their own folder and export them with jar file
 
 	AudioInputStream streamAudio;
 	Clip audioClip;
@@ -64,6 +61,9 @@ public class PongGamePlay extends JPanel implements Runnable {
 	static Color leftFieldColor = tableColor; // default values will be our tableColor
 	static Color rightFieldColor = tableColor;
 
+	URL PONG_ICON_URL = getClass().getResource("pongGameIcon.png");
+	final ImageIcon PONG_ICON = new ImageIcon(PONG_ICON_URL);
+
 	public PongGamePlay() {
 
 		// Creating our JFrame
@@ -71,7 +71,7 @@ public class PongGamePlay extends JPanel implements Runnable {
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameFrame.setResizable(false);
 		gameFrame.setBackground(tableColor);
-		gameFrame.setIconImage(PongGameMainMenu.PONG_ICON.getImage());
+		gameFrame.setIconImage(PONG_ICON.getImage());
 
 		playGameFightMusic();
 		newPaddles();
@@ -296,18 +296,16 @@ public class PongGamePlay extends JPanel implements Runnable {
 		int userChoice = JOptionPane.showOptionDialog(this, gameWinner + " Wins!", "Winner Message",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, responsesArr, null);
 
-		// TODO: check if this works properly
 		if (userChoice == 0) { // user chooses to return to Main Menu
-			audioClip.stop();
 			gameFrame.dispose();
 			new PongGameMainMenu();
-		} else if (userChoice == 1) { // user chooses to restart game
 			audioClip.stop();
+		} else if (userChoice == 1) { // user chooses to restart game
 			gameFrame.dispose();
 			new PongGamePlay();
-		} else if (userChoice == 2) { // user chooses to exit game
 			audioClip.stop();
-			gameFrame.dispose();
+		} else if (userChoice == 2) { // user chooses to exit game
+			System.exit(0);
 		}
 
 	}
@@ -333,12 +331,10 @@ public class PongGamePlay extends JPanel implements Runnable {
 	}
 
 	public void askExitGame() {
-		// TODO: check if this works properly
 		String[] responsesArr = { "Main Menu", "Restart Game", "Exit Game" };
 		int userChoice = JOptionPane.showOptionDialog(this, "Game Ongoing!", "Warning Message",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, responsesArr, null);
 
-		// TODO: add this to existing Pong game in Programming 2
 		if (userChoice == 0) {
 			gameFrame.dispose();
 			new PongGameMainMenu();

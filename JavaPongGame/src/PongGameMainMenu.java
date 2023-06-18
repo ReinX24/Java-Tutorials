@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 
 public class PongGameMainMenu extends JPanel implements ActionListener, KeyListener {
 
+	private static final long serialVersionUID = 1L;
+
 	static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 42);
 	static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 16);
 
@@ -16,7 +18,8 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 	static final Color FONT_COLOR = new Color(238, 238, 238);
 	static final Color BUTTON_COLOR = new Color(42, 52, 57);
 
-	static final ImageIcon PONG_ICON = new ImageIcon("pongGameIcon.png");
+	URL PONG_ICON_URL = getClass().getResource("pongGameIcon.png");
+	final ImageIcon PONG_ICON = new ImageIcon(PONG_ICON_URL);
 
 	JFrame menuFrame;
 
@@ -38,7 +41,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	public PongGameMainMenu() {
 
-		setGameTheme();
+//		setGameTheme(); // disabling this for now, this is because in windows, the GTK look and feel is not installed
 
 		menuFrame = new JFrame("Pong Game Menu");
 		menuFrame.setResizable(false);
@@ -117,7 +120,7 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 		paraButton.addActionListener(this);
 		paraButton.setFocusable(false);
 		paraButton.setFont(BUTTON_FONT);
-//		paraButton.setForeground(FONT_COLOR);
+		paraButton.setForeground(FONT_COLOR);
 		paraButton.setBackground(BUTTON_COLOR);
 		this.add(paraButton);
 	}
@@ -147,15 +150,13 @@ public class PongGameMainMenu extends JPanel implements ActionListener, KeyListe
 
 	}
 
-	// TODO: add this to existing Pong game in Programming 2 
 	public void playPongGame() {
 		menuFrame.dispose();
 		new PongGamePlay(); // calling our PongGameFrame constructor
 		audioClip.stop();
-	
+
 	}
 
-	// TODO: add this to existing Pong game in Programming 2 
 	public void gameSettingsMenu() {
 		menuFrame.dispose();
 		new PongGameSettingsMenu();

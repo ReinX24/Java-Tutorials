@@ -3,6 +3,8 @@ import java.util.*;
 
 public class Ball extends Rectangle {
 
+	private static final long serialVersionUID = 1L;
+
 	Random myRandom;
 
 	int xVelocity;
