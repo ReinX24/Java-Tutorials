@@ -1,8 +1,10 @@
 package TextEditorPractice;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -10,12 +12,17 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
@@ -31,17 +38,35 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 	JMenuItem saveFile;
 	JMenuItem exitFile;
 
-	JSpinner fontSizeSpinner;
+	JScrollPane mainScrollPane;
 	JTextArea mainTextArea;
 
+	JLabel fontSizeLabel;
+	JSpinner fontSizeSpinner;
+
+	JComboBox<String> fontStyleBox;
+	JButton changeFontColorButton;
+
 	public static void main(String[] args) {
+		/*
+		 * Ideas for features to be added:
+		 * 
+		 * - Character counter and sentence counter
+		 * 
+		 * - Change font to bold, italic, or plain
+		 * 
+		 * - Change the size of the JTextArea / JScrollPane
+		 * 
+		 * - Change how text is aligned in the JTextArea / JScrollPane
+		 * 
+		 */
 		new JavaTextEditor();
 	}
 
 	public JavaTextEditor() {
 		this.setTitle("Java Text Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(500, 500);
+		this.setSize(500, 600);
 		this.setLocationRelativeTo(null);
 		this.setLayout(new FlowLayout());
 
@@ -68,15 +93,26 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
 		mainTextArea = new JTextArea();
-		mainTextArea.setPreferredSize(new Dimension(450, 450));
+		mainTextArea.setFont(new Font("Arial", Font.PLAIN, 20));
 		mainTextArea.setLineWrap(true);
 		mainTextArea.setWrapStyleWord(true);
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
+
+		/* ------------------- JScrollPane for our JTextArea ------------------- */
+		mainScrollPane = new JScrollPane(mainTextArea);
+		mainScrollPane.setPreferredSize(new Dimension(450, 450));
+		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		/* ------------------- JScrollPane for our JTextArea ------------------- */
+
+		/* --------------- JLabel before JSpinner --------------- */
+		fontSizeLabel = new JLabel("Font Size: ");
+		/* --------------- JLabel before JSpinner --------------- */
 
 		/* --------------- Adding JSpinner for changing font size --------------- */
 		fontSizeSpinner = new JSpinner();
 		fontSizeSpinner.setPreferredSize(new Dimension(50, 25));
 		fontSizeSpinner.setValue(20);
+		fontSizeSpinner.setEditor(new JSpinner.DefaultEditor(fontSizeSpinner)); // JSpinner contents are not editable
 		fontSizeSpinner.addChangeListener(new ChangeListener() {
 
 			@Override
@@ -85,20 +121,45 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 						new Font(mainTextArea.getFont().getFamily(), Font.PLAIN, (int) fontSizeSpinner.getValue()));
 			}
 		});
-		
-
 		/* --------------- Adding JSpinner for changing font size --------------- */
-		
+
+		/* --------------- Adding JComboBox for changing font style --------------- */
+		String[] javaFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		fontStyleBox = new JComboBox<String>(javaFonts);
+		fontStyleBox.addActionListener(this);
+		fontStyleBox.setSelectedItem("Arial");
+		/* --------------- Adding JComboBox for changing font style --------------- */
+
+		/* --------------- Adding JButton for changing font color --------------- */
+		changeFontColorButton = new JButton("Change Font Color");
+		changeFontColorButton.addActionListener(this);
+		/* --------------- Adding JButton for changing font color --------------- */
+
+		/* --------------- Adding different components for our JFrame --------------- */
 		this.setJMenuBar(editorMenuBar);
+		this.add(fontSizeLabel);
 		this.add(fontSizeSpinner);
-		this.add(mainTextArea);
+		this.add(changeFontColorButton);
+		this.add(fontStyleBox);
+		this.add(mainScrollPane);
 
 		this.setVisible(true);
+		/* --------------- Adding different components for our JFrame --------------- */
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
+		if (arg0.getSource() == changeFontColorButton) {
+			Color newFontColor = JColorChooser.showDialog(null, "Change Font Color", Color.BLACK);
+			mainTextArea.setForeground(newFontColor);
+		}
+
+		if (arg0.getSource() == fontStyleBox) {
+			mainTextArea.setFont(
+					new Font((String) fontStyleBox.getSelectedItem(), Font.PLAIN, mainTextArea.getFont().getSize()));
+		}
 
 		if (arg0.getSource() == openFile) {
 
@@ -117,6 +178,7 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 				try {
 					scanFile = new Scanner(openedFile);
 					if (openedFile.isFile()) {
+						mainTextArea.setText(""); // removes current text in JTextArea
 						while (scanFile.hasNextLine()) {
 							String eachLine = scanFile.nextLine() + "\n";
 							mainTextArea.append(eachLine);
