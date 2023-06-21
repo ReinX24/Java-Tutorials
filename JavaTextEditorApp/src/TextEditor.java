@@ -174,10 +174,9 @@ public class TextEditor extends JFrame implements ActionListener {
 			int saveResponse = saveFileChooser.showSaveDialog(null);
 
 			if (saveResponse == JFileChooser.APPROVE_OPTION) { // 0, if the user chooses to save their file
-				File saveFile = new File(saveFileChooser.getSelectedFile().getAbsolutePath()); // storing current File
-				PrintWriter writeFile = null;
-
 				// Get our current file in saveFileChooser
+				File saveFile = new File(saveFileChooser.getSelectedFile().getAbsolutePath());
+				PrintWriter writeFile = null;
 
 				// Writing our current file
 				try {
