@@ -65,11 +65,11 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		/*
 		 * Ideas for features to be added:
 		 * 
-		 * - Character counter, word counter, and sentence counter
+		 * - DONE: Character counter, word counter, and sentence counter
 		 * 
 		 * - TODO: Create methods that separates creating components and functions
 		 * 
-		 * - TODO: Change font to bold, italic, or plain
+		 * - DONE: Change font to bold, italic, or plain
 		 * 
 		 * - TODO: Change the size of the JTextArea / JScrollPane
 		 * 
@@ -112,6 +112,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		mainTextArea.setLineWrap(true);
 		mainTextArea.setWrapStyleWord(true);
 		mainTextArea.addKeyListener(this);
+//		mainTextArea.setComponentOrientation();
 
 		/* ------------------- JScrollPane for our JTextArea ------------------- */
 		mainScrollPane = new JScrollPane(mainTextArea);
@@ -194,8 +195,17 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		}
 
 		if (arg0.getSource() == fontStyleBox) {
-			// TODO: finish creating the function for this JComboBox
-//			mainTextArea.setFont(new Font((String) fontTypeBox.getSelectedItem(), (String) fontStyleBox.getSelectedItem());
+			if (fontStyleBox.getSelectedIndex() == 0) { // Font.PLAIN
+				mainTextArea.setFont(
+						new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, mainTextArea.getFont().getSize()));
+			} else if (fontStyleBox.getSelectedIndex() == 1) { // Font.BOLD
+				mainTextArea.setFont(
+						new Font((String) fontTypeBox.getSelectedItem(), Font.BOLD, mainTextArea.getFont().getSize()));
+			} else if (fontStyleBox.getSelectedIndex() == 2) { // Font.ITALIC
+				mainTextArea.setFont(new Font((String) fontTypeBox.getSelectedItem(), Font.ITALIC,
+						mainTextArea.getFont().getSize()));
+			}
+
 		}
 
 		if (arg0.getSource() == openFile) {
