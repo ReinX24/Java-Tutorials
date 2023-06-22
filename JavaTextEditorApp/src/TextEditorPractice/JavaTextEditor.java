@@ -27,6 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -61,19 +63,26 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	JComboBox<String> fontTypeBox;
 
+	JSpinner scrollPaneWidthSpinner;
+	JSpinner scrollPaneHeightSpinner;
+
 	public static void main(String[] args) {
 		/*
 		 * Ideas for features to be added:
 		 * 
 		 * - DONE: Character counter, word counter, and sentence counter
 		 * 
-		 * - TODO: Create methods that separates creating components and functions
+		 * - DONE: Create methods that separates creating components and functions
 		 * 
 		 * - DONE: Change font to bold, italic, or plain
 		 * 
 		 * - TODO: Change the size of the JTextArea / JScrollPane
 		 * 
 		 * - TODO: Change how text is aligned in the JTextArea / JScrollPane
+		 * 
+		 * - TODO: Change icon for our program
+		 * 
+		 * - TODO: Add sound effects when typing on keyboard
 		 * 
 		 */
 		new JavaTextEditor();
@@ -86,6 +95,41 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		this.setLocationRelativeTo(null);
 		this.setLayout(new FlowLayout());
 
+		/* --------------- Instantiating components for our JFrame --------------- */
+		setLookAndFeel();
+		createMenuBar();
+		createMainTextArea();
+		createScrollPane();
+		createFontSizeLabelSpinner();
+		createFontTypeBox();
+		createFontStyleBox();
+		createChangeColorButton();
+		createChangeWidthSpinner();
+		createChangeHeightSpinner();
+		createCharCountLabel();
+		createWordCountLabel();
+		createSentenceCountLabel();
+
+		/* --------------- Adding different components for our JFrame --------------- */
+		this.setJMenuBar(editorMenuBar);
+		this.add(fontSizeLabel);
+		this.add(fontSizeSpinner);
+		this.add(changeFontColorButton);
+		this.add(fontTypeBox);
+		this.add(fontStyleBox);
+		this.add(scrollPaneWidthSpinner);
+		// TODO: add height JSpinner
+		this.add(mainScrollPane);
+
+		this.add(charCountLabel);
+		this.add(wordCountLabel);
+		this.add(sentenceCountLabel);
+
+		this.setVisible(true);
+
+	}
+
+	public void createMenuBar() {
 		/* ------------------- Adding JMenuBar and its components ------------------- */
 		editorMenuBar = new JMenuBar();
 
@@ -105,7 +149,18 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		fileMenu.add(exitFile);
 
 		editorMenuBar.add(fileMenu);
+	}
 
+	public void setLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void createMainTextArea() {
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
 		mainTextArea = new JTextArea();
 		mainTextArea.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -113,12 +168,16 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		mainTextArea.setWrapStyleWord(true);
 		mainTextArea.addKeyListener(this);
 //		mainTextArea.setComponentOrientation();
+	}
 
+	public void createScrollPane() {
 		/* ------------------- JScrollPane for our JTextArea ------------------- */
 		mainScrollPane = new JScrollPane(mainTextArea);
 		mainScrollPane.setPreferredSize(new Dimension(450, 450));
 		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	}
 
+	public void createFontSizeLabelSpinner() {
 		/* --------------- JLabel before JSpinner --------------- */
 		fontSizeLabel = new JLabel("Font Size: ");
 
@@ -135,50 +194,66 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 						new Font(mainTextArea.getFont().getFamily(), Font.PLAIN, (int) fontSizeSpinner.getValue()));
 			}
 		});
+	}
 
-		/* --------------- Adding JComboBox for changing font style --------------- */
+	public void createFontTypeBox() {
+		/* --------------- Adding JComboBox for changing font type --------------- */
 		String[] javaFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		fontTypeBox = new JComboBox<String>(javaFonts);
 		fontTypeBox.addActionListener(this);
 		fontTypeBox.setSelectedItem("Arial");
+	}
 
-		/* --------------- Adding JComboBox for changing font type --------------- */
+	public void createFontStyleBox() {
+		/* --------------- Adding JComboBox for changing font style --------------- */
 		String[] fontTypes = { "Plain", "Bold", "Italic" };
 		fontStyleBox = new JComboBox<String>(fontTypes);
 		fontStyleBox.addActionListener(this);
 		fontStyleBox.setSelectedItem("Plain");
+	}
 
+	public void createChangeColorButton() {
 		/* --------------- Adding JButton for changing font color --------------- */
 		changeFontColorButton = new JButton("Change Font Color");
 		changeFontColorButton.addActionListener(this);
+	}
 
+	public void createChangeWidthSpinner() {
+		// TODO: debug this JSpinner
+		scrollPaneWidthSpinner = new JSpinner();
+		scrollPaneWidthSpinner.setPreferredSize(new Dimension(50, 25));
+		scrollPaneWidthSpinner.setValue((int) mainScrollPane.getWidth());
+		scrollPaneWidthSpinner.setEditor(new JSpinner.DefaultEditor(scrollPaneWidthSpinner));
+		scrollPaneWidthSpinner.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				mainScrollPane.setPreferredSize(
+						new Dimension((int) scrollPaneWidthSpinner.getValue(), mainScrollPane.getHeight()));
+			}
+		});
+	}
+
+	public void createChangeHeightSpinner() {
+
+	}
+
+	public void createCharCountLabel() {
 		/* --------------- Adding String & JLabel for char amount --------------- */
 		charAmount = 0;
 		charCountLabel = new JLabel("Characters: " + charAmount);
+	}
 
+	public void createWordCountLabel() {
 		/* --------------- Adding JLabel for word amount --------------- */
 		wordAmount = 0;
 		wordCountLabel = new JLabel("Words: " + wordAmount);
+	}
 
+	public void createSentenceCountLabel() {
 		/* --------------- Adding JLabel for sentence amount --------------- */
 		sentenceAmount = 0;
 		sentenceCountLabel = new JLabel("Sentences: " + sentenceAmount);
-
-		/* --------------- Adding different components for our JFrame --------------- */
-		this.setJMenuBar(editorMenuBar);
-		this.add(fontSizeLabel);
-		this.add(fontSizeSpinner);
-		this.add(changeFontColorButton);
-		this.add(fontTypeBox);
-		this.add(fontStyleBox);
-		this.add(mainScrollPane);
-
-		this.add(charCountLabel);
-		this.add(wordCountLabel);
-		this.add(sentenceCountLabel);
-
-		this.setVisible(true);
-
 	}
 
 	@Override
@@ -293,7 +368,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		/* --------------- Count Amount of entered sentences --------------- */
 		// Removing all the periods in mainTextArea and subtracting them to the original
 		// String length
-		sentenceAmount = mainTextArea.getText().length() - mainTextArea.getText().replaceAll("[.]", "").length();
+		sentenceAmount = mainTextArea.getText().length() - mainTextArea.getText().replaceAll("[.?!]", "").length();
 		sentenceCountLabel.setText("Sentences: " + sentenceAmount);
 
 	}
