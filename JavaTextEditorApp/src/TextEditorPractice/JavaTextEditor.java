@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -29,7 +31,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class JavaTextEditor extends JFrame implements ActionListener {
+public class JavaTextEditor extends JFrame implements ActionListener, KeyListener {
 
 	JMenuBar editorMenuBar;
 	JMenu fileMenu;
@@ -47,11 +49,17 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 	JComboBox<String> fontStyleBox;
 	JButton changeFontColorButton;
 
+	JLabel charCountLabel;
+	String textAreaString;
+	
+	JLabel wordCountLabel;
+	int wordAmount;
+
 	public static void main(String[] args) {
 		/*
 		 * Ideas for features to be added:
 		 * 
-		 * - Character counter and sentence counter
+		 * - Character counter, word counter, and sentence counter
 		 * 
 		 * - Change font to bold, italic, or plain
 		 * 
@@ -96,6 +104,7 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 		mainTextArea.setFont(new Font("Arial", Font.PLAIN, 20));
 		mainTextArea.setLineWrap(true);
 		mainTextArea.setWrapStyleWord(true);
+		mainTextArea.addKeyListener(this);
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
 
 		/* ------------------- JScrollPane for our JTextArea ------------------- */
@@ -135,6 +144,16 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 		changeFontColorButton.addActionListener(this);
 		/* --------------- Adding JButton for changing font color --------------- */
 
+		/* --------------- Adding String & JLabel for char amount --------------- */
+		textAreaString = "";
+		charCountLabel = new JLabel("Characters: " + textAreaString.length());
+		/* --------------- Adding String & JLabel for char amount --------------- */
+		
+		/* --------------- Adding JLabel for sentence amount --------------- */
+		wordAmount = 0;
+		wordCountLabel = new JLabel("Sentences: " + wordAmount);
+		/* --------------- Adding JLabel for sentence amount --------------- */
+
 		/* --------------- Adding different components for our JFrame --------------- */
 		this.setJMenuBar(editorMenuBar);
 		this.add(fontSizeLabel);
@@ -142,6 +161,8 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 		this.add(changeFontColorButton);
 		this.add(fontStyleBox);
 		this.add(mainScrollPane);
+
+		this.add(charCountLabel);
 
 		this.setVisible(true);
 		/* --------------- Adding different components for our JFrame --------------- */
@@ -224,6 +245,22 @@ public class JavaTextEditor extends JFrame implements ActionListener {
 				System.exit(0);
 			}
 		}
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		textAreaString = mainTextArea.getText().replaceAll("\\s", ""); // replaces whitespace in mainTextArea text
+		charCountLabel.setText("Characters: " + textAreaString.length()); // sets charCountLabel text (updates)
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
 
 	}
 
