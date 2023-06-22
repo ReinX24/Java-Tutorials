@@ -55,15 +55,17 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	JLabel wordCountLabel;
 	int wordAmount;
-	
+
 	JLabel sentenceCountLabel;
 	int sentenceAmount;
+
+	JComboBox<String> fontTypeBox;
 
 	public static void main(String[] args) {
 		/*
 		 * Ideas for features to be added:
 		 * 
-		 * - TODO: Character counter, word counter, and sentence counter
+		 * - Character counter, word counter, and sentence counter
 		 * 
 		 * - TODO: Create methods that separates creating components and functions
 		 * 
@@ -135,9 +137,15 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 		/* --------------- Adding JComboBox for changing font style --------------- */
 		String[] javaFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		fontStyleBox = new JComboBox<String>(javaFonts);
+		fontTypeBox = new JComboBox<String>(javaFonts);
+		fontTypeBox.addActionListener(this);
+		fontTypeBox.setSelectedItem("Arial");
+
+		/* --------------- Adding JComboBox for changing font type --------------- */
+		String[] fontTypes = { "Plain", "Bold", "Italic" };
+		fontStyleBox = new JComboBox<String>(fontTypes);
 		fontStyleBox.addActionListener(this);
-		fontStyleBox.setSelectedItem("Arial");
+		fontStyleBox.setSelectedItem("Plain");
 
 		/* --------------- Adding JButton for changing font color --------------- */
 		changeFontColorButton = new JButton("Change Font Color");
@@ -147,20 +155,26 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		charAmount = 0;
 		charCountLabel = new JLabel("Characters: " + charAmount);
 
-		/* --------------- Adding JLabel for sentence amount --------------- */
+		/* --------------- Adding JLabel for word amount --------------- */
 		wordAmount = 0;
-		wordCountLabel = new JLabel("Sentences: " + wordAmount);
+		wordCountLabel = new JLabel("Words: " + wordAmount);
+
+		/* --------------- Adding JLabel for sentence amount --------------- */
+		sentenceAmount = 0;
+		sentenceCountLabel = new JLabel("Sentences: " + sentenceAmount);
 
 		/* --------------- Adding different components for our JFrame --------------- */
 		this.setJMenuBar(editorMenuBar);
 		this.add(fontSizeLabel);
 		this.add(fontSizeSpinner);
 		this.add(changeFontColorButton);
+		this.add(fontTypeBox);
 		this.add(fontStyleBox);
 		this.add(mainScrollPane);
 
 		this.add(charCountLabel);
 		this.add(wordCountLabel);
+		this.add(sentenceCountLabel);
 
 		this.setVisible(true);
 
@@ -174,9 +188,14 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 			mainTextArea.setForeground(newFontColor);
 		}
 
-		if (arg0.getSource() == fontStyleBox) {
+		if (arg0.getSource() == fontTypeBox) {
 			mainTextArea.setFont(
-					new Font((String) fontStyleBox.getSelectedItem(), Font.PLAIN, mainTextArea.getFont().getSize()));
+					new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, mainTextArea.getFont().getSize()));
+		}
+
+		if (arg0.getSource() == fontStyleBox) {
+			// TODO: finish creating the function for this JComboBox
+//			mainTextArea.setFont(new Font((String) fontTypeBox.getSelectedItem(), (String) fontStyleBox.getSelectedItem());
 		}
 
 		if (arg0.getSource() == openFile) {
@@ -260,8 +279,13 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 			wordAmount = 0;
 			wordCountLabel.setText("Words: " + wordAmount);
 		}
-		
+
 		/* --------------- Count Amount of entered sentences --------------- */
+		// Removing all the periods in mainTextArea and subtracting them to the original
+		// String length
+		sentenceAmount = mainTextArea.getText().length() - mainTextArea.getText().replaceAll("[.]", "").length();
+		sentenceCountLabel.setText("Sentences: " + sentenceAmount);
+
 	}
 
 	@Override
