@@ -4,33 +4,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Scanner;
 
 import javax.swing.*;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -65,13 +54,20 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	JComboBox<String> fontTypeBox;
 
+	JLabel widthLabel;
+	SpinnerNumberModel widthValues;
 	JSpinner scrollPaneWidthSpinner;
+
+	JLabel heightLabel;
+	SpinnerModel heightValues;
 	JSpinner scrollPaneHeightSpinner;
 
 	JPanel mainTextPanel;
 
 	int editorTextAreaWidth = 450;
 	int editorTextAreaHeight = 450;
+
+	URL programIcon;
 
 	public static void main(String[] args) {
 		/*
@@ -83,11 +79,11 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		 * 
 		 * - DONE: Change font to bold, italic, or plain
 		 * 
-		 * - TODO: Change the size of the JTextArea / JScrollPane
+		 * - DONE: Change the size of the JTextArea / JScrollPane
 		 * 
 		 * - TODO: Change how text is aligned in the JTextArea / JScrollPane
 		 * 
-		 * - TODO: Change icon for our program
+		 * - DONE: Change icon for our program
 		 * 
 		 * - TODO: Add sound effects when typing on keyboard
 		 * 
@@ -104,6 +100,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 		/* --------------- Instantiating components for our JFrame --------------- */
 		setLookAndFeel();
+		setImageIcon();
 		createMenuBar();
 		createMainTextArea();
 		createScrollPane();
@@ -111,6 +108,9 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		createFontTypeBox();
 		createFontStyleBox();
 		createChangeColorButton();
+		
+		// TODO: add change alignment here
+		
 		createChangeWidthSpinner();
 		createChangeHeightSpinner();
 		createCharCountLabel();
@@ -119,14 +119,21 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 		/* --------------- Adding different components for our JFrame --------------- */
 		this.setJMenuBar(editorMenuBar);
+
 		this.add(fontSizeLabel);
 		this.add(fontSizeSpinner);
+
 		this.add(changeFontColorButton);
+
 		this.add(fontTypeBox);
 		this.add(fontStyleBox);
+
+		this.add(widthLabel);
 		this.add(scrollPaneWidthSpinner);
-		// TODO: add height JSpinner
-//		this.add(mainScrollPane);
+
+		this.add(heightLabel);
+		this.add(scrollPaneHeightSpinner);
+
 		this.add(mainTextPanel);
 
 		this.add(charCountLabel);
@@ -168,6 +175,11 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		}
 	}
 
+	public void setImageIcon() {
+		programIcon = getClass().getResource("../textEditor.png");
+		this.setIconImage(new ImageIcon(programIcon).getImage());
+	}
+
 	public void createMainTextArea() {
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
 		mainTextArea = new JTextArea();
@@ -182,10 +194,10 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		/* ------------------- JScrollPane for our JTextArea ------------------- */
 
 		mainTextPanel = new JPanel();
-		mainTextPanel.setPreferredSize(new Dimension(1280, 600));
+		mainTextPanel.setPreferredSize(new Dimension(1240, 600));
 
 		mainScrollPane = new JScrollPane(mainTextArea);
-		mainScrollPane.setPreferredSize(new Dimension(450, 450));
+		mainScrollPane.setPreferredSize(new Dimension(editorTextAreaWidth, editorTextAreaHeight));
 		mainScrollPane.setSize(1000, 1000);
 		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -235,14 +247,14 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	public void createChangeWidthSpinner() {
 
-		SpinnerModel widthValues = new SpinnerNumberModel(editorTextAreaWidth, // initial value
+		widthLabel = new JLabel("Width: ");
+
+		widthValues = new SpinnerNumberModel(editorTextAreaWidth, // initial value
 				editorTextAreaWidth, // min
 				1200, // max
-				10);
-		// TODO: debug this JSpinner
+				10); // increments
 		scrollPaneWidthSpinner = new JSpinner(widthValues);
 		scrollPaneWidthSpinner.setPreferredSize(new Dimension(100, 25));
-//		scrollPaneWidthSpinner.setValue(editorTextAreaWidth);
 		scrollPaneWidthSpinner.setEditor(new JSpinner.DefaultEditor(scrollPaneWidthSpinner));
 		scrollPaneWidthSpinner.addChangeListener(new ChangeListener() {
 			@Override
@@ -254,6 +266,21 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 	}
 
 	public void createChangeHeightSpinner() {
+
+		heightLabel = new JLabel("Height: ");
+
+		heightValues = new SpinnerNumberModel(editorTextAreaHeight, editorTextAreaHeight, 580, 10);
+
+		scrollPaneHeightSpinner = new JSpinner(heightValues);
+		scrollPaneHeightSpinner.setPreferredSize(new Dimension(100, 25));
+		scrollPaneHeightSpinner.setEditor(new JSpinner.DefaultEditor(scrollPaneHeightSpinner));
+		scrollPaneHeightSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				mainScrollPane.setPreferredSize(
+						new Dimension(mainScrollPane.getWidth(), (int) scrollPaneHeightSpinner.getValue()));
+			}
+		});
 
 	}
 
