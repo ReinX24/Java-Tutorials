@@ -23,6 +23,9 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyledDocument;
 
 public class JavaTextEditor extends JFrame implements ActionListener, KeyListener {
 
@@ -69,6 +72,12 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	URL programIcon;
 
+	JTextPane textPane;
+	StyledDocument docStyle;
+	SimpleAttributeSet attributeSet;
+
+	JComboBox<String> textAlignmentBox;
+
 	public static void main(String[] args) {
 		/*
 		 * Ideas for features to be added:
@@ -105,12 +114,13 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		createMainTextArea();
 		createScrollPane();
 		createFontSizeLabelSpinner();
+		createChangeColorButton();
 		createFontTypeBox();
 		createFontStyleBox();
-		createChangeColorButton();
-		
+
 		// TODO: add change alignment here
-		
+		createAlignmentBox();
+
 		createChangeWidthSpinner();
 		createChangeHeightSpinner();
 		createCharCountLabel();
@@ -127,6 +137,8 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 		this.add(fontTypeBox);
 		this.add(fontStyleBox);
+
+		this.add(textAlignmentBox);
 
 		this.add(widthLabel);
 		this.add(scrollPaneWidthSpinner);
@@ -182,12 +194,23 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	public void createMainTextArea() {
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
+
 		mainTextArea = new JTextArea();
 		mainTextArea.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 20));
 		mainTextArea.setLineWrap(true);
 		mainTextArea.setWrapStyleWord(true);
 		mainTextArea.addKeyListener(this);
-//		mainTextArea.setComponentOrientation();
+
+		textPane = new JTextPane();
+		// For aligning text in our textPane
+		docStyle = textPane.getStyledDocument();
+		attributeSet = new SimpleAttributeSet();
+		StyleConstants.setAlignment(attributeSet, StyleConstants.ALIGN_LEFT);
+		docStyle.setParagraphAttributes(0, docStyle.getLength(), attributeSet, false);
+
+		textPane.setPreferredSize(new Dimension(200, 100));
+		textPane.setText(mainTextArea.getText());
+
 	}
 
 	public void createScrollPane() {
@@ -196,7 +219,8 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		mainTextPanel = new JPanel();
 		mainTextPanel.setPreferredSize(new Dimension(1240, 600));
 
-		mainScrollPane = new JScrollPane(mainTextArea);
+//		mainScrollPane = new JScrollPane(textPane); // reason for text not saving
+		mainScrollPane = new JScrollPane(mainTextArea); // This saves text but the one above does not
 		mainScrollPane.setPreferredSize(new Dimension(editorTextAreaWidth, editorTextAreaHeight));
 		mainScrollPane.setSize(1000, 1000);
 		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -223,6 +247,12 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		});
 	}
 
+	public void createChangeColorButton() {
+		/* --------------- Adding JButton for changing font color --------------- */
+		changeFontColorButton = new JButton("Change Font Color");
+		changeFontColorButton.addActionListener(this);
+	}
+
 	public void createFontTypeBox() {
 		/* --------------- Adding JComboBox for changing font type --------------- */
 		String[] javaFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -239,10 +269,11 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		fontStyleBox.setSelectedItem("Plain");
 	}
 
-	public void createChangeColorButton() {
-		/* --------------- Adding JButton for changing font color --------------- */
-		changeFontColorButton = new JButton("Change Font Color");
-		changeFontColorButton.addActionListener(this);
+	public void createAlignmentBox() {
+		String[] alignmentChoices = { "Left", "Center", "Right", "Justify" };
+		textAlignmentBox = new JComboBox<String>(alignmentChoices);
+		textAlignmentBox.setPreferredSize(new Dimension(100, 25));
+		textAlignmentBox.addActionListener(this);
 	}
 
 	public void createChangeWidthSpinner() {
@@ -327,6 +358,22 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 						mainTextArea.getFont().getSize()));
 			}
 
+		}
+
+		if (arg0.getSource() == textAlignmentBox) {
+			if (textAlignmentBox.getSelectedItem() == "Left") {
+				StyleConstants.setAlignment(attributeSet, StyleConstants.ALIGN_LEFT);
+				docStyle.setParagraphAttributes(0, docStyle.getLength(), attributeSet, false);
+			} else if (textAlignmentBox.getSelectedItem() == "Center") {
+				StyleConstants.setAlignment(attributeSet, StyleConstants.ALIGN_CENTER);
+				docStyle.setParagraphAttributes(0, docStyle.getLength(), attributeSet, false);
+			} else if (textAlignmentBox.getSelectedItem() == "Right") {
+				StyleConstants.setAlignment(attributeSet, StyleConstants.ALIGN_RIGHT);
+				docStyle.setParagraphAttributes(0, docStyle.getLength(), attributeSet, false);
+			} else if (textAlignmentBox.getSelectedItem() == "Justify") {
+				StyleConstants.setAlignment(attributeSet, StyleConstants.ALIGN_JUSTIFIED);
+				docStyle.setParagraphAttributes(0, docStyle.getLength(), attributeSet, false);
+			}
 		}
 
 		if (arg0.getSource() == openFile) {
