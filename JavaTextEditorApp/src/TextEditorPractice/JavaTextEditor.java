@@ -4,15 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -90,11 +86,13 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		 * 
 		 * - DONE: Change the size of the JTextArea / JScrollPane
 		 * 
-		 * - TODO: Change how text is aligned in the JTextArea / JScrollPane
+		 * - DONE: Change how text is aligned in the JTextArea / JScrollPane
 		 * 
 		 * - DONE: Change icon for our program
 		 * 
 		 * - TODO: Add sound effects when typing on keyboard
+		 * 
+		 * - TODO: Debug all functionalities before exporting to a jar file
 		 * 
 		 */
 		new JavaTextEditor();
@@ -147,7 +145,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		this.add(scrollPaneHeightSpinner);
 
 		this.add(mainTextPanel);
-
+		// TODO: these counters are not working, debug and fix
 		this.add(charCountLabel);
 		this.add(wordCountLabel);
 		this.add(sentenceCountLabel);
@@ -196,19 +194,18 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
 
 		mainTextArea = new JTextArea();
-		mainTextArea.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 20));
 		mainTextArea.setLineWrap(true);
 		mainTextArea.setWrapStyleWord(true);
 		mainTextArea.addKeyListener(this);
 
 		textPane = new JTextPane();
+		textPane.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 20));
 		// For aligning text in our textPane
 		docStyle = textPane.getStyledDocument();
 		attributeSet = new SimpleAttributeSet();
 		StyleConstants.setAlignment(attributeSet, StyleConstants.ALIGN_LEFT);
 		docStyle.setParagraphAttributes(0, docStyle.getLength(), attributeSet, false);
 
-		textPane.setPreferredSize(new Dimension(200, 100));
 		textPane.setText(mainTextArea.getText());
 
 	}
@@ -219,10 +216,10 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		mainTextPanel = new JPanel();
 		mainTextPanel.setPreferredSize(new Dimension(1240, 600));
 
-//		mainScrollPane = new JScrollPane(textPane); // reason for text not saving
-		mainScrollPane = new JScrollPane(mainTextArea); // This saves text but the one above does not
+		mainScrollPane = new JScrollPane(textPane); // reason for text not saving
 		mainScrollPane.setPreferredSize(new Dimension(editorTextAreaWidth, editorTextAreaHeight));
-		mainScrollPane.setSize(1000, 1000);
+//		mainScrollPane.setSize(1200, 580);
+//		mainScrollPane.setPreferredSize(new Dimension(1200, 580));
 		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		mainTextPanel.add(mainScrollPane);
@@ -241,8 +238,8 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				mainTextArea.setFont(
-						new Font(mainTextArea.getFont().getFamily(), Font.PLAIN, (int) fontSizeSpinner.getValue()));
+				textPane.setFont(
+						new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, (int) fontSizeSpinner.getValue()));
 			}
 		});
 	}
@@ -292,6 +289,8 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 			public void stateChanged(ChangeEvent arg0) {
 				mainScrollPane.setPreferredSize(
 						new Dimension((int) scrollPaneWidthSpinner.getValue(), mainScrollPane.getHeight()));
+				revalidate(); // validates changed components
+				repaint(); // repaints components
 			}
 		});
 	}
@@ -310,6 +309,8 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 			public void stateChanged(ChangeEvent arg0) {
 				mainScrollPane.setPreferredSize(
 						new Dimension(mainScrollPane.getWidth(), (int) scrollPaneHeightSpinner.getValue()));
+				revalidate();
+				repaint();
 			}
 		});
 
@@ -338,24 +339,24 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 		if (arg0.getSource() == changeFontColorButton) {
 			Color newFontColor = JColorChooser.showDialog(null, "Change Font Color", Color.BLACK);
-			mainTextArea.setForeground(newFontColor);
+			textPane.setForeground(newFontColor);
 		}
 
 		if (arg0.getSource() == fontTypeBox) {
-			mainTextArea.setFont(
-					new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, mainTextArea.getFont().getSize()));
+			textPane.setFont(
+					new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, textPane.getFont().getSize()));
 		}
 
 		if (arg0.getSource() == fontStyleBox) {
 			if (fontStyleBox.getSelectedIndex() == 0) { // Font.PLAIN
-				mainTextArea.setFont(
-						new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, mainTextArea.getFont().getSize()));
+				textPane.setFont(
+						new Font((String) fontTypeBox.getSelectedItem(), Font.PLAIN, textPane.getFont().getSize()));
 			} else if (fontStyleBox.getSelectedIndex() == 1) { // Font.BOLD
-				mainTextArea.setFont(
-						new Font((String) fontTypeBox.getSelectedItem(), Font.BOLD, mainTextArea.getFont().getSize()));
+				textPane.setFont(
+						new Font((String) fontTypeBox.getSelectedItem(), Font.BOLD, textPane.getFont().getSize()));
 			} else if (fontStyleBox.getSelectedIndex() == 2) { // Font.ITALIC
-				mainTextArea.setFont(new Font((String) fontTypeBox.getSelectedItem(), Font.ITALIC,
-						mainTextArea.getFont().getSize()));
+				textPane.setFont(
+						new Font((String) fontTypeBox.getSelectedItem(), Font.ITALIC, textPane.getFont().getSize()));
 			}
 
 		}
@@ -398,6 +399,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 							String eachLine = scanFile.nextLine() + "\n";
 							mainTextArea.append(eachLine);
 						}
+						textPane.setText(mainTextArea.getText());
 					}
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -421,7 +423,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 				try {
 					writeFile = new PrintWriter(savedFile);
-					writeFile.println(mainTextArea.getText());
+					writeFile.println(textPane.getText());
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} finally {
