@@ -1,4 +1,3 @@
-package TextEditorPractice;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -185,7 +184,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 	}
 
 	public void setImageIcon() {
-		programIcon = getClass().getResource("../textEditor.png");
+		programIcon = getClass().getResource("textEditor.png");
 		this.setIconImage(new ImageIcon(programIcon).getImage());
 	}
 
