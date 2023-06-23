@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
@@ -24,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -66,6 +68,11 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 	JSpinner scrollPaneWidthSpinner;
 	JSpinner scrollPaneHeightSpinner;
 
+	JPanel mainTextPanel;
+
+	int editorTextAreaWidth = 450;
+	int editorTextAreaHeight = 450;
+
 	public static void main(String[] args) {
 		/*
 		 * Ideas for features to be added:
@@ -91,7 +98,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 	public JavaTextEditor() {
 		this.setTitle("Java Text Editor");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(500, 600);
+		this.setSize(1280, 720);
 		this.setLocationRelativeTo(null);
 		this.setLayout(new FlowLayout());
 
@@ -119,7 +126,8 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		this.add(fontStyleBox);
 		this.add(scrollPaneWidthSpinner);
 		// TODO: add height JSpinner
-		this.add(mainScrollPane);
+//		this.add(mainScrollPane);
+		this.add(mainTextPanel);
 
 		this.add(charCountLabel);
 		this.add(wordCountLabel);
@@ -163,7 +171,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 	public void createMainTextArea() {
 		/* ------------------- Adding mainTextArea in our JFrame ------------------- */
 		mainTextArea = new JTextArea();
-		mainTextArea.setFont(new Font("Arial", Font.PLAIN, 20));
+		mainTextArea.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 20));
 		mainTextArea.setLineWrap(true);
 		mainTextArea.setWrapStyleWord(true);
 		mainTextArea.addKeyListener(this);
@@ -172,9 +180,16 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 
 	public void createScrollPane() {
 		/* ------------------- JScrollPane for our JTextArea ------------------- */
+
+		mainTextPanel = new JPanel();
+		mainTextPanel.setPreferredSize(new Dimension(1280, 600));
+
 		mainScrollPane = new JScrollPane(mainTextArea);
 		mainScrollPane.setPreferredSize(new Dimension(450, 450));
+		mainScrollPane.setSize(1000, 1000);
 		mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+		mainTextPanel.add(mainScrollPane);
 	}
 
 	public void createFontSizeLabelSpinner() {
@@ -201,7 +216,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		String[] javaFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		fontTypeBox = new JComboBox<String>(javaFonts);
 		fontTypeBox.addActionListener(this);
-		fontTypeBox.setSelectedItem("Arial");
+		fontTypeBox.setSelectedItem("DejaVu Sans Mono");
 	}
 
 	public void createFontStyleBox() {
@@ -219,13 +234,17 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 	}
 
 	public void createChangeWidthSpinner() {
+
+		SpinnerModel widthValues = new SpinnerNumberModel(editorTextAreaWidth, // initial value
+				editorTextAreaWidth, // min
+				1200, // max
+				10);
 		// TODO: debug this JSpinner
-		scrollPaneWidthSpinner = new JSpinner();
-		scrollPaneWidthSpinner.setPreferredSize(new Dimension(50, 25));
-		scrollPaneWidthSpinner.setValue((int) mainScrollPane.getWidth());
+		scrollPaneWidthSpinner = new JSpinner(widthValues);
+		scrollPaneWidthSpinner.setPreferredSize(new Dimension(100, 25));
+//		scrollPaneWidthSpinner.setValue(editorTextAreaWidth);
 		scrollPaneWidthSpinner.setEditor(new JSpinner.DefaultEditor(scrollPaneWidthSpinner));
 		scrollPaneWidthSpinner.addChangeListener(new ChangeListener() {
-
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				mainScrollPane.setPreferredSize(
