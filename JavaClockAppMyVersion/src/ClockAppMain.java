@@ -28,7 +28,7 @@ public class ClockAppMain extends JFrame {
 	String currentTime;
 	String currentDay;
 	String currentDate;
-	
+
 	URL clockIcon;
 
 	public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class ClockAppMain extends JFrame {
 		this.setTitle("Java Clock App");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		
+
 		clockIcon = getClass().getResource("clockAppIcon.png");
 		this.setIconImage(new ImageIcon(clockIcon).getImage());
 
