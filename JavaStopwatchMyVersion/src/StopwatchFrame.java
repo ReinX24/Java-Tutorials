@@ -1,7 +1,15 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Scanner;
 
 public class StopwatchFrame extends JFrame implements ActionListener {
 
@@ -9,6 +17,8 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 
 	JButton startButton = new JButton();
 	JButton resetButton = new JButton();
+	JButton recordButton = new JButton();
+	JButton exitButton = new JButton();
 
 	JPanel mainPanel;
 
@@ -44,12 +54,18 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		}
 	});
 
+	AudioInputStream streamAudio;
+	Clip audioClip;
+	FloatControl adjustAudioVolume;
+
 	URL stopWatchIcon = getClass().getResource("stopWatchIcon.png");
 	URL startTimerIcon = getClass().getResource("startTimer.png");
 	URL pauseTimerIcon = getClass().getResource("pauseTimer.png");
 	URL resetTimerIcon = getClass().getResource("resetTimer.png");
 
-	URL tickSoundEffect = getClass().getResource("tickSoundEffect.wav");
+	URL startTimerSound = getClass().getResource("startTimerSound.wav");
+	URL stopTimerSound = getClass().getResource("stopTimerSound.wav");
+	URL resetTimerSound = getClass().getResource("resetTimerSound.wav");
 
 	public StopwatchFrame() {
 
@@ -76,8 +92,10 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		startButton.addActionListener(this);
 		startButton.setFocusable(false);
 		startButton.setBounds(120, 250, 190, 90);
-		startButton.setFont(new Font("Arial", Font.PLAIN, 24));
+		startButton.setFont(new Font("Arial", Font.BOLD, 24));
 		startButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+		startButton.setBackground(new Color(0, 128, 128));
+		startButton.setForeground(Color.WHITE);
 
 		mainPanel.add(startButton);
 
@@ -86,10 +104,36 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		resetButton.addActionListener(this);
 		resetButton.setFocusable(false);
 		resetButton.setBounds(330, 250, 190, 90);
-		resetButton.setFont(new Font("Arial", Font.PLAIN, 24));
+		resetButton.setFont(new Font("Arial", Font.BOLD, 24));
 		resetButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+		resetButton.setBackground(new Color(189, 12, 59));
+		resetButton.setForeground(Color.WHITE);
 
 		mainPanel.add(resetButton);
+
+		recordButton.setText("RECORD");
+		// TODO: add an Icon for recordButton
+		recordButton.addActionListener(this);
+		recordButton.setFocusable(false);
+		recordButton.setBounds(120, 350, 190, 90);
+		recordButton.setFont(new Font("Arial", Font.BOLD, 24));
+		recordButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+		recordButton.setBackground(new Color(218, 165, 32));
+		recordButton.setForeground(Color.WHITE);
+
+		mainPanel.add(recordButton);
+
+		exitButton.setText("EXIT");
+		// TODO: add an Icon for exitButton
+		exitButton.addActionListener(this);
+		exitButton.setFocusable(false);
+		exitButton.setBounds(330, 350, 190, 90);
+		exitButton.setFont(new Font("Arial", Font.BOLD, 24));
+		exitButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+		exitButton.setBackground(new Color(189, 12, 59));
+		exitButton.setForeground(Color.WHITE);
+		
+		mainPanel.add(exitButton);
 
 		this.add(mainPanel);
 		this.pack();
@@ -102,8 +146,10 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 
 		if (arg0.getSource() == startButton) {
 			if (timerHasStarted == false) {
+				startTimerSound();
 				startTimer();
 			} else {
+				stopTimerSound();
 				stopTimer();
 			}
 		}
@@ -114,11 +160,13 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 
 	}
 
+	// User starts the timer
 	public void startTimer() {
 		watchTimer.start();
 		timerHasStarted = true;
 		startButton.setText("STOP");
 		startButton.setIcon(new ImageIcon(pauseTimerIcon));
+		startButton.setBackground(new Color(254, 90, 29)); // chance button color
 	}
 
 	public void stopTimer() {
@@ -126,6 +174,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		timerHasStarted = false;
 		startButton.setText("START");
 		startButton.setIcon(new ImageIcon(startTimerIcon));
+		startButton.setBackground(new Color(0, 128, 128)); // change button color back to original color
 	}
 
 	public void resetTimer() {
@@ -145,11 +194,55 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 			hoursString = String.format("%02d", hoursPassed);
 
 			timeLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
+			resetTimerSound();
 		}
 	}
 
-	public void playTickSound() {
+	public void startTimerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(startTimerSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-16.0f); // reduce volume of resetTimerSound
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 
 	}
 
+	public void stopTimerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(stopTimerSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-16.0f); // reduce volume of resetTimerSound
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void resetTimerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(resetTimerSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-16.0f); // reduce volume of resetTimerSound
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
+	}
 }
