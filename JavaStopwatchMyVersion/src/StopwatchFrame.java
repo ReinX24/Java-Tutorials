@@ -70,6 +70,17 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 	URL startTimerSound = getClass().getResource("startTimerSound.wav");
 	URL stopTimerSound = getClass().getResource("stopTimerSound.wav");
 	URL resetTimerSound = getClass().getResource("resetTimerSound.wav");
+	URL saveTimerSound = getClass().getResource("saveTimerSound.wav");
+	URL exitTimerSound = getClass().getResource("exitTimerSound.wav");
+
+	URL errorTimerSound = getClass().getResource("errorTimerSound.wav");
+	
+	Color mainPanelBackgroundColor = Color.LIGHT_GRAY;
+	Color startButtonColor = new Color(0, 128, 128);
+	Color stopButtonColor = new Color(254, 90, 29);
+	Color resetButtonColor; // TODO: add other colors used in program
+	Color recordButtonColor;
+	Color exitButtonColor;
 
 	public StopwatchFrame() {
 
@@ -78,7 +89,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		this.setIconImage(new ImageIcon(stopWatchIcon).getImage());
 
 		mainPanel = new JPanel();
-		mainPanel.setBackground(Color.LIGHT_GRAY);
+		mainPanel.setBackground(mainPanelBackgroundColor);
 		mainPanel.setPreferredSize(new Dimension(640, 480));
 		mainPanel.setLayout(null);
 
@@ -98,7 +109,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		startButton.setBounds(120, 250, 190, 90);
 		startButton.setFont(new Font("Arial", Font.BOLD, 24));
 		startButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		startButton.setBackground(new Color(0, 128, 128));
+		startButton.setBackground(startButtonColor);
 		startButton.setForeground(Color.WHITE);
 
 		mainPanel.add(startButton);
@@ -178,7 +189,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		timerHasStarted = true;
 		startButton.setText("STOP");
 		startButton.setIcon(new ImageIcon(pauseTimerIcon));
-		startButton.setBackground(new Color(254, 90, 29)); // chance button color
+		startButton.setBackground(stopButtonColor); // chance button color
 	}
 
 	public void stopTimer() {
@@ -186,7 +197,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		timerHasStarted = false;
 		startButton.setText("START");
 		startButton.setIcon(new ImageIcon(startTimerIcon));
-		startButton.setBackground(new Color(0, 128, 128)); // change button color back to original color
+		startButton.setBackground(startButtonColor); // change button color back to original color
 	}
 
 	public void resetTimer() {
@@ -214,26 +225,34 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 				"Recorded Time", JOptionPane.YES_NO_OPTION);
 
 		if (confirmSave == JOptionPane.YES_OPTION) {
-			// TODO: before saving file, ask for file name
-			String recordedTimeFileName = JOptionPane.showInputDialog("Enter File Name");
-			
-			JFileChooser saveTimeChooser = new JFileChooser();
-			saveTimeChooser.setCurrentDirectory(new File(".")); // current directory
-			saveTimeChooser.setSelectedFile(new File("RecordTime.txt"));
+			String recordedTimeFileName = JOptionPane.showInputDialog(this, "Enter File Name", "File Name",
+					JOptionPane.INFORMATION_MESSAGE);
 
-			int saveTimeResponse = saveTimeChooser.showSaveDialog(null);
+			// If there is not file name, show error message
+			if (recordedTimeFileName.length() == 0) {
+				errorTimerSound();
+				JOptionPane.showMessageDialog(this, "Invalid File Name!", "File Name Invalid Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				JFileChooser saveTimeChooser = new JFileChooser();
+				saveTimeChooser.setCurrentDirectory(new File(".")); // current directory
+				saveTimeChooser.setSelectedFile(new File(recordedTimeFileName + ".txt"));
 
-			if (saveTimeResponse == JFileChooser.APPROVE_OPTION) {
-				File savedTimeFile = new File(saveTimeChooser.getSelectedFile().getAbsolutePath());
-				PrintWriter writeTime = null;
+				int saveTimeResponse = saveTimeChooser.showSaveDialog(null);
 
-				try {
-					writeTime = new PrintWriter(savedTimeFile);
-					writeTime.println(timeLabel.getText());
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} finally {
-					writeTime.close();
+				if (saveTimeResponse == JFileChooser.APPROVE_OPTION) {
+					File savedTimeFile = new File(saveTimeChooser.getSelectedFile().getAbsolutePath());
+					PrintWriter writeTime = null;
+
+					try {
+						writeTime = new PrintWriter(savedTimeFile);
+						writeTime.println(timeLabel.getText());
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} finally {
+						saveTimerSound();
+						writeTime.close();
+					}
 				}
 			}
 
@@ -246,6 +265,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		int confirmExit = JOptionPane.showConfirmDialog(this, "Exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
 
 		if (confirmExit == JOptionPane.YES_OPTION) {
+			exitTimerSound();
 			System.exit(0);
 		}
 
@@ -264,7 +284,6 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void stopTimerSound() {
@@ -273,14 +292,13 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			adjustAudioVolume.setValue(-16.0f); // reduce volume of resetTimerSound
+			adjustAudioVolume.setValue(-16.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void resetTimerSound() {
@@ -289,13 +307,57 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			adjustAudioVolume.setValue(-16.0f); // reduce volume of resetTimerSound
+			adjustAudioVolume.setValue(-16.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public void exitTimerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(exitTimerSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-16.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void saveTimerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(saveTimerSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-16.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void errorTimerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(errorTimerSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-16.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 }
