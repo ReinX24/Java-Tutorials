@@ -74,19 +74,20 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 	URL exitTimerSound = getClass().getResource("exitTimerSound.wav");
 
 	URL errorTimerSound = getClass().getResource("errorTimerSound.wav");
-	
-	Color mainPanelBackgroundColor = Color.LIGHT_GRAY;
+
+	Color mainPanelBackgroundColor = new Color(143, 139, 139);
 	Color startButtonColor = new Color(0, 128, 128);
 	Color stopButtonColor = new Color(254, 90, 29);
-	Color resetButtonColor; // TODO: add other colors used in program
-	Color recordButtonColor;
-	Color exitButtonColor;
+	Color resetButtonColor = new Color(189, 12, 59);
+	Color recordButtonColor = new Color(218, 165, 32);
+	Color exitButtonColor = new Color(127, 128, 0);
 
 	public StopwatchFrame() {
 
 		this.setTitle("Java Stopwatch");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setIconImage(new ImageIcon(stopWatchIcon).getImage());
+		this.setResizable(false);
 
 		mainPanel = new JPanel();
 		mainPanel.setBackground(mainPanelBackgroundColor);
@@ -121,7 +122,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		resetButton.setBounds(330, 250, 190, 90);
 		resetButton.setFont(new Font("Arial", Font.BOLD, 24));
 		resetButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		resetButton.setBackground(new Color(189, 12, 59));
+		resetButton.setBackground(resetButtonColor);
 		resetButton.setForeground(Color.WHITE);
 
 		mainPanel.add(resetButton);
@@ -133,7 +134,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		recordButton.setBounds(120, 350, 190, 90);
 		recordButton.setFont(new Font("Arial", Font.BOLD, 24));
 		recordButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		recordButton.setBackground(new Color(218, 165, 32));
+		recordButton.setBackground(recordButtonColor);
 		recordButton.setForeground(Color.WHITE);
 
 		mainPanel.add(recordButton);
@@ -145,7 +146,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		exitButton.setBounds(330, 350, 190, 90);
 		exitButton.setFont(new Font("Arial", Font.BOLD, 24));
 		exitButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		exitButton.setBackground(new Color(127, 128, 0));
+		exitButton.setBackground(exitButtonColor);
 		exitButton.setForeground(Color.WHITE);
 
 		mainPanel.add(exitButton);
