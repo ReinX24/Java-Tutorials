@@ -4,9 +4,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,6 +43,12 @@ public class LoginPage extends JFrame implements ActionListener {
 
 	static Dimension mainPanelDimension = new Dimension(640, 480);
 	static Color backgroundPanelColor = new Color(224, 224, 224);
+	Color loginButtonBackgroundColor = new Color(0, 128, 128);
+	Color resetButtonBackgroundColor = new Color(255, 128, 0);
+
+	URL loginPageIcon = getClass().getResource("loginPhoto.png");
+	URL loginButtonIcon = getClass().getResource("loginButtonPhoto.png");
+	URL resetButtonIcon = getClass().getResource("resetButtonPhoto.png");
 
 	public LoginPage(HashMap<String, String> programIDsAndPasswords) {
 		this.programIDsAndPasswords = programIDsAndPasswords;
@@ -48,6 +56,7 @@ public class LoginPage extends JFrame implements ActionListener {
 		this.setTitle("Java Login System");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
+		this.setIconImage(new ImageIcon(loginPageIcon).getImage());
 
 		mainPanel.setPreferredSize(mainPanelDimension);
 		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 40));
@@ -80,14 +89,20 @@ public class LoginPage extends JFrame implements ActionListener {
 		loginButton.addActionListener(this);
 		loginButton.setFocusable(false);
 		loginButton.setPreferredSize(new Dimension(250, 50));
-		loginButton.setFont(new Font(null, Font.BOLD, 26));
+		loginButton.setFont(new Font(null, Font.PLAIN, 26));
 		loginButton.setBorder(BorderFactory.createRaisedBevelBorder());
+		loginButton.setIcon(new ImageIcon(loginButtonIcon));
+		loginButton.setForeground(Color.WHITE);
+		loginButton.setBackground(loginButtonBackgroundColor);
 
 		resetButton.addActionListener(this);
 		resetButton.setFocusable(false);
 		resetButton.setPreferredSize(new Dimension(250, 50));
-		resetButton.setFont(new Font(null, Font.BOLD, 26));
+		resetButton.setFont(new Font(null, Font.PLAIN, 26));
 		resetButton.setBorder(BorderFactory.createRaisedBevelBorder());
+		resetButton.setIcon(new ImageIcon(resetButtonIcon));
+		resetButton.setForeground(Color.WHITE);
+		resetButton.setBackground(resetButtonBackgroundColor);
 
 		mainPanel.add(loginButton);
 		mainPanel.add(resetButton);
@@ -116,18 +131,11 @@ public class LoginPage extends JFrame implements ActionListener {
 				// checking if similar to userPasswordInput
 				if (programIDsAndPasswords.get(userIDInput).equals(userPasswordInput)) {
 					loginStatusLabel.setForeground(new Color(0, 128, 128));
-					loginStatusLabel.setText("Login Successful!");
-
-					try {
-						// TODO: fix this
-						JOptionPane.showMessageDialog(this, "Logging in...", "Login Message",
-								JOptionPane.INFORMATION_MESSAGE);
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					} finally {
-						new WelcomePage(userIDInput);
-					}
+					loginStatusLabel.setText("Login Verified!");
+					JOptionPane.showMessageDialog(this, "Login Successful!", "Login Message",
+							JOptionPane.INFORMATION_MESSAGE);
+					this.dispose(); // closes current JFrame
+					new WelcomePage(userIDInput);
 
 				} else {
 					// If the user types in the wrong password but right user ID
