@@ -80,8 +80,11 @@ public class LoginPage implements ActionListener {
 					loginStatusLabel.setForeground(Color.GREEN);
 					loginStatusLabel.setText("Login Successful!");
 
+					// Close our current JFrame
+					loginPageFrame.dispose();
+
 					// Create a new WelcomePage password
-					WelcomePage programWelcomePage = new WelcomePage();
+					WelcomePage programWelcomePage = new WelcomePage(userIDInput);
 				} else { // If the password is wrong
 					loginStatusLabel.setForeground(Color.RED);
 					loginStatusLabel.setText("Wrong Password!");
