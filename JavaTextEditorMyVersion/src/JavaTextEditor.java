@@ -89,7 +89,7 @@ public class JavaTextEditor extends JFrame implements ActionListener, KeyListene
 		 * 
 		 * - DONE: Change icon for our program
 		 * 
-		 * - TODO: Debug all functionalities before exporting to a jar file
+		 * - DONE: Debug all functionalities before exporting to a jar file
 		 * 
 		 */
 		new JavaTextEditor();

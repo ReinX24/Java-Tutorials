@@ -7,9 +7,11 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.util.Scanner;
 
 public class StopwatchFrame extends JFrame implements ActionListener {
 
@@ -62,6 +64,8 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 	URL startTimerIcon = getClass().getResource("startTimer.png");
 	URL pauseTimerIcon = getClass().getResource("pauseTimer.png");
 	URL resetTimerIcon = getClass().getResource("resetTimer.png");
+	URL recordTimerIcon = getClass().getResource("recordTimer.png");
+	URL exitTimerIcon = getClass().getResource("exitTimer.png");
 
 	URL startTimerSound = getClass().getResource("startTimerSound.wav");
 	URL stopTimerSound = getClass().getResource("stopTimerSound.wav");
@@ -112,7 +116,7 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		mainPanel.add(resetButton);
 
 		recordButton.setText("RECORD");
-		// TODO: add an Icon for recordButton
+		recordButton.setIcon(new ImageIcon(recordTimerIcon));
 		recordButton.addActionListener(this);
 		recordButton.setFocusable(false);
 		recordButton.setBounds(120, 350, 190, 90);
@@ -124,15 +128,15 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 		mainPanel.add(recordButton);
 
 		exitButton.setText("EXIT");
-		// TODO: add an Icon for exitButton
+		exitButton.setIcon(new ImageIcon(exitTimerIcon));
 		exitButton.addActionListener(this);
 		exitButton.setFocusable(false);
 		exitButton.setBounds(330, 350, 190, 90);
 		exitButton.setFont(new Font("Arial", Font.BOLD, 24));
 		exitButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-		exitButton.setBackground(new Color(189, 12, 59));
+		exitButton.setBackground(new Color(127, 128, 0));
 		exitButton.setForeground(Color.WHITE);
-		
+
 		mainPanel.add(exitButton);
 
 		this.add(mainPanel);
@@ -158,6 +162,14 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 			resetTimer();
 		}
 
+		if (arg0.getSource() == recordButton) {
+			recordTime();
+		}
+
+		if (arg0.getSource() == exitButton) {
+			exitTimer();
+		}
+
 	}
 
 	// User starts the timer
@@ -178,7 +190,6 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 	}
 
 	public void resetTimer() {
-		// TODO: debug resetTimer function
 		int confirmReset = JOptionPane.showConfirmDialog(this, "Reset Timer?", "Reset Confirmation",
 				JOptionPane.YES_NO_OPTION);
 
@@ -196,6 +207,48 @@ public class StopwatchFrame extends JFrame implements ActionListener {
 			timeLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
 			resetTimerSound();
 		}
+	}
+
+	public void recordTime() {
+		int confirmSave = JOptionPane.showConfirmDialog(this, "Time: " + timeLabel.getText() + "\nSave Time?",
+				"Recorded Time", JOptionPane.YES_NO_OPTION);
+
+		if (confirmSave == JOptionPane.YES_OPTION) {
+			// TODO: before saving file, ask for file name
+			String recordedTimeFileName = JOptionPane.showInputDialog("Enter File Name");
+			
+			JFileChooser saveTimeChooser = new JFileChooser();
+			saveTimeChooser.setCurrentDirectory(new File(".")); // current directory
+			saveTimeChooser.setSelectedFile(new File("RecordTime.txt"));
+
+			int saveTimeResponse = saveTimeChooser.showSaveDialog(null);
+
+			if (saveTimeResponse == JFileChooser.APPROVE_OPTION) {
+				File savedTimeFile = new File(saveTimeChooser.getSelectedFile().getAbsolutePath());
+				PrintWriter writeTime = null;
+
+				try {
+					writeTime = new PrintWriter(savedTimeFile);
+					writeTime.println(timeLabel.getText());
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} finally {
+					writeTime.close();
+				}
+			}
+
+		}
+
+	}
+
+	public void exitTimer() {
+
+		int confirmExit = JOptionPane.showConfirmDialog(this, "Exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+
+		if (confirmExit == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
+
 	}
 
 	public void startTimerSound() {
