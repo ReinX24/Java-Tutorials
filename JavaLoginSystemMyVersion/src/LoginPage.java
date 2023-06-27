@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -17,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginPage extends JFrame implements ActionListener {
+public class LoginPage extends JFrame implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -73,6 +75,7 @@ public class LoginPage extends JFrame implements ActionListener {
 
 		userIDField.setPreferredSize(new Dimension(350, 50));
 		userIDField.setFont(new Font(null, Font.PLAIN, 26));
+		userIDField.addKeyListener(this);
 
 		mainPanel.add(userIDLabel);
 		mainPanel.add(userIDField);
@@ -82,6 +85,7 @@ public class LoginPage extends JFrame implements ActionListener {
 
 		userPasswordField.setPreferredSize(new Dimension(350, 50));
 		userPasswordField.setFont(new Font(null, Font.PLAIN, 26));
+		userPasswordField.addKeyListener(this);
 
 		mainPanel.add(userPasswordLabel);
 		mainPanel.add(userPasswordField);
@@ -159,6 +163,28 @@ public class LoginPage extends JFrame implements ActionListener {
 				loginStatusLabel.setText("");
 			}
 		}
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// When the user presses enter, click loginButton
+		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			loginButton.doClick();
+		}
+		// If the user pressed delete, click resetButton
+		if (arg0.getKeyCode() == KeyEvent.VK_DELETE) {
+			resetButton.doClick();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
 
 	}
 

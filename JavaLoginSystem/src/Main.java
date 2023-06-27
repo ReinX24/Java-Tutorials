@@ -8,7 +8,7 @@ public class Main {
 
 		// Creating a programLoginPage and passing in the hashmap from
 		// programIDandPasswords
-		LoginPage programLoginPage = new LoginPage(programIDAndPasswords.getLoginInfo());
+		new LoginPage(programIDAndPasswords.getLoginInfo());
 	}
 
 }

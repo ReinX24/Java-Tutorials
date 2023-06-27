@@ -84,7 +84,7 @@ public class LoginPage implements ActionListener {
 					loginPageFrame.dispose();
 
 					// Create a new WelcomePage password
-					WelcomePage programWelcomePage = new WelcomePage(userIDInput);
+					new WelcomePage(userIDInput);
 				} else { // If the password is wrong
 					loginStatusLabel.setForeground(Color.RED);
 					loginStatusLabel.setText("Wrong Password!");
