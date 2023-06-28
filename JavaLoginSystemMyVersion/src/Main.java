@@ -5,7 +5,7 @@ public class Main {
 		UserIDsAndPasswords programIDsAndPasswords = new UserIDsAndPasswords();
 
 		new LoginPage(programIDsAndPasswords.getIDAndPasswordMap());
-		// TODO: add sound effects for different functions in the program
+		// DONE: add sound effects for different functions in the program
 	}
 
 }

@@ -67,8 +67,11 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 	URL resetButtonIcon = getClass().getResource("resetButtonPhoto.png");
 
 	URL loginButtonSound = getClass().getResource("loginButtonAudio.wav");
-	URL registerButtonSound = getClass().getResource("");
-	URL resetButtonSound = getClass().getResource("");
+	URL registerButtonSound = getClass().getResource("registerButtonAudio.wav");
+	URL resetButtonSound = getClass().getResource("resetButtonAudio.wav");
+
+	URL registerSuccessSound = getClass().getResource("registerSuccessAudio.wav");
+	URL errorSound = getClass().getResource("errorSound.wav");
 
 	AudioInputStream playAudioStream;
 	Clip audioClip;
@@ -190,11 +193,16 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 
 		if (arg0.getSource() == registerButton) {
 
+			playRegisterButtonPressedAudio();
+
 			try {
 				String newUserNameString = JOptionPane.showInputDialog(this, "Enter new user name", "New User Name",
 						JOptionPane.PLAIN_MESSAGE);
 				// If an account with the same name already exists, show an error message
 				if (programIDsAndPasswords.containsKey(newUserNameString)) {
+
+					playErrorAudio();
+
 					// Tells the user trying to register that their entered user name already exists
 					JOptionPane.showMessageDialog(this, newUserNameString + " already exists!", "User Exists Message",
 							JOptionPane.WARNING_MESSAGE);
@@ -202,6 +210,8 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 					// If the account name length is 0, throw a message that says that their
 					// entered user name is invalid
 				} else if (newUserNameString.length() == 0) {
+
+					playErrorAudio();
 
 					JOptionPane.showMessageDialog(this, "Invalid User Name!", "Invalid Name Message",
 							JOptionPane.WARNING_MESSAGE);
@@ -219,6 +229,9 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 
 					// Check if the first entered password is the same with the confirmation one
 					if (newUserPasswordString.equals(newUserPasswordConfirm)) {
+
+						playRegisterSuccessAudio();
+
 						// Show account successfully created if the password and confirmation password
 						// match
 						JOptionPane.showMessageDialog(this, "New Account Created!", "New Account Message",
@@ -228,9 +241,17 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 						// information
 						programIDsAndPasswords.put(newUserNameString, newUserPasswordString);
 
+						// TODO: create a method that compiles all these in one block
+						UserIDsAndPasswords.IDAndPasswordMap.put(newUserNameString, newUserPasswordString);
+						UserIDsAndPasswords.saveIDsAndPasswords();
+						UserIDsAndPasswords.readIDsAndPasswords();
+
 						// If the original and confirmation passwords do not match, show an error
 						// message
 					} else {
+
+						playErrorAudio();
+
 						JOptionPane.showMessageDialog(this, "Passwords do not match!",
 								"Passwords Confirmation Error Message", JOptionPane.WARNING_MESSAGE);
 					}
@@ -247,6 +268,9 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		}
 
 		if (arg0.getSource() == resetButton) {
+
+			playResetButtonPressedAudio();
+
 			int confirmResetChoice = JOptionPane.showConfirmDialog(this, "Reset Inputs?", "Reset Confirmation",
 					JOptionPane.YES_NO_OPTION);
 
@@ -274,7 +298,74 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public void playRegisterButtonPressedAudio() {
+		try {
+			playAudioStream = AudioSystem.getAudioInputStream(registerButtonSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(playAudioStream);
+
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-20.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playResetButtonPressedAudio() {
+		try {
+			playAudioStream = AudioSystem.getAudioInputStream(resetButtonSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(playAudioStream);
+
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-20.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playRegisterSuccessAudio() {
+		try {
+			playAudioStream = AudioSystem.getAudioInputStream(registerSuccessSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(playAudioStream);
+
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-20.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playErrorAudio() {
+		try {
+			playAudioStream = AudioSystem.getAudioInputStream(errorSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(playAudioStream);
+
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-20.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
