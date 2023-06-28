@@ -6,9 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,10 +57,22 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 	Color registerButtonBackgroundColor = new Color(0, 127, 255);
 	Color resetButtonBackgroundColor = new Color(255, 128, 0);
 
+	Font loginTitleFont = new Font(null, Font.BOLD, 42);
+	Font generalProgramFont = new Font(null, Font.PLAIN, 26);
+	Font loginStatusFont = new Font(null, Font.ITALIC, 36);
+
 	URL loginPageIcon = getClass().getResource("loginPhoto.png");
 	URL loginButtonIcon = getClass().getResource("loginButtonPhoto.png");
 	URL registerButtonIcon = getClass().getResource("registerButtonPhoto.png");
 	URL resetButtonIcon = getClass().getResource("resetButtonPhoto.png");
+
+	URL loginButtonSound = getClass().getResource("loginButtonAudio.wav");
+	URL registerButtonSound = getClass().getResource("");
+	URL resetButtonSound = getClass().getResource("");
+
+	AudioInputStream playAudioStream;
+	Clip audioClip;
+	FloatControl adjustAudioVolume;
 
 	public LoginPage(HashMap<String, String> programIDsAndPasswords) {
 		this.programIDsAndPasswords = programIDsAndPasswords;
@@ -69,7 +88,7 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 
 		loginTitleLabel.setHorizontalAlignment(JLabel.CENTER);
 		loginTitleLabel.setPreferredSize(new Dimension(600, 40));
-		loginTitleLabel.setFont(new Font(null, Font.BOLD, 42));
+		loginTitleLabel.setFont(loginTitleFont);
 
 		mainPanel.add(loginTitleLabel);
 
@@ -77,17 +96,17 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		userIDLabel.setFont(new Font(null, Font.PLAIN, 26));
 
 		userIDField.setPreferredSize(new Dimension(350, 50));
-		userIDField.setFont(new Font(null, Font.PLAIN, 26));
+		userIDField.setFont(generalProgramFont);
 		userIDField.addKeyListener(this);
 
 		mainPanel.add(userIDLabel);
 		mainPanel.add(userIDField);
 
 		userPasswordLabel.setPreferredSize(new Dimension(250, 50));
-		userPasswordLabel.setFont(new Font(null, Font.PLAIN, 26));
+		userPasswordLabel.setFont(generalProgramFont);
 
 		userPasswordField.setPreferredSize(new Dimension(350, 50));
-		userPasswordField.setFont(new Font(null, Font.PLAIN, 26));
+		userPasswordField.setFont(generalProgramFont);
 		userPasswordField.addKeyListener(this);
 
 		mainPanel.add(userPasswordLabel);
@@ -96,7 +115,7 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		loginButton.addActionListener(this);
 		loginButton.setFocusable(false);
 		loginButton.setPreferredSize(new Dimension(140, 50));
-		loginButton.setFont(new Font(null, Font.PLAIN, 26));
+		loginButton.setFont(generalProgramFont);
 		loginButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		loginButton.setIcon(new ImageIcon(loginButtonIcon));
 		loginButton.setForeground(Color.WHITE);
@@ -105,7 +124,7 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		registerButton.addActionListener(this);
 		registerButton.setFocusable(false);
 		registerButton.setPreferredSize(new Dimension(180, 50));
-		registerButton.setFont(new Font(null, Font.PLAIN, 26));
+		registerButton.setFont(generalProgramFont);
 		registerButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		registerButton.setIcon(new ImageIcon(registerButtonIcon));
 		registerButton.setForeground(Color.WHITE);
@@ -114,7 +133,7 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		resetButton.addActionListener(this);
 		resetButton.setFocusable(false);
 		resetButton.setPreferredSize(new Dimension(140, 50));
-		resetButton.setFont(new Font(null, Font.PLAIN, 26));
+		resetButton.setFont(generalProgramFont);
 		resetButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		resetButton.setIcon(new ImageIcon(resetButtonIcon));
 		resetButton.setForeground(Color.WHITE);
@@ -125,7 +144,7 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		mainPanel.add(resetButton);
 
 		loginStatusLabel.setPreferredSize(new Dimension(400, 50));
-		loginStatusLabel.setFont(new Font(null, Font.ITALIC, 36));
+		loginStatusLabel.setFont(loginStatusFont);
 		loginStatusLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		mainPanel.add(loginStatusLabel);
@@ -140,15 +159,18 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 
 		if (arg0.getSource() == loginButton) {
 
+			playLoginButtonPressedAudio();
+
 			String userIDInput = userIDField.getText();
 			String userPasswordInput = String.valueOf(userPasswordField.getPassword());
 
 			if (programIDsAndPasswords.containsKey(userIDInput)) {
-				// Getting password of userIDInput key in programIDsAndPasswords hashmap and
+				// Getting password of userIDInput key in programIDsAndPasswords hash map and
 				// checking if similar to userPasswordInput
 				if (programIDsAndPasswords.get(userIDInput).equals(userPasswordInput)) {
 					loginStatusLabel.setForeground(new Color(0, 128, 128));
 					loginStatusLabel.setText("Login Verified!");
+
 					JOptionPane.showMessageDialog(this, "Login Successful!", "Login Message",
 							JOptionPane.INFORMATION_MESSAGE);
 					this.dispose(); // closes current JFrame
@@ -167,52 +189,61 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 		}
 
 		if (arg0.getSource() == registerButton) {
-			String newUserNameString = JOptionPane.showInputDialog(this, "Enter new user name", "New User Name",
-					JOptionPane.PLAIN_MESSAGE);
 
-			// If an account with the same name already exists, show an error message
-			if (programIDsAndPasswords.containsKey(newUserNameString)) {
-				// Tells the user trying to register that their entered user name already exists
-				JOptionPane.showMessageDialog(this, newUserNameString + " already exists!", "User Exists Message",
-						JOptionPane.WARNING_MESSAGE);
+			try {
+				String newUserNameString = JOptionPane.showInputDialog(this, "Enter new user name", "New User Name",
+						JOptionPane.PLAIN_MESSAGE);
+				// If an account with the same name already exists, show an error message
+				if (programIDsAndPasswords.containsKey(newUserNameString)) {
+					// Tells the user trying to register that their entered user name already exists
+					JOptionPane.showMessageDialog(this, newUserNameString + " already exists!", "User Exists Message",
+							JOptionPane.WARNING_MESSAGE);
 
-				// If the account name length is 0 or null, throw a message that says that their
-				// entered user name is invalid
-			} else if (newUserNameString.length() == 0 || newUserNameString == null) {
+					// If the account name length is 0, throw a message that says that their
+					// entered user name is invalid
+				} else if (newUserNameString.length() == 0) {
 
-				JOptionPane.showMessageDialog(this, "Invalid User Name!", "Invalid Name Message",
-						JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Invalid User Name!", "Invalid Name Message",
+							JOptionPane.WARNING_MESSAGE);
 
-				// If an account with the entered name DOES NOT exits, ask for a password for
-				// account user name
-			} else {
-				// Asks the user for their new password
-				String newUserPasswordString = JOptionPane.showInputDialog(this,
-						"Enter password for " + newUserNameString, "New User Password", JOptionPane.PLAIN_MESSAGE);
-
-				// Ask the user for their new password again for confirmation
-				String newUserPasswordConfirm = JOptionPane.showInputDialog(this, "Enter password again",
-						"Password Confirmation", JOptionPane.PLAIN_MESSAGE);
-
-				// Check if the first entered password is the same with the confirmation one
-				if (newUserPasswordString.equals(newUserPasswordConfirm)) {
-					// Show account successfully created if the password and confirmation password
-					// match
-					JOptionPane.showMessageDialog(this, "New Account Created!", "New Account Message",
-							JOptionPane.INFORMATION_MESSAGE);
-
-					// Putting our new user name and password in our hash map that contains user
-					// information
-					programIDsAndPasswords.put(newUserNameString, newUserPasswordString);
-
-					// If the original and confirmation passwords do not match, show an error
-					// message
+					// If an account with the entered name DOES NOT exits, ask for a password for
+					// account user name
 				} else {
-					JOptionPane.showMessageDialog(this, "Passwords do not match!",
-							"Passwords Confirmation Error Message", JOptionPane.WARNING_MESSAGE);
+					// Asks the user for their new password
+					String newUserPasswordString = JOptionPane.showInputDialog(this,
+							"Enter password for " + newUserNameString, "New User Password", JOptionPane.PLAIN_MESSAGE);
+
+					// Ask the user for their new password again for confirmation
+					String newUserPasswordConfirm = JOptionPane.showInputDialog(this, "Enter password again",
+							"Password Confirmation", JOptionPane.PLAIN_MESSAGE);
+
+					// Check if the first entered password is the same with the confirmation one
+					if (newUserPasswordString.equals(newUserPasswordConfirm)) {
+						// Show account successfully created if the password and confirmation password
+						// match
+						JOptionPane.showMessageDialog(this, "New Account Created!", "New Account Message",
+								JOptionPane.INFORMATION_MESSAGE);
+
+						// Putting our new user name and password in our hash map that contains user
+						// information
+						programIDsAndPasswords.put(newUserNameString, newUserPasswordString);
+
+						// If the original and confirmation passwords do not match, show an error
+						// message
+					} else {
+						JOptionPane.showMessageDialog(this, "Passwords do not match!",
+								"Passwords Confirmation Error Message", JOptionPane.WARNING_MESSAGE);
+					}
+
 				}
 
+			} catch (Exception e) {
+				// when we press cancel, apparently newUserNameString is assigned as null so we
+				// have to catch this exception
+				JOptionPane.showMessageDialog(this, "User Registration Cancelled!", "Cancelled Message",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
+
 		}
 
 		if (arg0.getSource() == resetButton) {
@@ -224,6 +255,24 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 				userPasswordField.setText("");
 				loginStatusLabel.setText("");
 			}
+		}
+
+	}
+
+	public void playLoginButtonPressedAudio() {
+		try {
+			playAudioStream = AudioSystem.getAudioInputStream(loginButtonSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(playAudioStream);
+
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-20.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
 		}
 
 	}
