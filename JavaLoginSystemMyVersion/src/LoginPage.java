@@ -70,6 +70,7 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 	URL registerButtonSound = getClass().getResource("registerButtonAudio.wav");
 	URL resetButtonSound = getClass().getResource("resetButtonAudio.wav");
 
+	URL loginSuccessSound = getClass().getResource("loginSuccessSound.wav");
 	URL registerSuccessSound = getClass().getResource("registerSuccessAudio.wav");
 	URL errorSound = getClass().getResource("errorSound.wav");
 
@@ -171,6 +172,9 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 				// Getting password of userIDInput key in programIDsAndPasswords hash map and
 				// checking if similar to userPasswordInput
 				if (programIDsAndPasswords.get(userIDInput).equals(userPasswordInput)) {
+
+					playLoginSuccessAudio();
+
 					loginStatusLabel.setForeground(new Color(0, 128, 128));
 					loginStatusLabel.setText("Login Verified!");
 
@@ -241,10 +245,8 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 						// information
 						programIDsAndPasswords.put(newUserNameString, newUserPasswordString);
 
-						// TODO: create a method that compiles all these in one block
-						UserIDsAndPasswords.IDAndPasswordMap.put(newUserNameString, newUserPasswordString);
-						UserIDsAndPasswords.saveIDsAndPasswords();
-						UserIDsAndPasswords.readIDsAndPasswords();
+						// DONE: create a method that compiles all these in one block
+						UserIDsAndPasswords.saveNewHashMap(newUserNameString, newUserPasswordString);
 
 						// If the original and confirmation passwords do not match, show an error
 						// message
@@ -320,6 +322,23 @@ public class LoginPage extends JFrame implements ActionListener, KeyListener {
 	public void playResetButtonPressedAudio() {
 		try {
 			playAudioStream = AudioSystem.getAudioInputStream(resetButtonSound);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(playAudioStream);
+
+			adjustAudioVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			adjustAudioVolume.setValue(-20.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playLoginSuccessAudio() {
+		try {
+			playAudioStream = AudioSystem.getAudioInputStream(loginSuccessSound);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(playAudioStream);
 
