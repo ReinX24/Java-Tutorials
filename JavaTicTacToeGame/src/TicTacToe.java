@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalBorders.TableHeaderBorder;
 
 public class TicTacToe implements ActionListener {
 
@@ -185,9 +184,22 @@ public class TicTacToe implements ActionListener {
 		myButtons[a].setBackground(Color.GREEN);
 		myButtons[b].setBackground(Color.GREEN);
 		myButtons[c].setBackground(Color.GREEN);
+
+		for (int i = 0; i < 9; i++) {
+			myButtons[i].setEnabled(false);
+		}
+		textFieldLabel.setText("X wins");
 	}
 
 	public void oWins(int a, int b, int c) {
+		myButtons[a].setBackground(Color.GREEN);
+		myButtons[b].setBackground(Color.GREEN);
+		myButtons[c].setBackground(Color.GREEN);
+
+		for (int i = 0; i < 9; i++) {
+			myButtons[i].setEnabled(false);
+		}
+		textFieldLabel.setText("O wins");
 
 	}
 
