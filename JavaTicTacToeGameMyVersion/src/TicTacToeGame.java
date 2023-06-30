@@ -71,9 +71,7 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 			// Checks if either of the players meet the requirements to win
 			checkIfWin();
-			
-			// Asks the user if the want to restart or exit the game
-//			askRestartOrExit();
+			askRestartOrExit();
 
 		}
 
@@ -213,22 +211,36 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 		}
 
 		titleLabel.setText("O wins!");
-
 		isGameOver = true;
 
 	}
 
 	public void askRestartOrExit() {
-		String[] askChoices = { "Restart", "Exit" };
-		int userChoice = JOptionPane.showOptionDialog(null, "Restart or Exit Game?", "Restart / Exit Game",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, askChoices, askChoices[0]);
 
-		if (userChoice == 0) {
-			new TicTacToeGame();
-		}
+		if (isGameOver) {
 
-		if (userChoice == 1) {
-			System.exit(0);
+			isGameOver = false;
+
+			String[] askChoices = { "Restart", "Exit" };
+			int userChoice = JOptionPane.showOptionDialog(null, "Restart or Exit Game?", "Restart / Exit Game",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, askChoices, null);
+
+//			int userChoice = JOptionPane.showConfirmDialog(null, "Restart Game?", "Restart Message",
+//					JOptionPane.YES_NO_OPTION);
+
+			if (userChoice == JOptionPane.YES_OPTION) {
+				this.dispose(); // disposes our current JFrame
+				// Fixes JOptionPane reappearing
+				for (int i = 0; i < buttonsArr.length; i++) {
+					buttonsArr[i].setText("");
+				}
+				new TicTacToeGame();
+			}
+
+			if (userChoice == JOptionPane.NO_OPTION) {
+				System.exit(0);
+			}
+
 		}
 
 	}
