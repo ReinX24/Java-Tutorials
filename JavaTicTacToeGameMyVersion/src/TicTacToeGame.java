@@ -34,6 +34,9 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 	URL buttonPressedSoundURL = getClass().getResource("buttonPressed.wav");
 	URL winGameSoundURL = getClass().getResource("winGame.wav");
+	URL allSpacedFilledSoundURL = getClass().getResource("allSpacesFilled.wav");
+
+	int spaceFilledAmount = 0;
 
 	public TicTacToeGame() {
 
@@ -76,6 +79,7 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 					buttonsArr[i].setForeground(new Color(0, 128, 128));
 					playerOneTurn = false;
 					titleLabel.setText("O turn");
+					spaceFilledAmount++;
 					playButtonPressedSound();
 				}
 
@@ -86,6 +90,7 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 					buttonsArr[i].setForeground(new Color(255, 128, 0));
 					playerOneTurn = true;
 					titleLabel.setText("X turn");
+					spaceFilledAmount++;
 					playButtonPressedSound();
 				}
 
@@ -93,6 +98,9 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 			// Checks if either of the players meet the requirements to win
 			checkIfWin();
+
+			// Checks if all the buttons have been pressed
+			checkIfAllSpacesFilled();
 
 		}
 
@@ -239,6 +247,34 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 	}
 
+	public void checkIfAllSpacesFilled() {
+
+		if (spaceFilledAmount == 9) {
+
+			playAllSpacesFilledSound();
+
+			String[] askChoices = { "Restart", "Exit" };
+			int userChoice = JOptionPane.showOptionDialog(null,
+					"All spaces have been filled!" + "\nRestart or Exit Game?", "Restart / Exit Game",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, askChoices, null);
+
+			if (userChoice == 0) {
+				spaceFilledAmount = 0;
+				this.dispose();
+				for (int i = 0; i < buttonsArr.length; i++) {
+					buttonsArr[i].setText("");
+				}
+				new TicTacToeGame();
+			}
+
+			if (userChoice == 1) {
+				System.exit(0);
+			}
+
+		}
+
+	}
+
 	public void askRestartOrExit(String winnerMessage) {
 
 		playWinSound();
@@ -247,7 +283,8 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 		int userChoice = JOptionPane.showOptionDialog(null, winnerMessage + "\nRestart or Exit Game?",
 				"Restart / Exit Game", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, askChoices, null);
 
-		if (userChoice == JOptionPane.YES_OPTION) {
+		if (userChoice == 0) {
+			spaceFilledAmount = 0;
 			this.dispose(); // disposes our current JFrame
 			// Resetting the text in our JButtons
 			for (int i = 0; i < buttonsArr.length; i++) {
@@ -257,7 +294,7 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 			new TicTacToeGame();
 		}
 
-		if (userChoice == JOptionPane.NO_OPTION) {
+		if (userChoice == 1) {
 			System.exit(0);
 		}
 
@@ -286,6 +323,21 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 	public void playWinSound() {
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(winGameSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		audioClip.start();
+	}
+
+	public void playAllSpacesFilledSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(allSpacedFilledSoundURL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
