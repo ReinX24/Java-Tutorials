@@ -1,6 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 public class TicTacToeGame extends JFrame implements ActionListener {
@@ -14,15 +23,24 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 	JPanel buttonsPanel = new JPanel();
 
 	boolean playerOneTurn;
-	boolean isGameOver;
 
 	Random randomNumberGen = new Random();
+
+	AudioInputStream streamAudio;
+	Clip audioClip;
+	FloatControl gainControl;
+
+	URL ticTacToeGameIconURL = getClass().getResource("ticTacToeGameIcon.png");
+
+	URL buttonPressedSoundURL = getClass().getResource("buttonPressed.wav");
+	URL winGameSoundURL = getClass().getResource("winGame.wav");
 
 	public TicTacToeGame() {
 
 		this.setTitle("Java Tic Tac Toe Game");
 		this.setSize(900, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setIconImage(new ImageIcon(ticTacToeGameIconURL).getImage());
 
 		titleLabel.setText("Tic Tac Toe");
 		titleLabel.setPreferredSize(new Dimension(900, 100));
@@ -55,23 +73,26 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 				if (arg0.getSource() == buttonsArr[i] && buttonsArr[i].getText() == "") {
 					buttonsArr[i].setText("X");
+					buttonsArr[i].setForeground(new Color(0, 128, 128));
 					playerOneTurn = false;
 					titleLabel.setText("O turn");
+					playButtonPressedSound();
 				}
 
 			} else {
 
 				if (arg0.getSource() == buttonsArr[i] && buttonsArr[i].getText() == "") {
 					buttonsArr[i].setText("O");
+					buttonsArr[i].setForeground(new Color(255, 128, 0));
 					playerOneTurn = true;
 					titleLabel.setText("X turn");
+					playButtonPressedSound();
 				}
 
 			}
 
 			// Checks if either of the players meet the requirements to win
 			checkIfWin();
-			askRestartOrExit();
 
 		}
 
@@ -81,6 +102,8 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 		try {
 			Thread.sleep(2000);
+
+			this.remove(loadingLabel); // removes Loading... text at the center of our JFrame
 
 			buttonsPanel.setPreferredSize(new Dimension(900, 900));
 			buttonsPanel.setBackground(Color.GRAY);
@@ -93,6 +116,7 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 				buttonsArr[i].addActionListener(this);
 				buttonsArr[i].setFocusable(false);
 				buttonsArr[i].setFont(new Font(null, Font.BOLD, 70));
+				buttonsArr[i].setBorder(BorderFactory.createRaisedBevelBorder());
 
 				buttonsPanel.add(buttonsArr[i]);
 			}
@@ -194,9 +218,9 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 
 		titleLabel.setText("X wins!");
 
-		// TODO: restart function not working properly, the option pane shows again when
+		// DONE: restart function not working properly, the option pane shows again when
 		// we click restart
-		isGameOver = true;
+		askRestartOrExit("Player X wins!");
 
 	}
 
@@ -211,38 +235,67 @@ public class TicTacToeGame extends JFrame implements ActionListener {
 		}
 
 		titleLabel.setText("O wins!");
-		isGameOver = true;
+		askRestartOrExit("Player O wins!");
 
 	}
 
-	public void askRestartOrExit() {
+	public void askRestartOrExit(String winnerMessage) {
 
-		if (isGameOver) {
+		playWinSound();
 
-			isGameOver = false;
+		String[] askChoices = { "Restart", "Exit" };
+		int userChoice = JOptionPane.showOptionDialog(null, winnerMessage + "\nRestart or Exit Game?",
+				"Restart / Exit Game", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, askChoices, null);
 
-			String[] askChoices = { "Restart", "Exit" };
-			int userChoice = JOptionPane.showOptionDialog(null, "Restart or Exit Game?", "Restart / Exit Game",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, askChoices, null);
-
-//			int userChoice = JOptionPane.showConfirmDialog(null, "Restart Game?", "Restart Message",
-//					JOptionPane.YES_NO_OPTION);
-
-			if (userChoice == JOptionPane.YES_OPTION) {
-				this.dispose(); // disposes our current JFrame
-				// Fixes JOptionPane reappearing
-				for (int i = 0; i < buttonsArr.length; i++) {
-					buttonsArr[i].setText("");
-				}
-				new TicTacToeGame();
+		if (userChoice == JOptionPane.YES_OPTION) {
+			this.dispose(); // disposes our current JFrame
+			// Resetting the text in our JButtons
+			for (int i = 0; i < buttonsArr.length; i++) {
+				buttonsArr[i].setText("");
 			}
-
-			if (userChoice == JOptionPane.NO_OPTION) {
-				System.exit(0);
-			}
-
+			// Creating a new TicTacToeGame JFrame
+			new TicTacToeGame();
 		}
 
+		if (userChoice == JOptionPane.NO_OPTION) {
+			System.exit(0);
+		}
+
+	}
+
+	public void playButtonPressedSound() {
+
+		// Gets the audio file
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(buttonPressedSoundURL);
+			// Clip object to get audio file & use methods on file
+			audioClip = AudioSystem.getClip();
+			// Opens the clip, now we could use methods on audioClip
+			audioClip.open(streamAudio);
+			// Lowering the volume of our main menu music
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		audioClip.start();
+	}
+
+	public void playWinSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(winGameSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		audioClip.start();
 	}
 
 }
