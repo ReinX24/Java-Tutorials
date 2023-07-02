@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 public class Quiz implements ActionListener {
@@ -9,7 +10,7 @@ public class Quiz implements ActionListener {
 			"Which company created Java?",
 			"Which year was Java created?",
 			"What was Java originally called?",
-			"Who is credited with creating Java?"
+			"Who is credited with creating Java?",
 	};
 
 	// 2D array that contains the different choices for each question
@@ -29,7 +30,7 @@ public class Quiz implements ActionListener {
 	};
 	
 	char userGuess;
-	char questionAnswer;
+	char userAnswer;
 	int indexNum;
 	int correctGuesses = 0;
 	int totalQuestions = questionsArr.length;
@@ -54,6 +55,21 @@ public class Quiz implements ActionListener {
 	JLabel secondsLeftLabel = new JLabel();
 	JTextField numberRightAnswerField = new JTextField();
 	JTextField percentageCorrectField = new JTextField();
+
+	Timer quizTimer = new Timer(1000, new ActionListener() {
+
+		// Executes every second (1000ms)
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			secondNum--;
+			secondsLeftLabel.setText(String.valueOf(secondNum));
+
+			if (secondNum <= 0) {
+				displayAnswer(); // displays the answer and disables all buttons, also automatically moves to the
+									// next question
+			}
+		}
+	});
 
 	public Quiz() {
 		mainFrame.setTitle("Java Quiz Game");
@@ -146,27 +162,180 @@ public class Quiz implements ActionListener {
 		secondsLeftLabel.setOpaque(true);
 		secondsLeftLabel.setHorizontalAlignment(JTextField.CENTER);
 		secondsLeftLabel.setText(String.valueOf(secondNum));
-		
+
 		mainFrame.add(secondsLeftLabel);
-		// TODO: resume at 35:24
+
+		timerLabel.setBounds(535, 475, 100, 100);
+		timerLabel.setBackground(new Color(50, 50, 50));
+		timerLabel.setForeground(new Color(255, 0, 0));
+		timerLabel.setFont(new Font("MV Boli", Font.PLAIN, 16));
+		timerLabel.setHorizontalAlignment(JLabel.CENTER);
+		timerLabel.setText("Timer >:D");
+
+		mainFrame.add(timerLabel);
+
+		// Shows the number of questions that we got right
+		numberRightAnswerField.setBounds(225, 225, 200, 100);
+		numberRightAnswerField.setBackground(new Color(25, 25, 25));
+		numberRightAnswerField.setForeground(new Color(25, 255, 0));
+		numberRightAnswerField.setFont(new Font("Ink Free", Font.BOLD, 50));
+		numberRightAnswerField.setBorder(BorderFactory.createBevelBorder(1));
+		numberRightAnswerField.setHorizontalAlignment(JTextField.CENTER);
+		numberRightAnswerField.setEditable(false);
+
+		// Shows the percentage of how much correct answers we got
+		percentageCorrectField.setBounds(225, 325, 200, 100);
+		percentageCorrectField.setBackground(new Color(25, 25, 25));
+		percentageCorrectField.setForeground(new Color(25, 255, 0));
+		percentageCorrectField.setFont(new Font("Ink Free", Font.BOLD, 50));
+		percentageCorrectField.setBorder(BorderFactory.createBevelBorder(1));
+		percentageCorrectField.setHorizontalAlignment(JTextField.CENTER);
+		percentageCorrectField.setEditable(false);
 
 		mainFrame.setVisible(true);
+
+		nextQuestion();
 	}
 
 	public void nextQuestion() {
+		if (indexNum >= totalQuestions) {
+			displayResults();
+		} else {
+			questionField.setText("Question " + (indexNum + 1));
+			// Getting the current iterated question in questionsArr
+			questionArea.setText(questionsArr[indexNum]);
 
+			// Getting the corresponding choices of the question in questionArea
+			answerLabelA.setText(optionsArr[indexNum][0]);
+			answerLabelB.setText(optionsArr[indexNum][1]);
+			answerLabelC.setText(optionsArr[indexNum][2]);
+			answerLabelD.setText(optionsArr[indexNum][3]);
+
+			quizTimer.start(); // timer starts once the programs is ran or the nextQuestion method is called
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
+		// Disables all the buttons when we click on a button that we choose as our
+		// answer
+		buttonA.setEnabled(false);
+		buttonB.setEnabled(false);
+		buttonC.setEnabled(false);
+		buttonD.setEnabled(false);
+
+		// Checks if the button that the user pressed is the answer to the current
+		// question
+		if (arg0.getSource() == buttonA) {
+			userAnswer = 'A';
+			if (userAnswer == answerArr[indexNum]) {
+				correctGuesses++;
+			}
+		}
+
+		if (arg0.getSource() == buttonB) {
+			userAnswer = 'B';
+			if (userAnswer == answerArr[indexNum]) {
+				correctGuesses++;
+			}
+		}
+
+		if (arg0.getSource() == buttonC) {
+			userAnswer = 'C';
+			if (userAnswer == answerArr[indexNum]) {
+				correctGuesses++;
+			}
+		}
+
+		if (arg0.getSource() == buttonD) {
+			userAnswer = 'D';
+			if (userAnswer == answerArr[indexNum]) {
+				correctGuesses++;
+			}
+		}
+
+		displayAnswer();
+
 	}
 
 	public void displayAnswer() {
 
+		quizTimer.stop(); // the timer stops once the user chooses an answer
+
+		buttonA.setEnabled(false);
+		buttonB.setEnabled(false);
+		buttonC.setEnabled(false);
+		buttonD.setEnabled(false);
+
+		// if the current answer is not A, change the foreground / text color to red
+		if (answerArr[indexNum] != 'A') {
+			answerLabelA.setForeground(new Color(255, 0, 0));
+		}
+
+		if (answerArr[indexNum] != 'B') {
+			answerLabelB.setForeground(new Color(255, 0, 0));
+		}
+
+		if (answerArr[indexNum] != 'C') {
+			answerLabelC.setForeground(new Color(255, 0, 0));
+		}
+
+		if (answerArr[indexNum] != 'D') {
+			answerLabelD.setForeground(new Color(255, 0, 0));
+		}
+
+		// Timer object for pausing the program after displaying the correct answer
+		Timer pauseTimer = new Timer(2000, new ActionListener() {
+
+			// After 2 seconds (2000), perform the function below
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				answerLabelA.setForeground(new Color(25, 255, 0));
+				answerLabelB.setForeground(new Color(25, 255, 0));
+				answerLabelC.setForeground(new Color(25, 255, 0));
+				answerLabelD.setForeground(new Color(25, 255, 0));
+
+				userAnswer = ' ';
+				secondNum = 10;
+				secondsLeftLabel.setText(String.valueOf(secondNum));
+
+				buttonA.setEnabled(true);
+				buttonB.setEnabled(true);
+				buttonC.setEnabled(true);
+				buttonD.setEnabled(true);
+				indexNum++;
+				nextQuestion();
+			}
+		});
+
+		pauseTimer.setRepeats(false); // makes sure that pauseTimer only runs once
+		pauseTimer.start();
+
 	}
 
 	public void displayResults() {
+
+		buttonA.setEnabled(false);
+		buttonB.setEnabled(false);
+		buttonC.setEnabled(false);
+		buttonD.setEnabled(false);
+
+		resultNum = (int) ((correctGuesses / (double) totalQuestions) * 100);
+
+		questionField.setText("RESULTS!");
+		questionArea.setText("");
+
+		answerLabelA.setText("");
+		answerLabelB.setText("");
+		answerLabelC.setText("");
+		answerLabelD.setText("");
+
+		numberRightAnswerField.setText("(" + correctGuesses + "/" + totalQuestions + ")");
+		percentageCorrectField.setText(resultNum + "%");
+
+		mainFrame.add(numberRightAnswerField);
+		mainFrame.add(percentageCorrectField);
 
 	}
 
