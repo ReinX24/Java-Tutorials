@@ -29,12 +29,11 @@ public class Quiz implements ActionListener {
 			'C'
 	};
 	
-	char userGuess;
 	char userAnswer;
 	int indexNum;
 	int correctGuesses = 0;
 	int totalQuestions = questionsArr.length;
-	int resultNum;
+	int userOverallResult;
 	int secondNum = 10; // 10 seconds
 
 	JFrame mainFrame = new JFrame();
@@ -321,7 +320,7 @@ public class Quiz implements ActionListener {
 		buttonC.setEnabled(false);
 		buttonD.setEnabled(false);
 
-		resultNum = (int) ((correctGuesses / (double) totalQuestions) * 100);
+		userOverallResult = (int) ((correctGuesses / (double) totalQuestions) * 100);
 
 		questionField.setText("RESULTS!");
 		questionArea.setText("");
@@ -332,7 +331,7 @@ public class Quiz implements ActionListener {
 		answerLabelD.setText("");
 
 		numberRightAnswerField.setText("(" + correctGuesses + "/" + totalQuestions + ")");
-		percentageCorrectField.setText(resultNum + "%");
+		percentageCorrectField.setText(userOverallResult + "%");
 
 		mainFrame.add(numberRightAnswerField);
 		mainFrame.add(percentageCorrectField);
