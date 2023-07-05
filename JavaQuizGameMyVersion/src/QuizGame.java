@@ -11,21 +11,24 @@ public class QuizGame extends JFrame implements ActionListener {
 								"When was Valorant first released for beta testing?",
 								"What is the biggest map made for Valorant?",
 								"Who were the first two agents added to the Valorant Protocol?",
-								"What is the name of the free gun given once your agent spawns?"
+								"What is the name of the free gun given once your agent spawns?",
+								"What team won in Masters Reykjavík in 2021?"
 	};
 	
 	String[][] quizQuestionsChoices = { // A, D, B, C
 								{"April 7, 2020", "August 12, 2020", "January 23, 2020", "December 27, 2019"},
 								{"Bind", "Ascent", "Haven", "Breeze"},
 								{"Phoenix and Killjoy", "Brimstone and Viper", "Sova and Omen", "Raze and Jett"},
-								{"Pea Shooter", "Glock", "Classic", "Hand Gun"}
+								{"Pea Shooter", "Glock", "Classic", "Hand Gun"},
+								{"Sentinels", "FNATIC", "Gambit Esports", "Team Envy"}
 	};
 	
 	char[] quizChoicesAnswers = {
 							'A',
 							'D',
 							'B',
-							'C'
+							'C',
+							'A'
 	};
 	
 	char userAnswer;
@@ -74,6 +77,9 @@ public class QuizGame extends JFrame implements ActionListener {
 			}
 		}
 	});
+	
+	JButton tryAgainButton = new JButton("Try Again");
+	JButton exitQuizButton = new JButton("Exit Quiz");
 
 	public QuizGame() {
 
@@ -266,6 +272,16 @@ public class QuizGame extends JFrame implements ActionListener {
 				correctGuesses++;
 			}
 		}
+		
+		if (arg0.getSource() == tryAgainButton) {
+			this.dispose();
+			currentQuestionIndex = 0; // reset index to 0 to avoid out of bounds exception
+			new QuizGame();
+		}
+		
+		if (arg0.getSource() == exitQuizButton) {
+			System.exit(0);
+		}
 
 		displayAnswer();
 
@@ -327,13 +343,21 @@ public class QuizGame extends JFrame implements ActionListener {
 	}
 
 	public void displayResults() {
-		
-		// TODO: when showing results, remove all components with 2 textfields showing score and score percentage
-		mainPanel.remove(answerButtonA);
-		mainPanel.remove(choicesLabelA);
 
-		correctAnswersAmountField.setPreferredSize(new Dimension(450, 50));
-		correctAnswersAmountField.setBorder(BorderFactory.createLineBorder(Color.RED));
+		mainPanel.removeAll();
+		mainPanel.revalidate();
+		mainPanel.repaint();
+		
+		questionNumberField.setText("Quiz Over!");
+	
+		mainPanel.add(questionNumberField);
+		
+		questionStringArea.setText("Results:");
+		
+		mainPanel.add(questionStringArea);
+		
+		correctAnswersAmountField.setPreferredSize(new Dimension(900, 200));
+		correctAnswersAmountField.setBorder(BorderFactory.createBevelBorder(0));
 		correctAnswersAmountField.setText("Score: " + correctGuesses + "/" + quizQuestions.length);
 		correctAnswersAmountField.setHorizontalAlignment(SwingConstants.CENTER);
 		correctAnswersAmountField.setEditable(false);
@@ -341,17 +365,44 @@ public class QuizGame extends JFrame implements ActionListener {
 
 		mainPanel.add(correctAnswersAmountField);
 		
-		correctAnswersPercentageField.setPreferredSize(new Dimension(450, 50));
-		correctAnswersPercentageField.setBorder(BorderFactory.createLineBorder(Color.RED));
+		correctAnswersPercentageField.setPreferredSize(new Dimension(900, 200));
+		correctAnswersPercentageField.setBorder(BorderFactory.createBevelBorder(0));
 		
-		String correctAnswersPercentageString = String.valueOf((int)(((double) correctGuesses / quizQuestions.length) * 100));
+		int correctAnswersPercentage = (int)(((double) correctGuesses / quizQuestions.length) * 100);
 		
-		correctAnswersPercentageField.setText("Percentage: " + correctAnswersPercentageString + "%");
+		if (correctAnswersPercentage < 25) {
+			// Below 25%
+			correctAnswersAmountField.setForeground(Color.RED);
+		} else if (correctAnswersPercentage < 50) {
+			// Below 50% 
+			correctAnswersAmountField.setForeground(Color.ORANGE);
+		} else if (correctAnswersPercentage < 75) {
+			// Below 75%
+			correctAnswersAmountField.setForeground(new Color(255, 196, 12)); // yellow color
+		} else if (correctAnswersPercentage >= 75) {
+			correctAnswersAmountField.setForeground(Color.GREEN);
+		}
+		
+		correctAnswersPercentageField.setText("Percentage: " + correctAnswersPercentage + "%");
 		correctAnswersPercentageField.setHorizontalAlignment(SwingConstants.CENTER);
 		correctAnswersPercentageField.setEditable(false);
 		correctAnswersPercentageField.setFont(new Font(null, Font.BOLD, 30));
 		
 		mainPanel.add(correctAnswersPercentageField);
+		
+		tryAgainButton.addActionListener(this);
+		tryAgainButton.setPreferredSize(new Dimension(450, 75));
+		tryAgainButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		tryAgainButton.setFocusable(false);
+		
+		mainPanel.add(tryAgainButton);
+		
+		exitQuizButton.addActionListener(this);
+		exitQuizButton.setPreferredSize(new Dimension(450, 75));
+		exitQuizButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		exitQuizButton.setFocusable(false);
+		
+		mainPanel.add(exitQuizButton);
 
 	}
 
