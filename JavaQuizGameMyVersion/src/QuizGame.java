@@ -9,7 +9,7 @@ public class QuizGame extends JFrame implements ActionListener {
 
 	String[] quizQuestions = {
 								"When was Valorant first released for beta testing?",
-								"What is the biggest map for Valorant?",
+								"What is the biggest map made for Valorant?",
 								"Who were the first two agents added to the Valorant Protocol?",
 								"What is the name of the free gun given once your agent spawns?"
 	};
@@ -64,6 +64,7 @@ public class QuizGame extends JFrame implements ActionListener {
 			secondsLeftLabel.setText(String.valueOf(secondsNum));
 
 			if (secondsNum <= 0) {
+				// If there is not time left, display the answer and go to the next question automatically
 				displayAnswer();
 			}
 		}
@@ -79,7 +80,7 @@ public class QuizGame extends JFrame implements ActionListener {
 		mainPanel.setBackground(Color.LIGHT_GRAY);
 		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-		questionNumberField.setPreferredSize(new Dimension(900, 60));
+		questionNumberField.setPreferredSize(new Dimension(900, 100));
 		questionNumberField.setBackground(Color.GRAY);
 		questionNumberField.setForeground(Color.WHITE);
 		questionNumberField.setFont(new Font(null, Font.BOLD, 30));
@@ -89,7 +90,7 @@ public class QuizGame extends JFrame implements ActionListener {
 
 		mainPanel.add(questionNumberField);
 
-		questionStringArea.setPreferredSize(new Dimension(900, 60));
+		questionStringArea.setPreferredSize(new Dimension(900, 100));
 		questionStringArea.setBackground(Color.GRAY);
 		questionStringArea.setForeground(Color.WHITE);
 		questionStringArea.setFont(new Font(null, Font.BOLD, 30));
@@ -100,6 +101,7 @@ public class QuizGame extends JFrame implements ActionListener {
 
 		mainPanel.add(questionStringArea);
 
+		answerButtonA.addActionListener(this);
 		answerButtonA.setPreferredSize(new Dimension(200, 100));
 		answerButtonA.setFocusable(false);
 		answerButtonA.setBackground(new Color(0, 128, 128));
@@ -116,10 +118,10 @@ public class QuizGame extends JFrame implements ActionListener {
 		choicesLabelA.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		choicesLabelA.setFont(new Font(null, Font.BOLD, 26));
 		choicesLabelA.setHorizontalAlignment(JLabel.CENTER);
-		choicesLabelA.setText("A choice");
 
 		mainPanel.add(choicesLabelA);
 
+		answerButtonB.addActionListener(this);
 		answerButtonB.setPreferredSize(new Dimension(200, 100));
 		answerButtonB.setFocusable(false);
 		answerButtonB.setBackground(new Color(255, 128, 0));
@@ -136,10 +138,10 @@ public class QuizGame extends JFrame implements ActionListener {
 		choicesLabelB.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		choicesLabelB.setFont(new Font(null, Font.BOLD, 26));
 		choicesLabelB.setHorizontalAlignment(JLabel.CENTER);
-		choicesLabelB.setText("B choice");
 
 		mainPanel.add(choicesLabelB);
 
+		answerButtonC.addActionListener(this);
 		answerButtonC.setPreferredSize(new Dimension(200, 100));
 		answerButtonC.setFocusable(false);
 		answerButtonC.setBackground(new Color(227, 34, 39));
@@ -156,10 +158,10 @@ public class QuizGame extends JFrame implements ActionListener {
 		choicesLabelC.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		choicesLabelC.setFont(new Font(null, Font.BOLD, 26));
 		choicesLabelC.setHorizontalAlignment(JLabel.CENTER);
-		choicesLabelC.setText("C choice");
 
 		mainPanel.add(choicesLabelC);
 
+		answerButtonD.addActionListener(this);
 		answerButtonD.setPreferredSize(new Dimension(200, 100));
 		answerButtonD.setFocusable(false);
 		answerButtonD.setBackground(new Color(255, 215, 0));
@@ -176,37 +178,146 @@ public class QuizGame extends JFrame implements ActionListener {
 		choicesLabelD.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 		choicesLabelD.setFont(new Font(null, Font.BOLD, 26));
 		choicesLabelD.setHorizontalAlignment(JLabel.CENTER);
-		choicesLabelD.setText("D choice");
 
 		mainPanel.add(choicesLabelD);
+
+		timeLeftMessageLabel.setText("Time Left");
+		timeLeftMessageLabel.setFont(new Font(null, Font.BOLD, 26));
+		timeLeftMessageLabel.setBorder(BorderFactory.createBevelBorder(1));
+
+		mainPanel.add(timeLeftMessageLabel);
+		
+		secondsLeftLabel.setText(String.valueOf(secondsNum));
+		secondsLeftLabel.setFont(new Font(null, Font.BOLD, 26));
+		secondsLeftLabel.setBorder(BorderFactory.createBevelBorder(1));
+
+		mainPanel.add(secondsLeftLabel);
 
 		this.add(mainPanel);
 
 		this.pack();
 		this.setVisible(true);
-		
+
 		nextQuestion();
 
 	}
 
 	public void nextQuestion() {
-		
-		questionNumberField.setText("Question #" + (currentQuestionIndex + 1));
-		questionStringArea.setText(quizQuestions[currentQuestionIndex]);
+
+		// If we are out of questions, display results
+		if (currentQuestionIndex >= totalQuestions) {
+			displayResults();
+		} else { // If we still have remaining questions, display question and choices
+			questionNumberField.setText("Question #" + (currentQuestionIndex + 1));
+			questionStringArea.setText(quizQuestions[currentQuestionIndex]);
+
+			choicesLabelA.setText(quizQuestionsChoices[currentQuestionIndex][0]);
+			choicesLabelB.setText(quizQuestionsChoices[currentQuestionIndex][1]);
+			choicesLabelC.setText(quizQuestionsChoices[currentQuestionIndex][2]);
+			choicesLabelD.setText(quizQuestionsChoices[currentQuestionIndex][3]);
+
+			quizTimer.start(); // starts 10 second timer
+		}
+
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+
+		// Disable all buttons when a button is pressed
+		answerButtonA.setEnabled(false);
+		answerButtonB.setEnabled(false);
+		answerButtonC.setEnabled(false);
+		answerButtonD.setEnabled(false);
+
+		if (arg0.getSource() == answerButtonA) {
+			userAnswer = 'A';
+			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				correctGuesses++;
+			}
+		}
+
+		if (arg0.getSource() == answerButtonB) {
+			userAnswer = 'B';
+			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				correctGuesses++;
+			}
+		}
+
+		if (arg0.getSource() == answerButtonC) {
+			userAnswer = 'C';
+			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				correctGuesses++;
+			}
+		}
+
+		if (arg0.getSource() == answerButtonD) {
+			userAnswer = 'D';
+			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				correctGuesses++;
+			}
+		}
+
+		displayAnswer();
 
 	}
 
 	public void displayAnswer() {
 
+		quizTimer.stop();
+		
+		answerButtonA.setEnabled(false);
+		answerButtonB.setEnabled(false);
+		answerButtonC.setEnabled(false);
+		answerButtonD.setEnabled(false);
+		
+		if (quizChoicesAnswers[currentQuestionIndex] != 'A') {
+			choicesLabelA.setForeground(Color.RED);
+		} 
+		
+		if (quizChoicesAnswers[currentQuestionIndex] != 'B') {
+			choicesLabelB.setForeground(Color.RED);
+		} 
+		
+		if (quizChoicesAnswers[currentQuestionIndex] != 'C') {
+			choicesLabelC.setForeground(Color.RED);
+		} 
+		
+		if (quizChoicesAnswers[currentQuestionIndex] != 'D') {
+			choicesLabelD.setForeground(Color.RED);
+		}
+		
+		// After it displays the answers, pause for 2 seconds before going to the next question
+		Timer pauserTimer = new Timer(2000, new ActionListener() {
+
+			// After 2 seconds, execute actionPerformed method
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				choicesLabelA.setForeground(Color.WHITE);
+				choicesLabelB.setForeground(Color.WHITE);
+				choicesLabelC.setForeground(Color.WHITE);
+				choicesLabelD.setForeground(Color.WHITE);
+				
+				userAnswer = ' '; // resets user's answer
+				secondsNum = 10; // reset timer to 10
+				secondsLeftLabel.setText(String.valueOf(secondsNum));
+				
+				answerButtonA.setEnabled(true);
+				answerButtonB.setEnabled(true);
+				answerButtonC.setEnabled(true);
+				answerButtonD.setEnabled(true);
+				currentQuestionIndex++; // go to next question
+				nextQuestion();
+			}
+		});
+		
+		pauserTimer.setRepeats(false);
+		pauserTimer.start();
+		
 	}
 
 	public void displayResults() {
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
+		
 	}
 
 }
