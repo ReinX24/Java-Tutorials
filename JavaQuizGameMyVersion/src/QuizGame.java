@@ -296,6 +296,7 @@ public class QuizGame extends JFrame implements ActionListener {
 		answerButtonC.setEnabled(false);
 		answerButtonD.setEnabled(false);
 
+		// If the answer is the wrong answer, make label text red
 		if (quizChoicesAnswers[currentQuestionIndex] != 'A') {
 			choicesLabelA.setForeground(Color.RED);
 		}
@@ -310,6 +311,23 @@ public class QuizGame extends JFrame implements ActionListener {
 
 		if (quizChoicesAnswers[currentQuestionIndex] != 'D') {
 			choicesLabelD.setForeground(Color.RED);
+		}
+		
+		// If the answer is the right answer, make the text green
+		if (quizChoicesAnswers[currentQuestionIndex] == 'A') {
+			choicesLabelA.setForeground(Color.GREEN);
+		}
+		
+		if (quizChoicesAnswers[currentQuestionIndex] == 'B') {
+			choicesLabelB.setForeground(Color.GREEN);
+		}
+		
+		if (quizChoicesAnswers[currentQuestionIndex] == 'C') {
+			choicesLabelC.setForeground(Color.GREEN);
+		}
+
+		if (quizChoicesAnswers[currentQuestionIndex] == 'D') {
+			choicesLabelD.setForeground(Color.GREEN);
 		}
 
 		// After it displays the answers, pause for 2 seconds before going to the next
@@ -369,20 +387,21 @@ public class QuizGame extends JFrame implements ActionListener {
 		correctAnswersPercentageField.setBorder(BorderFactory.createBevelBorder(0));
 		
 		int correctAnswersPercentage = (int)(((double) correctGuesses / quizQuestions.length) * 100);
-		
+
 		if (correctAnswersPercentage < 25) {
 			// Below 25%
-			correctAnswersAmountField.setForeground(Color.RED);
+			correctAnswersAmountField.setForeground(new Color(227, 34, 39)); // red color
 		} else if (correctAnswersPercentage < 50) {
-			// Below 50% 
-			correctAnswersAmountField.setForeground(Color.ORANGE);
+			// Below 50%
+			correctAnswersAmountField.setForeground(new Color(255, 102, 0)); // orange color
 		} else if (correctAnswersPercentage < 75) {
 			// Below 75%
 			correctAnswersAmountField.setForeground(new Color(255, 196, 12)); // yellow color
 		} else if (correctAnswersPercentage >= 75) {
-			correctAnswersAmountField.setForeground(Color.GREEN);
+			// Greater than or equal to 75
+			correctAnswersAmountField.setForeground(new Color(120,190,33)); // green color
 		}
-		
+
 		correctAnswersPercentageField.setText("Percentage: " + correctAnswersPercentage + "%");
 		correctAnswersPercentageField.setHorizontalAlignment(SwingConstants.CENTER);
 		correctAnswersPercentageField.setEditable(false);
@@ -390,6 +409,7 @@ public class QuizGame extends JFrame implements ActionListener {
 		
 		mainPanel.add(correctAnswersPercentageField);
 		
+		// TODO: style tryAgainButton and exitQuizButton
 		tryAgainButton.addActionListener(this);
 		tryAgainButton.setPreferredSize(new Dimension(450, 75));
 		tryAgainButton.setBorder(BorderFactory.createLineBorder(Color.RED));
