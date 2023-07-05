@@ -53,7 +53,7 @@ public class QuizGame extends JFrame implements ActionListener {
 	JLabel timeLeftMessageLabel = new JLabel();
 	JLabel secondsLeftLabel = new JLabel();
 
-	JTextField correctAnswersAmoungField = new JTextField();
+	JTextField correctAnswersAmountField = new JTextField();
 	JTextField correctAnswersPercentageField = new JTextField();
 
 	Timer quizTimer = new Timer(1000, new ActionListener() {
@@ -63,8 +63,13 @@ public class QuizGame extends JFrame implements ActionListener {
 			secondsNum--; // -1 second for every second
 			secondsLeftLabel.setText(String.valueOf(secondsNum));
 
+			if (secondsNum <= 3) {
+				secondsLeftLabel.setForeground(Color.RED); // changes number color to red if there are 3 seconds left
+			}
+
 			if (secondsNum <= 0) {
-				// If there is not time left, display the answer and go to the next question automatically
+				// If there is not time left, display the answer and go to the next question
+				// automatically
 				displayAnswer();
 			}
 		}
@@ -181,15 +186,17 @@ public class QuizGame extends JFrame implements ActionListener {
 
 		mainPanel.add(choicesLabelD);
 
-		timeLeftMessageLabel.setText("Time Left");
-		timeLeftMessageLabel.setFont(new Font(null, Font.BOLD, 26));
-		timeLeftMessageLabel.setBorder(BorderFactory.createBevelBorder(1));
+		timeLeftMessageLabel.setText("TIME LEFT: ");
+		timeLeftMessageLabel.setFont(new Font(null, Font.BOLD, 30));
+		timeLeftMessageLabel.setPreferredSize(new Dimension(850, 50));
+		timeLeftMessageLabel.setHorizontalAlignment(JLabel.RIGHT);
 
 		mainPanel.add(timeLeftMessageLabel);
-		
+
 		secondsLeftLabel.setText(String.valueOf(secondsNum));
-		secondsLeftLabel.setFont(new Font(null, Font.BOLD, 26));
-		secondsLeftLabel.setBorder(BorderFactory.createBevelBorder(1));
+		secondsLeftLabel.setFont(new Font(null, Font.BOLD, 30));
+		secondsLeftLabel.setPreferredSize(new Dimension(50, 50));
+		secondsLeftLabel.setHorizontalAlignment(JLabel.RIGHT);
 
 		mainPanel.add(secondsLeftLabel);
 
@@ -203,7 +210,9 @@ public class QuizGame extends JFrame implements ActionListener {
 	}
 
 	public void nextQuestion() {
-
+		
+//		displayResults(); // TODO: remove later, for debugging
+		
 		// If we are out of questions, display results
 		if (currentQuestionIndex >= totalQuestions) {
 			displayResults();
@@ -220,10 +229,10 @@ public class QuizGame extends JFrame implements ActionListener {
 		}
 
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-
+		
 		// Disable all buttons when a button is pressed
 		answerButtonA.setEnabled(false);
 		answerButtonB.setEnabled(false);
@@ -265,29 +274,30 @@ public class QuizGame extends JFrame implements ActionListener {
 	public void displayAnswer() {
 
 		quizTimer.stop();
-		
+
 		answerButtonA.setEnabled(false);
 		answerButtonB.setEnabled(false);
 		answerButtonC.setEnabled(false);
 		answerButtonD.setEnabled(false);
-		
+
 		if (quizChoicesAnswers[currentQuestionIndex] != 'A') {
 			choicesLabelA.setForeground(Color.RED);
-		} 
-		
+		}
+
 		if (quizChoicesAnswers[currentQuestionIndex] != 'B') {
 			choicesLabelB.setForeground(Color.RED);
-		} 
-		
+		}
+
 		if (quizChoicesAnswers[currentQuestionIndex] != 'C') {
 			choicesLabelC.setForeground(Color.RED);
-		} 
-		
+		}
+
 		if (quizChoicesAnswers[currentQuestionIndex] != 'D') {
 			choicesLabelD.setForeground(Color.RED);
 		}
-		
-		// After it displays the answers, pause for 2 seconds before going to the next question
+
+		// After it displays the answers, pause for 2 seconds before going to the next
+		// question
 		Timer pauserTimer = new Timer(2000, new ActionListener() {
 
 			// After 2 seconds, execute actionPerformed method
@@ -297,11 +307,11 @@ public class QuizGame extends JFrame implements ActionListener {
 				choicesLabelB.setForeground(Color.WHITE);
 				choicesLabelC.setForeground(Color.WHITE);
 				choicesLabelD.setForeground(Color.WHITE);
-				
+
 				userAnswer = ' '; // resets user's answer
 				secondsNum = 10; // reset timer to 10
 				secondsLeftLabel.setText(String.valueOf(secondsNum));
-				
+
 				answerButtonA.setEnabled(true);
 				answerButtonB.setEnabled(true);
 				answerButtonC.setEnabled(true);
@@ -310,14 +320,39 @@ public class QuizGame extends JFrame implements ActionListener {
 				nextQuestion();
 			}
 		});
-		
+
 		pauserTimer.setRepeats(false);
 		pauserTimer.start();
-		
+
 	}
 
 	public void displayResults() {
 		
+		// TODO: when showing results, remove all components with 2 textfields showing score and score percentage
+		mainPanel.remove(answerButtonA);
+		mainPanel.remove(choicesLabelA);
+
+		correctAnswersAmountField.setPreferredSize(new Dimension(450, 50));
+		correctAnswersAmountField.setBorder(BorderFactory.createLineBorder(Color.RED));
+		correctAnswersAmountField.setText("Score: " + correctGuesses + "/" + quizQuestions.length);
+		correctAnswersAmountField.setHorizontalAlignment(SwingConstants.CENTER);
+		correctAnswersAmountField.setEditable(false);
+		correctAnswersAmountField.setFont(new Font(null, Font.BOLD, 30));
+
+		mainPanel.add(correctAnswersAmountField);
+		
+		correctAnswersPercentageField.setPreferredSize(new Dimension(450, 50));
+		correctAnswersPercentageField.setBorder(BorderFactory.createLineBorder(Color.RED));
+		
+		String correctAnswersPercentageString = String.valueOf((int)(((double) correctGuesses / quizQuestions.length) * 100));
+		
+		correctAnswersPercentageField.setText("Percentage: " + correctAnswersPercentageString + "%");
+		correctAnswersPercentageField.setHorizontalAlignment(SwingConstants.CENTER);
+		correctAnswersPercentageField.setEditable(false);
+		correctAnswersPercentageField.setFont(new Font(null, Font.BOLD, 30));
+		
+		mainPanel.add(correctAnswersPercentageField);
+
 	}
 
 }
