@@ -1,8 +1,16 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 public class QuizGame extends JFrame implements ActionListener {
@@ -59,7 +67,8 @@ public class QuizGame extends JFrame implements ActionListener {
 			secondsNum--; // -1 second for every second
 			secondsLeftLabel.setText(String.valueOf(secondsNum));
 
-			if (secondsNum <= 3) {
+			if (secondsNum > 0 && secondsNum <= 3) {
+				playLastThreeSecondsSound();
 				secondsLeftLabel.setForeground(Color.RED); // changes number color to red if there are 3 seconds left
 			}
 
@@ -75,6 +84,17 @@ public class QuizGame extends JFrame implements ActionListener {
 	JButton exitQuizButton = new JButton("Exit Quiz");
 
 	Random randomIndexSelector = new Random();
+
+	AudioInputStream streamAudio;
+	Clip audioClip;
+	FloatControl gainControl;
+
+	URL correctAnswerSoundURL = getClass().getResource("correctAnswerSound.wav");
+	URL wrongAnswerSoundURL = getClass().getResource("wrongAnswerSound.wav");
+	URL lastThreeSecondsSoundURL = getClass().getResource("lastThreeSecondsSound.wav");
+	URL tryAgainSoundURL = getClass().getResource("tryAgainSound.wav");
+	URL exitConfirmSoundURL = getClass().getResource("exitConfirmSound.wav");
+	// TODO: add no time left URL
 
 	public QuizGame() {
 
@@ -240,7 +260,11 @@ public class QuizGame extends JFrame implements ActionListener {
 		// If we are out of questions, display results
 		if (currentQuestionIndex >= totalQuestions) {
 			displayResults();
-		} else { // If we still have remaining questions, display question and choices
+		} else { 
+			// Reset timer number color
+			secondsLeftLabel.setForeground(timeLeftMessageLabel.getForeground());
+			
+			// If we still have remaining questions, display question and choices
 			questionNumberField.setText("Question #" + (currentQuestionIndex + 1));
 			questionStringArea.setText(quizQuestions[currentQuestionIndex]);
 
@@ -266,32 +290,45 @@ public class QuizGame extends JFrame implements ActionListener {
 		if (arg0.getSource() == answerButtonA) {
 			userAnswer = 'A';
 			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				playCorrectAnswerSound();
 				correctGuesses++;
+			} else {
+				playWrongAnswerSound();
 			}
 		}
 
 		if (arg0.getSource() == answerButtonB) {
 			userAnswer = 'B';
 			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				playCorrectAnswerSound();
 				correctGuesses++;
+			} else {
+				playWrongAnswerSound();
 			}
 		}
 
 		if (arg0.getSource() == answerButtonC) {
 			userAnswer = 'C';
 			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				playCorrectAnswerSound();
 				correctGuesses++;
+			} else {
+				playWrongAnswerSound();
 			}
 		}
 
 		if (arg0.getSource() == answerButtonD) {
 			userAnswer = 'D';
 			if (userAnswer == quizChoicesAnswers[currentQuestionIndex]) {
+				playCorrectAnswerSound();
 				correctGuesses++;
+			} else {
+				playWrongAnswerSound();
 			}
 		}
 
 		if (arg0.getSource() == tryAgainButton) {
+			playTryAgainSound();
 			this.dispose();
 			currentQuestionIndex = 0; // reset index to 0 to avoid out of bounds exception
 			new QuizGame();
@@ -448,6 +485,109 @@ public class QuizGame extends JFrame implements ActionListener {
 
 		mainPanel.add(exitQuizButton);
 
+	}
+
+	public void playCorrectAnswerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(correctAnswerSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playWrongAnswerSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(wrongAnswerSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playTryAgainSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(tryAgainSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playLastThreeSecondsSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(lastThreeSecondsSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void playNoTimeLeftSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(exitConfirmSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// TODO: Add a message dialog asking the user to confirm their exit from the quiz game
+	public void playExitConfirmSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(exitConfirmSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
