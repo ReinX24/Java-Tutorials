@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -7,30 +9,21 @@ public class QuizGame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	String[] quizQuestions = {
-								"When was Valorant first released for beta testing?",
-								"What is the biggest map made for Valorant?",
-								"Who were the first two agents added to the Valorant Protocol?",
-								"What is the name of the free gun given once your agent spawns?",
-								"What team won in Masters Reykjavík in 2021?"
-	};
-	
+	String[] quizQuestions = { "When was Valorant first released for beta testing?",
+			"What is the biggest map made for Valorant?",
+			"Who were the first two agents added to the Valorant Protocol?",
+			"What is the name of the free gun given once your agent spawns?",
+			"What team won in Masters Reykjavík in 2021?" };
+
 	String[][] quizQuestionsChoices = { // A, D, B, C
-								{"April 7, 2020", "August 12, 2020", "January 23, 2020", "December 27, 2019"},
-								{"Bind", "Ascent", "Haven", "Breeze"},
-								{"Phoenix and Killjoy", "Brimstone and Viper", "Sova and Omen", "Raze and Jett"},
-								{"Pea Shooter", "Glock", "Classic", "Hand Gun"},
-								{"Sentinels", "FNATIC", "Gambit Esports", "Team Envy"}
-	};
-	
-	char[] quizChoicesAnswers = {
-							'A',
-							'D',
-							'B',
-							'C',
-							'A'
-	};
-	
+			{ "April 7, 2020", "August 12, 2020", "January 23, 2020", "December 27, 2019" },
+			{ "Bind", "Ascent", "Haven", "Breeze" },
+			{ "Phoenix and Killjoy", "Brimstone and Viper", "Sova and Omen", "Raze and Jett" },
+			{ "Pea Shooter", "Glock", "Classic", "Hand Gun" },
+			{ "Sentinels", "FNATIC", "Gambit Esports", "Team Envy" } };
+
+	char[] quizChoicesAnswers = { 'A', 'D', 'B', 'C', 'A' };
+
 	char userAnswer;
 	int currentQuestionIndex;
 	int correctGuesses = 0;
@@ -77,9 +70,11 @@ public class QuizGame extends JFrame implements ActionListener {
 			}
 		}
 	});
-	
+
 	JButton tryAgainButton = new JButton("Try Again");
 	JButton exitQuizButton = new JButton("Exit Quiz");
+
+	Random randomIndexSelector = new Random();
 
 	public QuizGame() {
 
@@ -211,14 +206,37 @@ public class QuizGame extends JFrame implements ActionListener {
 		this.pack();
 		this.setVisible(true);
 
+		shuffleQuestions();
 		nextQuestion();
 
 	}
 
+	public void shuffleQuestions() {
+		// When starting our program, shuffle the order of questions and their answers
+		for (int i = 0; i < quizQuestions.length; i++) {
+			// Generates a random index between 0 and quizQuestions array length
+			int randomIndexSwap = randomIndexSelector.nextInt(quizQuestions.length);
+			// Stores selected element in a String variable
+			String tempQuestion = quizQuestions[randomIndexSwap];
+			// Reassign index of random selected element to current iterated element
+			quizQuestions[randomIndexSwap] = quizQuestions[i];
+			quizQuestions[i] = tempQuestion;
+
+			// For question choices
+			String[] tempChoices = quizQuestionsChoices[randomIndexSwap];
+			quizQuestionsChoices[randomIndexSwap] = quizQuestionsChoices[i];
+			quizQuestionsChoices[i] = tempChoices;
+
+			// For the answers for each question
+			char tempAnswer = quizChoicesAnswers[randomIndexSwap];
+			quizChoicesAnswers[randomIndexSwap] = quizChoicesAnswers[i];
+			quizChoicesAnswers[i] = tempAnswer;
+
+		}
+	}
+
 	public void nextQuestion() {
-		
-//		displayResults(); // TODO: remove later, for debugging
-		
+
 		// If we are out of questions, display results
 		if (currentQuestionIndex >= totalQuestions) {
 			displayResults();
@@ -238,7 +256,7 @@ public class QuizGame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		// Disable all buttons when a button is pressed
 		answerButtonA.setEnabled(false);
 		answerButtonB.setEnabled(false);
@@ -272,13 +290,13 @@ public class QuizGame extends JFrame implements ActionListener {
 				correctGuesses++;
 			}
 		}
-		
+
 		if (arg0.getSource() == tryAgainButton) {
 			this.dispose();
 			currentQuestionIndex = 0; // reset index to 0 to avoid out of bounds exception
 			new QuizGame();
 		}
-		
+
 		if (arg0.getSource() == exitQuizButton) {
 			System.exit(0);
 		}
@@ -312,16 +330,16 @@ public class QuizGame extends JFrame implements ActionListener {
 		if (quizChoicesAnswers[currentQuestionIndex] != 'D') {
 			choicesLabelD.setForeground(Color.RED);
 		}
-		
+
 		// If the answer is the right answer, make the text green
 		if (quizChoicesAnswers[currentQuestionIndex] == 'A') {
 			choicesLabelA.setForeground(Color.GREEN);
 		}
-		
+
 		if (quizChoicesAnswers[currentQuestionIndex] == 'B') {
 			choicesLabelB.setForeground(Color.GREEN);
 		}
-		
+
 		if (quizChoicesAnswers[currentQuestionIndex] == 'C') {
 			choicesLabelC.setForeground(Color.GREEN);
 		}
@@ -365,15 +383,15 @@ public class QuizGame extends JFrame implements ActionListener {
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
-		
+
 		questionNumberField.setText("Quiz Over!");
-	
+
 		mainPanel.add(questionNumberField);
-		
+
 		questionStringArea.setText("Results:");
-		
+
 		mainPanel.add(questionStringArea);
-		
+
 		correctAnswersAmountField.setPreferredSize(new Dimension(900, 200));
 		correctAnswersAmountField.setBorder(BorderFactory.createBevelBorder(0));
 		correctAnswersAmountField.setText("Score: " + correctGuesses + "/" + quizQuestions.length);
@@ -382,11 +400,11 @@ public class QuizGame extends JFrame implements ActionListener {
 		correctAnswersAmountField.setFont(new Font(null, Font.BOLD, 30));
 
 		mainPanel.add(correctAnswersAmountField);
-		
+
 		correctAnswersPercentageField.setPreferredSize(new Dimension(900, 200));
 		correctAnswersPercentageField.setBorder(BorderFactory.createBevelBorder(0));
-		
-		int correctAnswersPercentage = (int)(((double) correctGuesses / quizQuestions.length) * 100);
+
+		int correctAnswersPercentage = (int) (((double) correctGuesses / quizQuestions.length) * 100);
 
 		if (correctAnswersPercentage < 25) {
 			// Below 25%
@@ -399,29 +417,35 @@ public class QuizGame extends JFrame implements ActionListener {
 			correctAnswersAmountField.setForeground(new Color(255, 196, 12)); // yellow color
 		} else if (correctAnswersPercentage >= 75) {
 			// Greater than or equal to 75
-			correctAnswersAmountField.setForeground(new Color(120,190,33)); // green color
+			correctAnswersAmountField.setForeground(new Color(120, 190, 33)); // green color
 		}
 
 		correctAnswersPercentageField.setText("Percentage: " + correctAnswersPercentage + "%");
 		correctAnswersPercentageField.setHorizontalAlignment(SwingConstants.CENTER);
 		correctAnswersPercentageField.setEditable(false);
 		correctAnswersPercentageField.setFont(new Font(null, Font.BOLD, 30));
-		
+
 		mainPanel.add(correctAnswersPercentageField);
-		
-		// TODO: style tryAgainButton and exitQuizButton
+
+		// DONE: style tryAgainButton and exitQuizButton
 		tryAgainButton.addActionListener(this);
 		tryAgainButton.setPreferredSize(new Dimension(450, 75));
-		tryAgainButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		tryAgainButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		tryAgainButton.setFocusable(false);
-		
+		tryAgainButton.setBackground(new Color(120, 190, 33));
+		tryAgainButton.setForeground(Color.WHITE);
+		tryAgainButton.setFont(new Font(null, Font.BOLD, 26));
+
 		mainPanel.add(tryAgainButton);
-		
+
 		exitQuizButton.addActionListener(this);
 		exitQuizButton.setPreferredSize(new Dimension(450, 75));
-		exitQuizButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		exitQuizButton.setBorder(BorderFactory.createRaisedBevelBorder());
 		exitQuizButton.setFocusable(false);
-		
+		exitQuizButton.setBackground(new Color(227, 34, 39));
+		exitQuizButton.setForeground(Color.WHITE);
+		exitQuizButton.setFont(new Font(null, Font.BOLD, 26));
+
 		mainPanel.add(exitQuizButton);
 
 	}
