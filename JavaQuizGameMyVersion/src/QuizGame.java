@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
@@ -73,6 +72,7 @@ public class QuizGame extends JFrame implements ActionListener {
 			}
 
 			if (secondsNum <= 0) {
+				playNoTimeLeftSound();
 				// If there is not time left, display the answer and go to the next question
 				// automatically
 				displayAnswer();
@@ -94,13 +94,16 @@ public class QuizGame extends JFrame implements ActionListener {
 	URL lastThreeSecondsSoundURL = getClass().getResource("lastThreeSecondsSound.wav");
 	URL tryAgainSoundURL = getClass().getResource("tryAgainSound.wav");
 	URL exitConfirmSoundURL = getClass().getResource("exitConfirmSound.wav");
-	// TODO: add no time left URL
+	URL noTimeLeftSoundURL = getClass().getResource("noTimeLeftSound.wav");
+
+	URL quizGameIconURL = getClass().getResource("quizGameIcon.png");
 
 	public QuizGame() {
 
 		this.setTitle("Java Quiz Game (Valorant Edition)");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
+		this.setIconImage(new ImageIcon(quizGameIconURL).getImage());
 
 		mainPanel.setPreferredSize(new Dimension(1024, 768));
 		mainPanel.setBackground(Color.LIGHT_GRAY);
@@ -260,10 +263,10 @@ public class QuizGame extends JFrame implements ActionListener {
 		// If we are out of questions, display results
 		if (currentQuestionIndex >= totalQuestions) {
 			displayResults();
-		} else { 
+		} else {
 			// Reset timer number color
 			secondsLeftLabel.setForeground(timeLeftMessageLabel.getForeground());
-			
+
 			// If we still have remaining questions, display question and choices
 			questionNumberField.setText("Question #" + (currentQuestionIndex + 1));
 			questionStringArea.setText(quizQuestions[currentQuestionIndex]);
@@ -295,6 +298,7 @@ public class QuizGame extends JFrame implements ActionListener {
 			} else {
 				playWrongAnswerSound();
 			}
+			displayAnswer();
 		}
 
 		if (arg0.getSource() == answerButtonB) {
@@ -305,6 +309,7 @@ public class QuizGame extends JFrame implements ActionListener {
 			} else {
 				playWrongAnswerSound();
 			}
+			displayAnswer();
 		}
 
 		if (arg0.getSource() == answerButtonC) {
@@ -315,6 +320,7 @@ public class QuizGame extends JFrame implements ActionListener {
 			} else {
 				playWrongAnswerSound();
 			}
+			displayAnswer();
 		}
 
 		if (arg0.getSource() == answerButtonD) {
@@ -325,20 +331,23 @@ public class QuizGame extends JFrame implements ActionListener {
 			} else {
 				playWrongAnswerSound();
 			}
+			displayAnswer();
 		}
 
 		if (arg0.getSource() == tryAgainButton) {
 			playTryAgainSound();
 			this.dispose();
-			currentQuestionIndex = 0; // reset index to 0 to avoid out of bounds exception
 			new QuizGame();
 		}
 
 		if (arg0.getSource() == exitQuizButton) {
-			System.exit(0);
+			playExitConfirmSound();
+			int confirmExit = JOptionPane.showConfirmDialog(null, "Exit Quiz?", "Exit Quiz Confirmation",
+					JOptionPane.YES_NO_OPTION);
+			if (confirmExit == JOptionPane.YES_OPTION) {
+				System.exit(0);
+			}
 		}
-
-		displayAnswer();
 
 	}
 
@@ -416,6 +425,8 @@ public class QuizGame extends JFrame implements ActionListener {
 	}
 
 	public void displayResults() {
+
+		currentQuestionIndex = 0; // reset index to 0 to avoid out of bounds exception
 
 		mainPanel.removeAll();
 		mainPanel.revalidate();
@@ -554,10 +565,10 @@ public class QuizGame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void playNoTimeLeftSound() {
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(exitConfirmSoundURL);
+			streamAudio = AudioSystem.getAudioInputStream(noTimeLeftSoundURL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 
@@ -571,8 +582,9 @@ public class QuizGame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-	
-	// TODO: Add a message dialog asking the user to confirm their exit from the quiz game
+
+	// Done: Add a message dialog asking the user to confirm their exit from the
+	// quiz game
 	public void playExitConfirmSound() {
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(exitConfirmSoundURL);
