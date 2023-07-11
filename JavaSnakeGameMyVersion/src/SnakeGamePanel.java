@@ -1,5 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.util.Random;
 
@@ -32,13 +41,21 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 	Timer gameTimer;
 	Random randomObj;
 
+	// Creating objects that will be used for playing audio files
+	AudioInputStream streamAudio;
+	Clip audioClip;
+	FloatControl gainControl;
+
+	URL appleEatenURL = getClass().getResource("appleEatenSound.wav");
+	URL gameOverSoundURL = getClass().getResource("gameOverSound.wav");
+
 	public SnakeGamePanel() {
 		randomObj = new Random();
 
 		// Setting our JPanel attributes
 		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		this.setBackground(Color.BLACK);
-		this.setFocusable(false);
+		this.setFocusable(true); // must be true so that our KeyListener could be added
 		this.addKeyListener(new MyKeyAdapter()); // key pressed recorded by our inner class
 
 		startGame();
@@ -60,7 +77,6 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 	// Method that draws or paints our game components
 	public void draw(Graphics g) {
 		if (isRunning) {
-
 			// Drawing grid lines for our JPanel (for debugging)
 			for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
 				// x start, y start, width, height
@@ -132,6 +148,9 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 	// Check if the head of the snake has come into contact with an apple
 	public void checkApple() {
 		if (x[0] == appleX && y[0] == appleY) {
+
+			playAppleEatenSound(); // sound effect for when an apple is eaten
+
 			bodyParts++;
 			applesEaten++;
 			newApple();
@@ -146,21 +165,25 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 				isRunning = false; // stops the game and shows the Game Over screen
 			}
 		}
-		
+
 		// Goes past the left border
 		if (x[0] < 0) {
+			playgGameOverSound(); // game over sound plays
 			isRunning = false;
 		}
 		// Goes past the right border
 		if (x[0] > SCREEN_WIDTH) {
+			playgGameOverSound();
 			isRunning = false;
 		}
 		// Goes past the top border
 		if (y[0] < 0) {
+			playgGameOverSound();
 			isRunning = false;
 		}
 		// Goes past the bottom border
 		if (y[0] > SCREEN_HEIGHT) {
+			playgGameOverSound();
 			isRunning = false;
 		}
 	}
@@ -171,14 +194,15 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 		g.setColor(Color.RED);
 		g.setFont(new Font(null, Font.BOLD, 40));
 		FontMetrics fontMetricsOne = getFontMetrics(g.getFont());
-		g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - fontMetricsOne.stringWidth("Score: " + applesEaten) / 2), g.getFont().getSize());
-		
+		g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - fontMetricsOne.stringWidth("Score: " + applesEaten)) / 2,
+				g.getFont().getSize());
+
 		// Game Over screen
 		g.setColor(Color.RED);
 		g.setFont(new Font(null, Font.BOLD, 75));
 		FontMetrics fontMetricsTwo = getFontMetrics(g.getFont());
 		// Center of the screen
-		g.drawString("Game Over", (SCREEN_WIDTH - fontMetricsTwo.stringWidth("Game Over")) /  2, SCREEN_HEIGHT / 2); 
+		g.drawString("Game Over", (SCREEN_WIDTH - fontMetricsTwo.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
 	}
 
 	@Override
@@ -193,14 +217,69 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 
 	// Creating an inner class that will keep track of our keyboard presses
 	public class MyKeyAdapter extends KeyAdapter {
-		@Override // overriding existing keyPressed method
+		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
+
 			case KeyEvent.VK_LEFT:
-				
+				if (snakeDirection != 'R') {
+					snakeDirection = 'L';
+				}
 				break;
-				// TODO: finish key controls
+
+			case KeyEvent.VK_RIGHT:
+				if (snakeDirection != 'L') {
+					snakeDirection = 'R';
+				}
+				break;
+
+			case KeyEvent.VK_UP:
+				if (snakeDirection != 'D') {
+					snakeDirection = 'U';
+				}
+				break;
+
+			case KeyEvent.VK_DOWN:
+				if (snakeDirection != 'U') {
+					snakeDirection = 'D';
+				}
+				break;
+
 			}
+		}
+	}
+
+	public void playAppleEatenSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(appleEatenURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playgGameOverSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(gameOverSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
 		}
 	}
 }

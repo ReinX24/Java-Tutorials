@@ -7,7 +7,7 @@ public class SnakeGameMain {
 		/*
 		 * [Features to be added]
 		 * 
-		 * TODO: Add a sound effect of when an apple is eaten
+		 * DONE: Add a sound effect of when an apple is eaten
 		 * 
 		 * TODO: Add a sound effect of when the game is over
 		 * 
