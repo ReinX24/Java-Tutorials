@@ -2,8 +2,8 @@
 public class SnakeGameMain {
 
 	public static void main(String[] args) {
-		SnakeGameFrame gameFrame = new SnakeGameFrame();
-		gameFrame.createGameFrame();
+
+		new SnakeGame();
 
 		/*
 		 * [Features to be added]

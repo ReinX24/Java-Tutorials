@@ -12,7 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.util.Random;
 
-public class SnakeGamePanel extends JPanel implements ActionListener {
+public class SnakeGame extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L; // for removing warnings
 	final int SCREEN_WIDTH = 600;
@@ -48,8 +48,27 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 
 	URL appleEatenURL = getClass().getResource("appleEatenSound.wav");
 	URL gameOverSoundURL = getClass().getResource("gameOverSound.wav");
-	
-	public SnakeGamePanel() {
+
+	JFrame snakeGameFrame = new JFrame();
+	URL snakeGameIcon = getClass().getResource("snakeGameIcon.png");
+
+	static int applesEatenHighScore = 0;
+
+	public SnakeGame() {
+		snakeGameFrame.setTitle("Java Snake Game");
+		snakeGameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		snakeGameFrame.setResizable(false);
+		snakeGameFrame.setIconImage(new ImageIcon(snakeGameIcon).getImage());
+
+		snakeGameFrame.add(this);
+		createSnakeGamePanel(); // instantiates JPanel attributes
+
+		snakeGameFrame.pack();
+		snakeGameFrame.setVisible(true);
+		snakeGameFrame.setLocationRelativeTo(null); // this must be at the end for it to work properly
+	}
+
+	public void createSnakeGamePanel() {
 		randomObj = new Random();
 
 		// Setting our JPanel attributes
@@ -101,10 +120,17 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 
 			// Drawing the score
 			g.setColor(Color.RED);
-			g.setFont(new Font(null, Font.BOLD, 40));
+			g.setFont(new Font(null, Font.BOLD, 30));
 			FontMetrics fontMetrics = getFontMetrics(g.getFont());
-			g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - fontMetrics.stringWidth("Score: " + applesEaten)) / 2,
+			g.drawString("Score: " + applesEaten,
+					((SCREEN_WIDTH - fontMetrics.stringWidth("Score: " + applesEaten)) / 2) - (SCREEN_WIDTH / 4),
 					g.getFont().getSize());
+
+			g.drawString("High Score: " + applesEatenHighScore,
+					((SCREEN_WIDTH - fontMetrics.stringWidth("High Score: " + applesEatenHighScore)) / 2)
+							+ (SCREEN_WIDTH / 4),
+					g.getFont().getSize());
+
 		} else {
 			gameOver(g);
 		}
@@ -154,6 +180,12 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 			bodyParts++;
 			applesEaten++;
 			newApple();
+
+			// TODO: when there is a new high score, save it as an object
+			// If the current applesEaten is currently higher than the high score
+			if (applesEaten > applesEatenHighScore) {
+				applesEatenHighScore = applesEaten;
+			}
 		}
 	}
 
@@ -182,12 +214,20 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 		if (y[0] > SCREEN_HEIGHT) {
 			isRunning = false;
 		}
-		
+
 		// This runs before going to the game over screen
 		if (isRunning == false) {
 			playgGameOverSound();
-			SnakeGameFrame gameFrame = new SnakeGameFrame();
-			gameFrame.askTryAgain();
+
+			// TODO: think of another option other than "No"
+			String[] gameOverChoices = { "Try Again", "No" };
+			int userChoice = JOptionPane.showOptionDialog(this, "Game Over!", "Game Over Choices",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverChoices, gameOverChoices[0]);
+
+			if (userChoice == 0) { // try again
+				snakeGameFrame.dispose();
+				new SnakeGame();
+			}
 		}
 	}
 
@@ -196,16 +236,23 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 		// Displaying the score once the game is over
 		g.setColor(Color.RED);
 		g.setFont(new Font(null, Font.BOLD, 40));
-		FontMetrics fontMetricsOne = getFontMetrics(g.getFont());
-		g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - fontMetricsOne.stringWidth("Score: " + applesEaten)) / 2,
-				g.getFont().getSize());
+		FontMetrics scoreFontMetrics = getFontMetrics(g.getFont());
+		g.drawString("Score: " + applesEaten,
+				(SCREEN_WIDTH - scoreFontMetrics.stringWidth("Score: " + applesEaten)) / 2,
+				(SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4));
 
 		// Game Over screen
 		g.setColor(Color.RED);
 		g.setFont(new Font(null, Font.BOLD, 75));
-		FontMetrics fontMetricsTwo = getFontMetrics(g.getFont());
+		FontMetrics gameOverFontMetrics = getFontMetrics(g.getFont());
 		// Center of the screen
-		g.drawString("Game Over", (SCREEN_WIDTH - fontMetricsTwo.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
+		g.drawString("Game Over", (SCREEN_WIDTH - gameOverFontMetrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
+
+		g.setFont(new Font(null, Font.BOLD, 40));
+		FontMetrics highScoreFontMe = getFontMetrics(g.getFont());
+		g.drawString("High Score: " + applesEaten,
+				(SCREEN_WIDTH - highScoreFontMe.stringWidth("High Score: " + applesEaten)) / 2,
+				(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
 	}
 
 	@Override
