@@ -6,6 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="SnakeGameIcons"/>
 	<classpathentry kind="src" path="SnakeGameSounds"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

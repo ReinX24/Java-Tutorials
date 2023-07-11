@@ -48,7 +48,7 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 
 	URL appleEatenURL = getClass().getResource("appleEatenSound.wav");
 	URL gameOverSoundURL = getClass().getResource("gameOverSound.wav");
-
+	
 	public SnakeGamePanel() {
 		randomObj = new Random();
 
@@ -106,7 +106,7 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 			g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - fontMetrics.stringWidth("Score: " + applesEaten)) / 2,
 					g.getFont().getSize());
 		} else {
-			gameOver(g); // pass in our current JLabel graphic components
+			gameOver(g);
 		}
 	}
 
@@ -168,23 +168,26 @@ public class SnakeGamePanel extends JPanel implements ActionListener {
 
 		// Goes past the left border
 		if (x[0] < 0) {
-			playgGameOverSound(); // game over sound plays
 			isRunning = false;
 		}
 		// Goes past the right border
 		if (x[0] > SCREEN_WIDTH) {
-			playgGameOverSound();
 			isRunning = false;
 		}
 		// Goes past the top border
 		if (y[0] < 0) {
-			playgGameOverSound();
 			isRunning = false;
 		}
 		// Goes past the bottom border
 		if (y[0] > SCREEN_HEIGHT) {
-			playgGameOverSound();
 			isRunning = false;
+		}
+		
+		// This runs before going to the game over screen
+		if (isRunning == false) {
+			playgGameOverSound();
+			SnakeGameFrame gameFrame = new SnakeGameFrame();
+			gameFrame.askTryAgain();
 		}
 	}
 
