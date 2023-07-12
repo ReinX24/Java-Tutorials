@@ -232,8 +232,14 @@ public class SnakeGame extends JPanel implements ActionListener {
 		}
 
 		// This runs before going to the game over screen
+		// NOTE: we put this in here instead in the gameOverScreen function because it
+		// runs infinitely instead of once in the gameOverScreen function
 		if (isRunning == false) {
-			playgGameOverSound();
+			if (applesEaten == gameHighScore.getHighScore()) {
+				playNewHighScoreSound();
+			} else {
+				playgGameOverSound();
+			}
 		}
 	}
 
@@ -389,7 +395,7 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 	public void playNewHighScoreSound() {
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(gameOverSoundURL);
+			streamAudio = AudioSystem.getAudioInputStream(newHighScoreSoundURL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 
