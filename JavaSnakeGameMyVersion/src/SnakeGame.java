@@ -48,6 +48,7 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 	URL appleEatenURL = getClass().getResource("appleEatenSound.wav");
 	URL gameOverSoundURL = getClass().getResource("gameOverSound.wav");
+	URL newHighScoreSoundURL = getClass().getResource("newHighScoreSound.wav");
 
 	JFrame snakeGameFrame = new JFrame();
 	URL snakeGameIcon = getClass().getResource("snakeGameIcon.png");
@@ -194,7 +195,7 @@ public class SnakeGame extends JPanel implements ActionListener {
 			applesEaten++;
 			newApple();
 
-			// TODO: when there is a new high score, save it as an object
+			// DONE: when there is a new high score, save it as an object
 			// If the current applesEaten is currently higher than the high score
 			if (applesEaten > gameHighScore.getHighScore()) {
 				gameHighScore.setHighScore(applesEaten);
@@ -233,46 +234,10 @@ public class SnakeGame extends JPanel implements ActionListener {
 		// This runs before going to the game over screen
 		if (isRunning == false) {
 			playgGameOverSound();
-
-			// DONE: think of another option other than "No"
-//			String[] gameOverChoices = { "Try Again", "Exit Game" };
-//			int userChoice = JOptionPane.showOptionDialog(this, "Game Over!", "Game Over Choices",
-//					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverChoices, gameOverChoices[0]);
-//
-//			if (userChoice == 0) { // try again
-//				snakeGameFrame.dispose();
-//				new SnakeGame();
-//			}
 		}
 	}
 
-	// TODO: replace this method with another method that uses JPanels and JLabels
-	// instead
-	// Shows a "Game Over" message
-	public void gameOver(Graphics g) {
-		// Displaying the score once the game is over
-		g.setColor(Color.RED);
-		g.setFont(new Font(null, Font.BOLD, 40));
-		FontMetrics scoreFontMetrics = getFontMetrics(g.getFont());
-		g.drawString("Score: " + applesEaten,
-				(SCREEN_WIDTH - scoreFontMetrics.stringWidth("Score: " + applesEaten)) / 2,
-				(SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4));
-
-		// Game Over screen
-		g.setColor(Color.RED);
-		g.setFont(new Font(null, Font.BOLD, 75));
-		FontMetrics gameOverFontMetrics = getFontMetrics(g.getFont());
-		// Center of the screen
-		g.drawString("Game Over", (SCREEN_WIDTH - gameOverFontMetrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
-
-		g.setFont(new Font(null, Font.BOLD, 40));
-		FontMetrics highScoreFontMe = getFontMetrics(g.getFont());
-		g.drawString("High Score: " + gameHighScore.getHighScore(),
-				(SCREEN_WIDTH - highScoreFontMe.stringWidth("High Score: " + gameHighScore.getHighScore())) / 2,
-				(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
-	}
-
-	// TODO: develop a new game over screen that gives the user the option to try
+	// DONE: develop a new game over screen that gives the user the option to try
 	// again or to exit the game
 	public void gameOverScreen() {
 		snakeGameFrame.getContentPane().removeAll();
@@ -285,27 +250,28 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 		snakeGameFrame.add(gameOverScreenPanel);
 
-		currentScoreLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		currentScoreLabel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 4));
 		currentScoreLabel.setText("Score: " + applesEaten);
-		currentScoreLabel.setForeground(Color.WHITE);
+		if (applesEaten < gameHighScore.getHighScore()) {
+			currentScoreLabel.setForeground(Color.RED);
+		} else {
+			currentScoreLabel.setForeground(Color.GREEN);
+		}
 		currentScoreLabel.setFont(new Font(null, Font.BOLD, 40));
 		currentScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		gameOverScreenPanel.add(currentScoreLabel);
 
-		gameOverMessageLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		gameOverMessageLabel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 4));
-		gameOverMessageLabel.setForeground(Color.WHITE);
+		gameOverMessageLabel.setForeground(Color.GREEN);
 		gameOverMessageLabel.setFont(new Font(null, Font.BOLD, 40));
 		gameOverMessageLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		gameOverScreenPanel.add(gameOverMessageLabel);
 
-		highScoreLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		highScoreLabel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 4));
 		highScoreLabel.setText("High Score: " + gameHighScore.getHighScore());
-		highScoreLabel.setForeground(Color.WHITE);
+		highScoreLabel.setForeground(Color.GREEN);
 		highScoreLabel.setFont(new Font(null, Font.BOLD, 40));
 		highScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 
@@ -313,13 +279,21 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 		tryAgainButton.addActionListener(this);
 		tryAgainButton.setFocusable(false);
-		tryAgainButton.setPreferredSize(new Dimension(200, 50));
+		tryAgainButton.setPreferredSize(new Dimension(250, 60));
+		tryAgainButton.setBorder(BorderFactory.createRaisedBevelBorder());
+		tryAgainButton.setBackground(Color.WHITE);
+		tryAgainButton.setForeground(Color.BLACK);
+		tryAgainButton.setFont(new Font(null, Font.BOLD, 16));
 
 		gameOverScreenPanel.add(tryAgainButton);
 
 		exitGameButton.addActionListener(this);
 		exitGameButton.setFocusable(false);
-		exitGameButton.setPreferredSize(new Dimension(200, 50));
+		exitGameButton.setPreferredSize(new Dimension(250, 60));
+		exitGameButton.setBorder(BorderFactory.createRaisedBevelBorder());
+		exitGameButton.setBackground(Color.WHITE);
+		exitGameButton.setForeground(Color.BLACK);
+		exitGameButton.setFont(new Font(null, Font.BOLD, 16));
 
 		gameOverScreenPanel.add(exitGameButton);
 
@@ -334,6 +308,15 @@ public class SnakeGame extends JPanel implements ActionListener {
 			checkCollisions();
 		}
 		repaint();
+
+		if (arg0.getSource() == tryAgainButton) {
+			new SnakeGame();
+			snakeGameFrame.dispose();
+		}
+
+		if (arg0.getSource() == exitGameButton) {
+			System.exit(0);
+		}
 	}
 
 	// Creating an inner class that will keep track of our keyboard presses
@@ -403,4 +386,22 @@ public class SnakeGame extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+
+	public void playNewHighScoreSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(gameOverSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+
+			gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-6.0f);
+
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

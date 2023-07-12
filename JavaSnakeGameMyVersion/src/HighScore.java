@@ -1,6 +1,4 @@
 
-import javax.swing.JOptionPane;
-
 import java.io.*;
 
 public class HighScore {
@@ -17,7 +15,7 @@ public class HighScore {
 
 	public void saveHighScore() {
 		try {
-			File highScoreFile = new File("SnakeGameHighScore/HighScoreFile");
+			File highScoreFile = new File("HighScoreFile");
 			FileOutputStream fileOutput = new FileOutputStream(highScoreFile);
 			ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
 
@@ -27,15 +25,13 @@ public class HighScore {
 			objectOutput.close();
 			fileOutput.close();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error Occurred, Terminating Program", "Error Message",
-					JOptionPane.WARNING_MESSAGE);
-			System.exit(0);
+			// Do nothing
 		}
 	}
 
 	public void readHighScore() {
 		try {
-			File highScoreFile = new File("SnakeGameHighScore/HighScoreFile");
+			File highScoreFile = new File("HighScoreFile");
 			FileInputStream fileInput = new FileInputStream(highScoreFile);
 			ObjectInputStream objectInput = new ObjectInputStream(fileInput);
 
@@ -46,9 +42,7 @@ public class HighScore {
 
 			snakeGameHighScore = savedGameHighScore;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error Occurred, Terminating Program", "Error Message",
-					JOptionPane.WARNING_MESSAGE);
-			System.exit(0);
+			// Do nothing
 		}
 	}
 
