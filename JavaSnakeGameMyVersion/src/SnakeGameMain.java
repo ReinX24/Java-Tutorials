@@ -12,11 +12,13 @@ public class SnakeGameMain {
 		 * 
 		 * DONE: Add a sound effect of when the game is over
 		 * 
-		 * TODO: Add a high score system that stays saved after the game is over
+		 * DONE: Add a high score system that stays saved after the game is over
 		 * 
-		 * TODO: Add a try again or exit button once the game is over
+		 * DONE: Add a try again or exit button once the game is over
 		 * 
 		 * DONE: Add an icon for our program
+		 * 
+		 * TODO: Test if high scores are saved properly once exported into a jar file
 		 * 
 		 * TODO: Export program into a jar and exe file after finalization
 		 */

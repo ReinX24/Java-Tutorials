@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -52,7 +53,7 @@ public class SnakeGame extends JPanel implements ActionListener {
 	JFrame snakeGameFrame = new JFrame();
 	URL snakeGameIcon = getClass().getResource("snakeGameIcon.png");
 
-	static int applesEatenHighScore = 0;
+	HighScore gameHighScore = new HighScore();
 
 	public SnakeGame() {
 		snakeGameFrame.setTitle("Java Snake Game");
@@ -69,6 +70,10 @@ public class SnakeGame extends JPanel implements ActionListener {
 	}
 
 	public void createSnakeGamePanel() {
+
+		gameHighScore.readHighScore(); // reads last high score
+		gameHighScore.saveHighScore();
+
 		randomObj = new Random();
 
 		// Setting our JPanel attributes
@@ -126,8 +131,8 @@ public class SnakeGame extends JPanel implements ActionListener {
 					((SCREEN_WIDTH - fontMetrics.stringWidth("Score: " + applesEaten)) / 2) - (SCREEN_WIDTH / 4),
 					g.getFont().getSize());
 
-			g.drawString("High Score: " + applesEatenHighScore,
-					((SCREEN_WIDTH - fontMetrics.stringWidth("High Score: " + applesEatenHighScore)) / 2)
+			g.drawString("High Score: " + gameHighScore.getHighScore(),
+					((SCREEN_WIDTH - fontMetrics.stringWidth("High Score: " + gameHighScore.getHighScore())) / 2)
 							+ (SCREEN_WIDTH / 4),
 					g.getFont().getSize());
 
@@ -183,8 +188,10 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 			// TODO: when there is a new high score, save it as an object
 			// If the current applesEaten is currently higher than the high score
-			if (applesEaten > applesEatenHighScore) {
-				applesEatenHighScore = applesEaten;
+			if (applesEaten > gameHighScore.getHighScore()) {
+				gameHighScore.setHighScore(applesEaten);
+				gameHighScore.saveHighScore();
+				gameHighScore.readHighScore();
 			}
 		}
 	}
@@ -233,26 +240,34 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 	// Shows a "Game Over" message
 	public void gameOver(Graphics g) {
-		// Displaying the score once the game is over
-		g.setColor(Color.RED);
-		g.setFont(new Font(null, Font.BOLD, 40));
-		FontMetrics scoreFontMetrics = getFontMetrics(g.getFont());
-		g.drawString("Score: " + applesEaten,
-				(SCREEN_WIDTH - scoreFontMetrics.stringWidth("Score: " + applesEaten)) / 2,
-				(SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4));
+		try {
+			// Displaying the score once the game is over
+			g.setColor(Color.RED);
+			g.setFont(new Font(null, Font.BOLD, 40));
+			FontMetrics scoreFontMetrics = getFontMetrics(g.getFont());
+			g.drawString("Score: " + applesEaten,
+					(SCREEN_WIDTH - scoreFontMetrics.stringWidth("Score: " + applesEaten)) / 2,
+					(SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4));
 
-		// Game Over screen
-		g.setColor(Color.RED);
-		g.setFont(new Font(null, Font.BOLD, 75));
-		FontMetrics gameOverFontMetrics = getFontMetrics(g.getFont());
-		// Center of the screen
-		g.drawString("Game Over", (SCREEN_WIDTH - gameOverFontMetrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
+			// Game Over screen
+			g.setColor(Color.RED);
+			g.setFont(new Font(null, Font.BOLD, 75));
+			FontMetrics gameOverFontMetrics = getFontMetrics(g.getFont());
+			// Center of the screen
+			g.drawString("Game Over", (SCREEN_WIDTH - gameOverFontMetrics.stringWidth("Game Over")) / 2,
+					SCREEN_HEIGHT / 2);
 
-		g.setFont(new Font(null, Font.BOLD, 40));
-		FontMetrics highScoreFontMe = getFontMetrics(g.getFont());
-		g.drawString("High Score: " + applesEaten,
-				(SCREEN_WIDTH - highScoreFontMe.stringWidth("High Score: " + applesEaten)) / 2,
-				(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
+			g.setFont(new Font(null, Font.BOLD, 40));
+			FontMetrics highScoreFontMe = getFontMetrics(g.getFont());
+			g.drawString("High Score: " + gameHighScore.getHighScore(),
+					(SCREEN_WIDTH - highScoreFontMe.stringWidth("High Score: " + gameHighScore.getHighScore())) / 2,
+					(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
+			Thread.sleep(5000);
+			System.exit(0);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Error Occurred, Terminating Program", "Error Message",
+					JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	@Override

@@ -1,21 +1,23 @@
-import java.util.*;
 
 import javax.swing.JOptionPane;
 
 import java.io.*;
-import java.net.URL;
 
 public class HighScore {
 
-	static int snakeGameHighScore = 0;
+	int snakeGameHighScore = 0;
 
-	public void newHighScore(int newHighScore) {
-		snakeGameHighScore = newHighScore;
+	public int getHighScore() {
+		return snakeGameHighScore;
 	}
 
-	public static void saveHighScore() {
+	public void setHighScore(int newHighScore) {
+		this.snakeGameHighScore = newHighScore;
+	}
+
+	public void saveHighScore() {
 		try {
-			File highScoreFile = new File("SnakeGameHighScore/SnakeGameHighScore");
+			File highScoreFile = new File("SnakeGameHighScore/HighScoreFile");
 			FileOutputStream fileOutput = new FileOutputStream(highScoreFile);
 			ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
 
@@ -25,8 +27,28 @@ public class HighScore {
 			objectOutput.close();
 			fileOutput.close();
 		} catch (Exception e) {
-			// TODO: finish this function
-			JOptionPane.showMessageDialog(null, "Error Occurred");
+			JOptionPane.showMessageDialog(null, "Error Occurred, Terminating Program", "Error Message",
+					JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
+		}
+	}
+
+	public void readHighScore() {
+		try {
+			File highScoreFile = new File("SnakeGameHighScore/HighScoreFile");
+			FileInputStream fileInput = new FileInputStream(highScoreFile);
+			ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+
+			int savedGameHighScore = (int) objectInput.readObject();
+
+			objectInput.close();
+			fileInput.close();
+
+			snakeGameHighScore = savedGameHighScore;
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error Occurred, Terminating Program", "Error Message",
+					JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
 		}
 	}
 
