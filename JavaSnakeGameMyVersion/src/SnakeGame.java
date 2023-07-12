@@ -3,7 +3,6 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.annotation.processing.SupportedSourceVersion;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -55,9 +54,17 @@ public class SnakeGame extends JPanel implements ActionListener {
 
 	HighScore gameHighScore = new HighScore();
 
+	JPanel gameOverScreenPanel = new JPanel();
+	JLabel currentScoreLabel = new JLabel();
+	JLabel gameOverMessageLabel = new JLabel("Game Over");
+	JLabel highScoreLabel = new JLabel();
+
+	JButton tryAgainButton = new JButton("Try Again");
+	JButton exitGameButton = new JButton("Exit Game");
+
 	public SnakeGame() {
 		snakeGameFrame.setTitle("Java Snake Game");
-		snakeGameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		snakeGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		snakeGameFrame.setResizable(false);
 		snakeGameFrame.setIconImage(new ImageIcon(snakeGameIcon).getImage());
 
@@ -137,7 +144,8 @@ public class SnakeGame extends JPanel implements ActionListener {
 					g.getFont().getSize());
 
 		} else {
-			gameOver(g);
+//			gameOver(g);
+			gameOverScreen();
 		}
 	}
 
@@ -226,48 +234,96 @@ public class SnakeGame extends JPanel implements ActionListener {
 		if (isRunning == false) {
 			playgGameOverSound();
 
-			// TODO: think of another option other than "No"
-			String[] gameOverChoices = { "Try Again", "No" };
-			int userChoice = JOptionPane.showOptionDialog(this, "Game Over!", "Game Over Choices",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverChoices, gameOverChoices[0]);
-
-			if (userChoice == 0) { // try again
-				snakeGameFrame.dispose();
-				new SnakeGame();
-			}
+			// DONE: think of another option other than "No"
+//			String[] gameOverChoices = { "Try Again", "Exit Game" };
+//			int userChoice = JOptionPane.showOptionDialog(this, "Game Over!", "Game Over Choices",
+//					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverChoices, gameOverChoices[0]);
+//
+//			if (userChoice == 0) { // try again
+//				snakeGameFrame.dispose();
+//				new SnakeGame();
+//			}
 		}
 	}
 
+	// TODO: replace this method with another method that uses JPanels and JLabels
+	// instead
 	// Shows a "Game Over" message
 	public void gameOver(Graphics g) {
-		try {
-			// Displaying the score once the game is over
-			g.setColor(Color.RED);
-			g.setFont(new Font(null, Font.BOLD, 40));
-			FontMetrics scoreFontMetrics = getFontMetrics(g.getFont());
-			g.drawString("Score: " + applesEaten,
-					(SCREEN_WIDTH - scoreFontMetrics.stringWidth("Score: " + applesEaten)) / 2,
-					(SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4));
+		// Displaying the score once the game is over
+		g.setColor(Color.RED);
+		g.setFont(new Font(null, Font.BOLD, 40));
+		FontMetrics scoreFontMetrics = getFontMetrics(g.getFont());
+		g.drawString("Score: " + applesEaten,
+				(SCREEN_WIDTH - scoreFontMetrics.stringWidth("Score: " + applesEaten)) / 2,
+				(SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4));
 
-			// Game Over screen
-			g.setColor(Color.RED);
-			g.setFont(new Font(null, Font.BOLD, 75));
-			FontMetrics gameOverFontMetrics = getFontMetrics(g.getFont());
-			// Center of the screen
-			g.drawString("Game Over", (SCREEN_WIDTH - gameOverFontMetrics.stringWidth("Game Over")) / 2,
-					SCREEN_HEIGHT / 2);
+		// Game Over screen
+		g.setColor(Color.RED);
+		g.setFont(new Font(null, Font.BOLD, 75));
+		FontMetrics gameOverFontMetrics = getFontMetrics(g.getFont());
+		// Center of the screen
+		g.drawString("Game Over", (SCREEN_WIDTH - gameOverFontMetrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
 
-			g.setFont(new Font(null, Font.BOLD, 40));
-			FontMetrics highScoreFontMe = getFontMetrics(g.getFont());
-			g.drawString("High Score: " + gameHighScore.getHighScore(),
-					(SCREEN_WIDTH - highScoreFontMe.stringWidth("High Score: " + gameHighScore.getHighScore())) / 2,
-					(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
-			Thread.sleep(5000);
-			System.exit(0);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Error Occurred, Terminating Program", "Error Message",
-					JOptionPane.WARNING_MESSAGE);
-		}
+		g.setFont(new Font(null, Font.BOLD, 40));
+		FontMetrics highScoreFontMe = getFontMetrics(g.getFont());
+		g.drawString("High Score: " + gameHighScore.getHighScore(),
+				(SCREEN_WIDTH - highScoreFontMe.stringWidth("High Score: " + gameHighScore.getHighScore())) / 2,
+				(SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 4));
+	}
+
+	// TODO: develop a new game over screen that gives the user the option to try
+	// again or to exit the game
+	public void gameOverScreen() {
+		snakeGameFrame.getContentPane().removeAll();
+		snakeGameFrame.repaint();
+		snakeGameFrame.revalidate();
+
+		gameOverScreenPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		gameOverScreenPanel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+		gameOverScreenPanel.setBackground(Color.BLACK);
+
+		snakeGameFrame.add(gameOverScreenPanel);
+
+		currentScoreLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		currentScoreLabel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 4));
+		currentScoreLabel.setText("Score: " + applesEaten);
+		currentScoreLabel.setForeground(Color.WHITE);
+		currentScoreLabel.setFont(new Font(null, Font.BOLD, 40));
+		currentScoreLabel.setHorizontalAlignment(JLabel.CENTER);
+
+		gameOverScreenPanel.add(currentScoreLabel);
+
+		gameOverMessageLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		gameOverMessageLabel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 4));
+		gameOverMessageLabel.setForeground(Color.WHITE);
+		gameOverMessageLabel.setFont(new Font(null, Font.BOLD, 40));
+		gameOverMessageLabel.setHorizontalAlignment(JLabel.CENTER);
+
+		gameOverScreenPanel.add(gameOverMessageLabel);
+
+		highScoreLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		highScoreLabel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 4));
+		highScoreLabel.setText("High Score: " + gameHighScore.getHighScore());
+		highScoreLabel.setForeground(Color.WHITE);
+		highScoreLabel.setFont(new Font(null, Font.BOLD, 40));
+		highScoreLabel.setHorizontalAlignment(JLabel.CENTER);
+
+		gameOverScreenPanel.add(highScoreLabel);
+
+		tryAgainButton.addActionListener(this);
+		tryAgainButton.setFocusable(false);
+		tryAgainButton.setPreferredSize(new Dimension(200, 50));
+
+		gameOverScreenPanel.add(tryAgainButton);
+
+		exitGameButton.addActionListener(this);
+		exitGameButton.setFocusable(false);
+		exitGameButton.setPreferredSize(new Dimension(200, 50));
+
+		gameOverScreenPanel.add(exitGameButton);
+
+		snakeGameFrame.pack();
 	}
 
 	@Override
