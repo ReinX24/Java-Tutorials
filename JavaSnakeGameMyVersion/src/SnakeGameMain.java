@@ -18,9 +18,9 @@ public class SnakeGameMain {
 		 * 
 		 * DONE: Add an icon for our program
 		 * 
-		 * TODO: Test if high scores are saved properly once exported into a jar file
+		 * DONE: Test if high scores are saved properly once exported into a jar file
 		 * 
-		 * TODO: Export program into a jar and exe file after finalization
+		 * DONE: Export program into a jar and exe file after finalization
 		 */
 	}
 
