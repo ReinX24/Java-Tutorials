@@ -1,9 +1,13 @@
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
+
 import javax.swing.*;
 
 public class GroceryListFrame extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	JPanel mainPanel;
 	JLabel titleLabel;
 
@@ -11,12 +15,18 @@ public class GroceryListFrame extends JFrame implements ActionListener {
 	JButton deleteButton;
 	JButton searchButton;
 
-	JPanel listTextPanel;
+	JTextArea listTextArea;
+	JScrollPane listScrollPane;
+
+	Stack<String> listItemsStack = new Stack<String>();
+
+	URL groceryListIconURL = getClass().getResource("groceryList.png");
 
 	public GroceryListFrame() {
 		this.setTitle("Simple Grocery List");
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setIconImage(new ImageIcon(groceryListIconURL).getImage());
 
 		/* Creating our JPanel and setting its attributes */
 		mainPanel = new JPanel();
@@ -66,15 +76,21 @@ public class GroceryListFrame extends JFrame implements ActionListener {
 		mainPanel.add(deleteButton);
 		mainPanel.add(searchButton);
 
-		/* Creating and adding our JPanel which will hold our stack elements*/
-		listTextPanel = new JPanel();
-		listTextPanel.setPreferredSize(new Dimension(850, 400));
-		listTextPanel.setLayout(new GridLayout(5, 2)); // 5 rows and 2 columns for now
-		listTextPanel.add(new JLabel("Test"));
-		listTextPanel.add(new JLabel("Test"));
-		listTextPanel.add(new JLabel("Test"));
-		
-		mainPanel.add(listTextPanel);
+		/* Creating and adding our JPanel which will hold our stack elements */
+		listTextArea = new JTextArea(15, 20);
+		listTextArea.setBackground(new Color(29, 35, 38));
+		listTextArea.setForeground(new Color(191, 163, 138));
+		listTextArea.setBorder(BorderFactory.createDashedBorder(new Color(191, 163, 138)));
+		listTextArea.setFont(new Font(null, Font.BOLD, 24));
+		listTextArea.setEditable(false);
+		listTextArea.setLineWrap(true);
+
+		/* JScrollPane that will hold our JTextArea */
+		listScrollPane = new JScrollPane(listTextArea);
+		listScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		listScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		mainPanel.add(listScrollPane);
 
 		this.pack();
 		this.setLocationRelativeTo(null);
@@ -83,8 +99,67 @@ public class GroceryListFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		if (arg0.getSource() == addButton) {
+			try {
+				String newItem = JOptionPane.showInputDialog(null, "Enter item name to be added", "Add Item",
+						JOptionPane.PLAIN_MESSAGE);
 
+				if (newItem.length() == 0 || newItem == null) {
+					JOptionPane.showMessageDialog(null, "Enter new item name!", "No Item Name",
+							JOptionPane.WARNING_MESSAGE);
+				} else {
+					listItemsStack.add(newItem);
+
+					listTextArea.setText("");
+					for (int i = listItemsStack.size() - 1; i >= 0; i--) {
+						listTextArea.append("   - " + listItemsStack.elementAt(i) + "\n");
+					}
+				}
+			} catch (Exception e) {
+				// Do nothing
+			}
+		}
+
+		if (arg0.getSource() == deleteButton) {
+
+			int confirmDelete = JOptionPane.showConfirmDialog(null, "Delete last added item?", "Confirm Delete",
+					JOptionPane.WARNING_MESSAGE);
+
+			if (confirmDelete == JOptionPane.YES_OPTION) {
+				if (listItemsStack.size() == 0) {
+					JOptionPane.showMessageDialog(null, "No items in list!", "No Items", JOptionPane.WARNING_MESSAGE);
+				} else {
+					listItemsStack.pop();
+
+					listTextArea.setText("");
+					for (int i = listItemsStack.size() - 1; i >= 0; i--) {
+						listTextArea.append("   - " + listItemsStack.elementAt(i) + "\n");
+					}
+				}
+			}
+
+		}
+
+		if (arg0.getSource() == searchButton) {
+			try {
+				String searchItem = JOptionPane.showInputDialog(null, "Enter item name", "Search Item",
+						JOptionPane.PLAIN_MESSAGE);
+				if (searchItem.length() == 0 || searchItem == null) {
+					JOptionPane.showMessageDialog(null, "No item name entered", "No Item Name",
+							JOptionPane.WARNING_MESSAGE);
+				} else {
+					if (listItemsStack.contains(searchItem)) {
+						JOptionPane.showMessageDialog(null, "Item found in list!", "Item Found",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Item not found in list!", "Item Not Found",
+								JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			} catch (Exception e) {
+				// Do nothing
+			}
+		}
 	}
 
 }
