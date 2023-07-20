@@ -37,9 +37,11 @@ public class GroceryListFrame extends JFrame implements ActionListener {
 		this.add(mainPanel);
 
 		/* Adding our title label and setting its attributes */
-		titleLabel = new JLabel("Simple Grocery List (Stacks)");
+		titleLabel = new JLabel("Simple Grocery List (Stacks)", JLabel.CENTER);
 		titleLabel.setForeground(new Color(191, 163, 138));
-		titleLabel.setFont(new Font(null, Font.BOLD, 44));
+		titleLabel.setFont(new Font(null, Font.BOLD, 48));
+		titleLabel.setPreferredSize(new Dimension(850, 100));
+		titleLabel.setBorder(BorderFactory.createDashedBorder(new Color(191, 163, 138)));
 
 		mainPanel.add(titleLabel);
 
@@ -77,7 +79,7 @@ public class GroceryListFrame extends JFrame implements ActionListener {
 		mainPanel.add(searchButton);
 
 		/* Creating and adding our JPanel which will hold our stack elements */
-		listTextArea = new JTextArea(15, 20);
+		listTextArea = new JTextArea(12, 20);
 		listTextArea.setBackground(new Color(29, 35, 38));
 		listTextArea.setForeground(new Color(191, 163, 138));
 		listTextArea.setBorder(BorderFactory.createDashedBorder(new Color(191, 163, 138)));
