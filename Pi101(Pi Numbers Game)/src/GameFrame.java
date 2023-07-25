@@ -1,7 +1,10 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.net.URL;
 
 public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
@@ -18,11 +21,19 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	int piEndIndex = 1; // starts at 3
 	int piScore = 0;
 	boolean decimalPointAdded = false;
-
 	JLabel scoreLabel;
 	JButton skipButton;
 	JButton resetButton;
 	JButton exitButton;
+
+	AudioInputStream streamAudio;
+	Clip audioClip;
+	FloatControl controlVolume;
+
+	URL wrongInputSoundURL = getClass().getResource("wrongInput.wav");
+	URL skipSoundURL = getClass().getResource("skipSound.wav");
+	URL resetSoundURL = getClass().getResource("resetSound.wav");
+	URL exitSoundURL = getClass().getResource("exitSound.wav");
 
 	public GameFrame() {
 		this.setTitle("Pi 101");
@@ -121,6 +132,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					JOptionPane.showMessageDialog(null,
 							"Congratulations! You have correctly entered the first 101 digits of Pi!",
 							"Congratulations Message", JOptionPane.INFORMATION_MESSAGE);
+					piTextArea.setEnabled(false);
 				}
 			} else if (pressedKey.equals(".") && !decimalPointAdded) { // if the entered key is a decimal point and it
 				// has not been added yet
@@ -129,16 +141,17 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				piStartIndex++;
 				piEndIndex++;
 			} else {
+				playWrongInputSound();
 				JOptionPane.showMessageDialog(null, "Wrong input!", "Wrong Input Message", JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (Exception e) {
 			// If the user is still trying to type while the 101 digits of Pi has already
 			// been entered
-			// DONE: test if this is working properly
+			// TODO: find another way of implementing this rather than being inside a catch
+			// block
 			JOptionPane.showMessageDialog(null, "101 digits of Pi already entered!", "",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
-
 	}
 
 	@Override
@@ -154,19 +167,19 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == skipButton) {
-			// TODO: Add functionality where it skips to a certain decimal place
+			// DONE: Add functionality where it skips to a certain decimal place
 			SpinnerNumberModel piSpinnerValues = new SpinnerNumberModel(1, 1, 101, 1);
 			JSpinner piValueSpinner = new JSpinner(piSpinnerValues);
 			// Making our JSpinner not editable by the user
 			((JSpinner.DefaultEditor) piValueSpinner.getEditor()).getTextField().setEditable(false);
 
 			String[] skipValueOptions = { "Confirm", "Cancel" };
-
 			int skipValueChoice = JOptionPane.showOptionDialog(null, piValueSpinner, "Enter Placement Skip Value",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, skipValueOptions, skipValueOptions[0]);
 
 			// If the user chooses to skip the to a certain placement value
 			if (skipValueChoice == 0) {
+				playSkipSound();
 				// The current score will equal to the index of the skipped starting value
 				piScore = (int) piValueSpinner.getValue();
 				// Current expected character will now be the next value of the current index
@@ -187,20 +200,89 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			int confirmReset = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset your progress?",
 					"Reset Confirmation", JOptionPane.YES_NO_OPTION);
 			if (confirmReset == JOptionPane.YES_OPTION) {
+				playResetSound();
 				piTextArea.setText("");
 				piStartIndex = 0;
 				piEndIndex = 1;
 				piScore = 0;
 				decimalPointAdded = false;
 				scoreLabel.setText("Score: " + piScore);
+				piTextArea.setEnabled(true); // sets to true in case the user already has finished the 101 digits and
+												// they want to reset their progress
 			}
 		}
 		if (arg0.getSource() == exitButton) {
+			playExitSound();
 			int confirmExit = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation",
 					JOptionPane.YES_NO_OPTION);
 			if (confirmExit == JOptionPane.YES_OPTION) {
 				System.exit(0);
 			}
+		}
+	}
+
+	public void playCongratsSound() {
+
+	}
+
+	public void playWrongInputSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(wrongInputSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-6.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void playSkipSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(skipSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-6.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playResetSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(resetSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-6.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playExitSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(exitSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-6.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
 		}
 	}
 
