@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -36,15 +37,13 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		this.add(gamePanel);
 
 		titleLabel = new JLabel("Pi 101", JLabel.CENTER);
-		titleLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setFont(new Font(null, Font.BOLD, 32));
 		titleLabel.setPreferredSize(new Dimension(1024, 64));
 
 		gamePanel.add(titleLabel);
 
-		instructionsLabel = new JLabel("Instructions: Type the first 101 digits of Pi", JLabel.CENTER);
-		instructionsLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		instructionsLabel = new JLabel("Instructions: Type the first 101 digits of Pi!", JLabel.CENTER);
 		instructionsLabel.setForeground(Color.WHITE);
 		instructionsLabel.setFont(new Font(null, Font.PLAIN, 24));
 		instructionsLabel.setPreferredSize(new Dimension(1024, 64));
@@ -63,7 +62,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gamePanel.add(piTextArea);
 
 		scoreLabel = new JLabel("Score: " + piStartIndex, JLabel.CENTER);
-		scoreLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		scoreLabel.setForeground(Color.WHITE);
 		scoreLabel.setFont(new Font(null, Font.PLAIN, 24));
 		scoreLabel.setPreferredSize(new Dimension(1024, 64));
@@ -71,7 +69,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gamePanel.add(scoreLabel);
 
 		skipButton = new JButton("Skip");
-		skipButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		skipButton.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
+		skipButton.setBackground(new Color(17, 20, 38));
+		skipButton.setForeground(Color.WHITE);
 		skipButton.addActionListener(this);
 		skipButton.setFocusable(false);
 		skipButton.setPreferredSize(new Dimension(256, 64));
@@ -79,7 +79,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gamePanel.add(skipButton);
 
 		resetButton = new JButton("Reset");
-		resetButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		resetButton.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
+		resetButton.setBackground(new Color(17, 20, 38));
+		resetButton.setForeground(Color.WHITE);
 		resetButton.addActionListener(this);
 		resetButton.setFocusable(false);
 		resetButton.setPreferredSize(new Dimension(256, 64));
@@ -87,7 +89,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gamePanel.add(resetButton);
 
 		exitButton = new JButton("Exit");
-		exitButton.setBorder(BorderFactory.createLineBorder(Color.RED));
+		exitButton.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
+		exitButton.setBackground(new Color(17, 20, 38));
+		exitButton.setForeground(Color.WHITE);
 		exitButton.addActionListener(this);
 		exitButton.setFocusable(false);
 		exitButton.setPreferredSize(new Dimension(256, 64));
@@ -111,7 +115,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				piEndIndex++;
 				piScore++;
 				scoreLabel.setText("Score: " + piScore);
-				// If the user finally reaches the 101th digit of Pi, print congratulations message
+				// If the user finally reaches the 101th digit of Pi, print congratulations
+				// message
 				if (piScore == 101) {
 					JOptionPane.showMessageDialog(null,
 							"Congratulations! You have correctly entered the first 101 digits of Pi!",
@@ -150,7 +155,33 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == skipButton) {
 			// TODO: Add functionality where it skips to a certain decimal place
-			
+			SpinnerNumberModel piSpinnerValues = new SpinnerNumberModel(1, 1, 101, 1);
+			JSpinner piValueSpinner = new JSpinner(piSpinnerValues);
+			// Making our JSpinner not editable by the user
+			((JSpinner.DefaultEditor) piValueSpinner.getEditor()).getTextField().setEditable(false);
+
+			String[] skipValueOptions = { "Confirm", "Cancel" };
+
+			int skipValueChoice = JOptionPane.showOptionDialog(null, piValueSpinner, "Enter Placement Skip Value",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, skipValueOptions, skipValueOptions[0]);
+
+			// If the user chooses to skip the to a certain placement value
+			if (skipValueChoice == 0) {
+				// The current score will equal to the index of the skipped starting value
+				piScore = (int) piValueSpinner.getValue();
+				// Current expected character will now be the next value of the current index
+				// Example: If the user chooses to start at index value 2, then it will start at
+				// 3.1 and will expect 4 as the next value
+				piStartIndex = piScore + 1;
+				piEndIndex = piScore + 2;
+				scoreLabel.setText("Score: " + piScore);
+				piTextArea.setText(piValue.substring(0, piStartIndex));
+				// If the current skipped value is greater than 3., then set decimalPointAdded
+				// to true since it will add the decimal to the JTextField when we skip
+				if (piScore > 1) {
+					decimalPointAdded = true;
+				}
+			}
 		}
 		if (arg0.getSource() == resetButton) {
 			int confirmReset = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset your progress?",
