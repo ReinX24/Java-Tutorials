@@ -26,10 +26,14 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	JButton resetButton;
 	JButton exitButton;
 
+	final Color backgroundColor = new Color(27, 36, 64);
+	final Color textAreaAndButtonColor = new Color(17, 20, 38);
+
 	AudioInputStream streamAudio;
 	Clip audioClip;
 	FloatControl controlVolume;
 
+	URL congratulationsSoundURL = getClass().getResource("congratulationsSound.wav");
 	URL wrongInputSoundURL = getClass().getResource("wrongInput.wav");
 	URL skipSoundURL = getClass().getResource("skipSound.wav");
 	URL resetSoundURL = getClass().getResource("resetSound.wav");
@@ -42,7 +46,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		gamePanel = new JPanel();
 		gamePanel.setPreferredSize(new Dimension(1024, 768));
-		gamePanel.setBackground(new Color(27, 36, 64));
+		gamePanel.setBackground(backgroundColor);
 		gamePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 
 		this.add(gamePanel);
@@ -62,7 +66,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gamePanel.add(instructionsLabel);
 
 		piTextArea = new JTextArea(12, 32);
-		piTextArea.setBackground(new Color(17, 20, 38));
+		piTextArea.setBackground(textAreaAndButtonColor);
 		piTextArea.setForeground(Color.WHITE);
 		piTextArea.setLineWrap(true);
 		piTextArea.setFont(new Font(null, Font.PLAIN, 24));
@@ -81,7 +85,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		skipButton = new JButton("Skip");
 		skipButton.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
-		skipButton.setBackground(new Color(17, 20, 38));
+		skipButton.setBackground(textAreaAndButtonColor);
 		skipButton.setForeground(Color.WHITE);
 		skipButton.addActionListener(this);
 		skipButton.setFocusable(false);
@@ -91,7 +95,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		resetButton = new JButton("Reset");
 		resetButton.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
-		resetButton.setBackground(new Color(17, 20, 38));
+		resetButton.setBackground(textAreaAndButtonColor);
 		resetButton.setForeground(Color.WHITE);
 		resetButton.addActionListener(this);
 		resetButton.setFocusable(false);
@@ -101,7 +105,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		exitButton = new JButton("Exit");
 		exitButton.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
-		exitButton.setBackground(new Color(17, 20, 38));
+		exitButton.setBackground(textAreaAndButtonColor);
 		exitButton.setForeground(Color.WHITE);
 		exitButton.addActionListener(this);
 		exitButton.setFocusable(false);
@@ -116,42 +120,56 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		try {
-			String pressedKey = String.valueOf(arg0.getKeyChar());
-			// Checks if the current entered key is the correct one for the current
-			// position, also check if the entered key is not a decimal point
-			if (pressedKey.equals(piValue.substring(piStartIndex, piEndIndex)) && !pressedKey.equals(".")) {
-				piTextArea.append(pressedKey);
-				piStartIndex++;
-				piEndIndex++;
-				piScore++;
-				scoreLabel.setText("Score: " + piScore);
-				// If the user finally reaches the 101th digit of Pi, print congratulations
-				// message
-				if (piScore == 101) {
-					JOptionPane.showMessageDialog(null,
-							"Congratulations! You have correctly entered the first 101 digits of Pi!",
-							"Congratulations Message", JOptionPane.INFORMATION_MESSAGE);
-					piTextArea.setEnabled(false);
-				}
-			} else if (pressedKey.equals(".") && !decimalPointAdded) { // if the entered key is a decimal point and it
-				// has not been added yet
-				piTextArea.append(pressedKey); // just add a period, no need to count it towards the score
-				decimalPointAdded = true;
-				piStartIndex++;
-				piEndIndex++;
-			} else {
-				playWrongInputSound();
-				JOptionPane.showMessageDialog(null, "Wrong input!", "Wrong Input Message", JOptionPane.WARNING_MESSAGE);
-			}
-		} catch (Exception e) {
-			// If the user is still trying to type while the 101 digits of Pi has already
-			// been entered
-			// TODO: find another way of implementing this rather than being inside a catch
-			// block
+		String pressedKey = String.valueOf(arg0.getKeyChar());
+		// If the user already has typed in the 101 digits of Pi, print a message
+		// telling them that they have already finished the game and asks them if they
+		// would like to restart
+		if (piScore == 101) {
+			// TODO: change message dialog into option dialog that asks if they want to
+			// restart the game or not
+			String[] maxScoreOptions = { "Restart", "Cancel" };
 			JOptionPane.showMessageDialog(null, "101 digits of Pi already entered!", "",
 					JOptionPane.INFORMATION_MESSAGE);
+		} else if (pressedKey.equals(piValue.substring(piStartIndex, piEndIndex)) && !pressedKey.equals(".")) {
+			// Checks if the current entered key is the correct one for the current
+			// position, also check if the entered key is not a decimal point
+			piTextArea.append(pressedKey);
+			piStartIndex++;
+			piEndIndex++;
+			piScore++;
+			scoreLabel.setText("Score: " + piScore);
+			// If the user finally reaches the 101th digit of Pi, print congratulations
+			// message
+			if (piScore == 101) {
+				playCongratsSound();
+				// TODO: after saying congratulations, ask the user if they want to restart the
+				// game or not
+				JOptionPane.showMessageDialog(null,
+						"Congratulations! You have correctly entered the first 101 digits of Pi!",
+						"Congratulations Message", JOptionPane.INFORMATION_MESSAGE);
+			}
+		} else if (pressedKey.equals(".") && !decimalPointAdded) {
+			// If the entered key is a decimal point and it has not been added yet
+			piTextArea.append(pressedKey); // just add a period, not counted in score, not a digit
+			decimalPointAdded = true;
+			piStartIndex++;
+			piEndIndex++;
+		} else {
+			// If the user does not type a number
+			playWrongInputSound();
+			JOptionPane.showMessageDialog(null, "Wrong input!", "Wrong Input Message", JOptionPane.WARNING_MESSAGE);
 		}
+	}
+
+	// TODO: place congratulations message here
+	public void congratulationsMessage() {
+
+	}
+
+	// TODO: finish this function, similar to congratulations message but pokes fun
+	// at the player
+	public void specialCongratulationsMessage() {
+
 	}
 
 	@Override
@@ -166,6 +184,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
 		if (arg0.getSource() == skipButton) {
 			// DONE: Add functionality where it skips to a certain decimal place
 			SpinnerNumberModel piSpinnerValues = new SpinnerNumberModel(1, 1, 101, 1);
@@ -179,7 +198,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 			// If the user chooses to skip the to a certain placement value
 			if (skipValueChoice == 0) {
-				playSkipSound();
 				// The current score will equal to the index of the skipped starting value
 				piScore = (int) piValueSpinner.getValue();
 				// Current expected character will now be the next value of the current index
@@ -189,13 +207,21 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				piEndIndex = piScore + 2;
 				scoreLabel.setText("Score: " + piScore);
 				piTextArea.setText(piValue.substring(0, piStartIndex));
-				// If the current skipped value is greater than 3., then set decimalPointAdded
-				// to true since it will add the decimal to the JTextField when we skip
-				if (piScore > 1) {
+				// If the score is greater than 1 but less than 101, play the normal skip sound
+				if (piScore > 1 && piScore < 101) {
+					playSkipSound();
+				} else if (piScore == 101) {
+					// If the score is equal to 101, play congratulations sound instead and show
+					// "special" congratulations message
+					// TODO: add a congratulations message here
+				} else if (piScore > 1) {
+					// If the current skipped value is greater than 3., then set decimalPointAdded
+					// to true since it will add the decimal to the JTextField when we skip
 					decimalPointAdded = true;
 				}
 			}
 		}
+
 		if (arg0.getSource() == resetButton) {
 			int confirmReset = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset your progress?",
 					"Reset Confirmation", JOptionPane.YES_NO_OPTION);
@@ -211,6 +237,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 												// they want to reset their progress
 			}
 		}
+
 		if (arg0.getSource() == exitButton) {
 			playExitSound();
 			int confirmExit = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation",
@@ -219,10 +246,22 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				System.exit(0);
 			}
 		}
+
 	}
 
 	public void playCongratsSound() {
-
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(congratulationsSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-6.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void playWrongInputSound() {
@@ -238,7 +277,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void playSkipSound() {
