@@ -1,19 +1,6 @@
-import javax.sound.sampled.*;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.Timer; // we need this import for our Timer object instead of the one from the util class
-
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.net.URL;
 
 public class GameFrame extends JFrame implements KeyListener, ActionListener {
@@ -33,40 +20,33 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	boolean decimalPointAdded = false;
 	JLabel scoreLabel;
 	JButton skipButton;
-	JButton resetButton;
+	static JButton resetButton;
 	JButton exitButton;
 
 	final Color backgroundColor = new Color(27, 36, 64);
 	final Color textAreaAndButtonColor = new Color(17, 20, 38);
 
-	AudioInputStream streamAudio;
-	Clip audioClip;
-	FloatControl controlVolume;
-
-	URL congratulationsSoundURL = getClass().getResource("congratulationsSound.wav");
-	URL maxScoreSoundURL = getClass().getResource("maxScoreSound.wav");
-	URL wrongInputSoundURL = getClass().getResource("wrongInput.wav");
-	URL skipSoundURL = getClass().getResource("skipSound.wav");
-	URL resetSoundURL = getClass().getResource("resetSound.wav");
-	URL exitSoundURL = getClass().getResource("exitSound.wav");
-	URL backgroundMusicURL = getClass().getResource("backgroundMusic.wav");
+	// Object from another class for our game audio
+	GameAudio gameAudio = new GameAudio();
+	// Object from another class for some of our option dialogs
+	OptionPaneDialog optionDialog = new OptionPaneDialog();
 
 	URL piGameIcon = getClass().getResource("piGameIcon.png");
 
-	int elapsedTime = 0;
-	int secondsPassed = 0;
-	int minutesPassed = 0;
-	int hoursPassed = 0;
+	static int elapsedTime = 0;
+	static int secondsPassed = 0;
+	static int minutesPassed = 0;
+	static int hoursPassed = 0;
 
 	boolean hasStarted = false;
 
-	String secondsString = String.format("%02d", secondsPassed);
-	String minutesString = String.format("%02d", minutesPassed);
-	String hoursString = String.format("%02d", hoursPassed);
+	static String secondsString = String.format("%02d", secondsPassed);
+	static String minutesString = String.format("%02d", minutesPassed);
+	static String hoursString = String.format("%02d", hoursPassed);
 
-	JLabel timerLabel = new JLabel(hoursString + ":" + minutesString + ":" + secondsString);
+	static JLabel timerLabel = new JLabel(hoursString + ":" + minutesString + ":" + secondsString);
 
-	Timer myTimer = new Timer(1000, new ActionListener() {
+	static Timer myTimer = new Timer(1000, new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -88,7 +68,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	});
 
 	public GameFrame() {
-		playBackgroundMusic();
+		gameAudio.playBackgroundMusic();
 		this.setTitle("Pi 101");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
@@ -208,54 +188,21 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			piEndIndex++;
 		} else {
 			// If the user does not type a number
-			playWrongInputSound();
+			gameAudio.playWrongInputSound();
 			JOptionPane.showMessageDialog(null, "Wrong input!", "Wrong Input Message", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
-	// DONE: place congratulations message here
 	public void congratulationsMessage() {
-		playCongratsSound();
-		myTimer.stop();
-		// DONE: after saying congratulations, ask the user if they want to restart the
-		// game or not
-		String[] congratulationsOptions = { "Restart", "Cancel" };
-		int congratulationsChoice = JOptionPane.showOptionDialog(null,
-				"Congratulations! You have correctly entered the first 101 digits of Pi!\nRestart the game?",
-				"Congratulations Message", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-				congratulationsOptions, congratulationsOptions[0]);
-		// If the user wishes to restart the game
-		if (congratulationsChoice == 0) {
-			resetButton.doClick();
-		}
+		optionDialog.congratulationsMessage();
 	}
 
 	public void alreadyMaxScoreMessage() {
-		// DONE: change message dialog into option dialog that asks if they want to
-		// restart the game or not
-		playMaxScoreSound();
-		String[] maxScoreOptions = { "Restart", "Cancel" };
-		int maxScoreChoice = JOptionPane.showOptionDialog(null, "101 digits of Pi already entered!",
-				"Max Score Message", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, maxScoreOptions,
-				maxScoreOptions[0]);
-		// If the user chooses to restart the game
-		if (maxScoreChoice == 0) {
-			resetButton.doClick();
-		}
+		optionDialog.alreadyMaxScoreMessage();
 	}
 
-	// DONE: finish this function, similar to congratulations message but pokes fun
-	// at the player for skipping immediately to the 101th place
 	public void specialCongratulationsMessage() {
-		playCongratsSound();
-		String[] skipToEndOptions = { "Reset", "Cancel" };
-		int skipToEndChoice = JOptionPane.showOptionDialog(null,
-				"Congratulations for skipping to the last digit!\nRestart the game?", "Skip To End Message",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, skipToEndOptions,
-				skipToEndOptions[0]);
-		if (skipToEndChoice == 0) {
-			resetButton.doClick();
-		}
+		optionDialog.specialCongratulationsMessage();
 	}
 
 	@Override
@@ -295,7 +242,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				piTextArea.setText(piValue.substring(0, piStartIndex));
 				// If the score is greater than 1 but less than 101, play the normal skip sound
 				if (piScore >= 1 && piScore < 101) {
-					playSkipSound();
+					gameAudio.playSkipSound();
 				} else if (piScore == 101) {
 					// If the score is equal to 101, play congratulations sound instead and show
 					// "special" congratulations message
@@ -313,14 +260,15 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			int confirmReset = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset your progress?",
 					"Reset Confirmation", JOptionPane.YES_NO_OPTION);
 			if (confirmReset == JOptionPane.YES_OPTION) {
-				playResetSound();
+				gameAudio.playResetSound();
+				// Resetting text area, indexes, etc.
 				piTextArea.setText("");
 				piStartIndex = 0;
 				piEndIndex = 1;
 				piScore = 0;
 				decimalPointAdded = false;
 				scoreLabel.setText("Score: " + piScore);
-
+				// Resetting timer values
 				elapsedTime = 0;
 				secondsPassed = 0;
 				minutesPassed = 0;
@@ -331,124 +279,12 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				hoursString = String.format("%02d", hoursPassed);
 
 				timerLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
-
 				myTimer.stop();
 			}
 		}
 
 		if (arg0.getSource() == exitButton) {
-			playExitSound();
-			int confirmExit = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation",
-					JOptionPane.YES_NO_OPTION);
-			if (confirmExit == JOptionPane.YES_OPTION) {
-				System.exit(0);
-			}
-		}
-
-	}
-
-	public void playBackgroundMusic() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(backgroundMusicURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-36.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void playCongratsSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(congratulationsSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void playMaxScoreSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(maxScoreSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void playWrongInputSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(wrongInputSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void playSkipSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(skipSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void playResetSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(resetSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void playExitSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(exitSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
+			optionDialog.askExitConfirmation();
 		}
 	}
 
