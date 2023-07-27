@@ -8,6 +8,7 @@ public class GameAudio {
 	Clip audioClip;
 	FloatControl controlVolume;
 
+	URL firstNumberSoundURL = getClass().getResource("firstNumberSound.wav");
 	URL congratulationsSoundURL = getClass().getResource("congratulationsSound.wav");
 	URL maxScoreSoundURL = getClass().getResource("maxScoreSound.wav");
 	URL wrongInputSoundURL = getClass().getResource("wrongInput.wav");
@@ -17,87 +18,45 @@ public class GameAudio {
 	URL backgroundMusicURL = getClass().getResource("backgroundMusic.wav");
 
 	public void playBackgroundMusic() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(backgroundMusicURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-36.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		startBackgroundMusic(backgroundMusicURL);
+	}
+
+	// DONE: play a sound when the user enters the first number of Pi
+	public void playFirstNumberSound() {
+		startMiscMusic(firstNumberSoundURL);
 	}
 
 	public void playCongratsSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(congratulationsSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		startMiscMusic(congratulationsSoundURL);
 	}
 
 	public void playMaxScoreSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(maxScoreSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		startMiscMusic(maxScoreSoundURL);
 	}
 
 	public void playWrongInputSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(wrongInputSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		startMiscMusic(wrongInputSoundURL);
 	}
 
 	public void playSkipSound() {
-		try {
-			streamAudio = AudioSystem.getAudioInputStream(skipSoundURL);
-			audioClip = AudioSystem.getClip();
-			audioClip.open(streamAudio);
-			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
-			audioClip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+		startMiscMusic(skipSoundURL);
 	}
 
 	public void playResetSound() {
+		startMiscMusic(resetSoundURL);
+	}
+
+	public void playExitSound() {
+		startMiscMusic(exitSoundURL);
+	}
+
+	public void startBackgroundMusic(URL soundURL) {
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(resetSoundURL);
+			streamAudio = AudioSystem.getAudioInputStream(soundURL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-12.0f);
+			controlVolume.setValue(-48.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -106,9 +65,9 @@ public class GameAudio {
 		}
 	}
 
-	public void playExitSound() {
+	public void startMiscMusic(URL soundURL) {
 		try {
-			streamAudio = AudioSystem.getAudioInputStream(exitSoundURL);
+			streamAudio = AudioSystem.getAudioInputStream(soundURL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);

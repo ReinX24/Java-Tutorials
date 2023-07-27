@@ -7,7 +7,9 @@ public class GameMain {
 		// JButtons
 		// DONE: Add a timer that counts how much time the user spent inputting the 101
 		// digits of Pi
-		// TODO: Try to make each class limited to 200 lines of code
+		// DONE: Try to make each class limited to 200 lines of code
+		// TODO: Export the Java project into a jar and exe file, don't forget to set
+		// its exe icon
 	}
 
 }
