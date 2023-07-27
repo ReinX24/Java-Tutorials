@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.security.cert.TrustAnchor;
 
 import javax.swing.*;
 

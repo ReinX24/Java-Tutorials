@@ -1,5 +1,15 @@
 import javax.sound.sampled.*;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.Timer; // we need this import for our Timer object instead of the one from the util class
 
 import java.awt.*;
 import java.awt.event.*;
@@ -34,15 +44,55 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	FloatControl controlVolume;
 
 	URL congratulationsSoundURL = getClass().getResource("congratulationsSound.wav");
+	URL maxScoreSoundURL = getClass().getResource("maxScoreSound.wav");
 	URL wrongInputSoundURL = getClass().getResource("wrongInput.wav");
 	URL skipSoundURL = getClass().getResource("skipSound.wav");
 	URL resetSoundURL = getClass().getResource("resetSound.wav");
 	URL exitSoundURL = getClass().getResource("exitSound.wav");
+	URL backgroundMusicURL = getClass().getResource("backgroundMusic.wav");
+
+	URL piGameIcon = getClass().getResource("piGameIcon.png");
+
+	int elapsedTime = 0;
+	int secondsPassed = 0;
+	int minutesPassed = 0;
+	int hoursPassed = 0;
+
+	boolean hasStarted = false;
+
+	String secondsString = String.format("%02d", secondsPassed);
+	String minutesString = String.format("%02d", minutesPassed);
+	String hoursString = String.format("%02d", hoursPassed);
+
+	JLabel timerLabel = new JLabel(hoursString + ":" + minutesString + ":" + secondsString);
+
+	Timer myTimer = new Timer(1000, new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// Timer object will execute functions in this block
+			elapsedTime += 1000; // increase by 1 second (1000 milliseconds)
+			hoursPassed = elapsedTime / 3600000; // 3600000 milliseconds in one hour
+			minutesPassed = (elapsedTime / 60000) % 60; // 60000 milliseconds in one minute, modulo 60 so that if there
+														// is a remainder, it is not included in the minutesPassed
+														// String
+			secondsPassed = (elapsedTime / 1000) % 60; // 1000 milliseconds in one second
+
+			secondsString = String.format("%02d", secondsPassed); // 2 zeroes will be reserved for secondsString
+			minutesString = String.format("%02d", minutesPassed);
+			hoursString = String.format("%02d", hoursPassed);
+
+			timerLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
+		}
+
+	});
 
 	public GameFrame() {
+		playBackgroundMusic();
 		this.setTitle("Pi 101");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
+		this.setIconImage(new ImageIcon(piGameIcon).getImage());
 
 		gamePanel = new JPanel();
 		gamePanel.setPreferredSize(new Dimension(1024, 768));
@@ -54,14 +104,14 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		titleLabel = new JLabel("Pi 101", JLabel.CENTER);
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setFont(new Font(null, Font.BOLD, 32));
-		titleLabel.setPreferredSize(new Dimension(1024, 64));
+		titleLabel.setPreferredSize(new Dimension(1024, 32));
 
 		gamePanel.add(titleLabel);
 
 		instructionsLabel = new JLabel("Instructions: Type the first 101 digits of Pi!", JLabel.CENTER);
 		instructionsLabel.setForeground(Color.WHITE);
 		instructionsLabel.setFont(new Font(null, Font.PLAIN, 24));
-		instructionsLabel.setPreferredSize(new Dimension(1024, 64));
+		instructionsLabel.setPreferredSize(new Dimension(1024, 32));
 
 		gamePanel.add(instructionsLabel);
 
@@ -113,6 +163,16 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		gamePanel.add(exitButton);
 
+		// DONE: configure text in timerLabel to show the time properly
+		timerLabel.setHorizontalAlignment(JLabel.CENTER);
+		timerLabel.setBorder(BorderFactory.createDashedBorder(Color.WHITE));
+		timerLabel.setOpaque(true);
+		timerLabel.setBackground(textAreaAndButtonColor);
+		timerLabel.setForeground(Color.WHITE);
+		timerLabel.setPreferredSize(new Dimension(512, 64));
+
+		gamePanel.add(timerLabel);
+
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -125,11 +185,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		// telling them that they have already finished the game and asks them if they
 		// would like to restart
 		if (piScore == 101) {
-			// TODO: change message dialog into option dialog that asks if they want to
-			// restart the game or not
-			String[] maxScoreOptions = { "Restart", "Cancel" };
-			JOptionPane.showMessageDialog(null, "101 digits of Pi already entered!", "",
-					JOptionPane.INFORMATION_MESSAGE);
+			alreadyMaxScoreMessage();
 		} else if (pressedKey.equals(piValue.substring(piStartIndex, piEndIndex)) && !pressedKey.equals(".")) {
 			// Checks if the current entered key is the correct one for the current
 			// position, also check if the entered key is not a decimal point
@@ -138,15 +194,11 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			piEndIndex++;
 			piScore++;
 			scoreLabel.setText("Score: " + piScore);
+			myTimer.start(); // starts our timer
 			// If the user finally reaches the 101th digit of Pi, print congratulations
 			// message
 			if (piScore == 101) {
-				playCongratsSound();
-				// TODO: after saying congratulations, ask the user if they want to restart the
-				// game or not
-				JOptionPane.showMessageDialog(null,
-						"Congratulations! You have correctly entered the first 101 digits of Pi!",
-						"Congratulations Message", JOptionPane.INFORMATION_MESSAGE);
+				congratulationsMessage();
 			}
 		} else if (pressedKey.equals(".") && !decimalPointAdded) {
 			// If the entered key is a decimal point and it has not been added yet
@@ -161,15 +213,49 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 	}
 
-	// TODO: place congratulations message here
+	// DONE: place congratulations message here
 	public void congratulationsMessage() {
-
+		playCongratsSound();
+		myTimer.stop();
+		// DONE: after saying congratulations, ask the user if they want to restart the
+		// game or not
+		String[] congratulationsOptions = { "Restart", "Cancel" };
+		int congratulationsChoice = JOptionPane.showOptionDialog(null,
+				"Congratulations! You have correctly entered the first 101 digits of Pi!\nRestart the game?",
+				"Congratulations Message", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+				congratulationsOptions, congratulationsOptions[0]);
+		// If the user wishes to restart the game
+		if (congratulationsChoice == 0) {
+			resetButton.doClick();
+		}
 	}
 
-	// TODO: finish this function, similar to congratulations message but pokes fun
-	// at the player
-	public void specialCongratulationsMessage() {
+	public void alreadyMaxScoreMessage() {
+		// DONE: change message dialog into option dialog that asks if they want to
+		// restart the game or not
+		playMaxScoreSound();
+		String[] maxScoreOptions = { "Restart", "Cancel" };
+		int maxScoreChoice = JOptionPane.showOptionDialog(null, "101 digits of Pi already entered!",
+				"Max Score Message", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, maxScoreOptions,
+				maxScoreOptions[0]);
+		// If the user chooses to restart the game
+		if (maxScoreChoice == 0) {
+			resetButton.doClick();
+		}
+	}
 
+	// DONE: finish this function, similar to congratulations message but pokes fun
+	// at the player for skipping immediately to the 101th place
+	public void specialCongratulationsMessage() {
+		playCongratsSound();
+		String[] skipToEndOptions = { "Reset", "Cancel" };
+		int skipToEndChoice = JOptionPane.showOptionDialog(null,
+				"Congratulations for skipping to the last digit!\nRestart the game?", "Skip To End Message",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, skipToEndOptions,
+				skipToEndOptions[0]);
+		if (skipToEndChoice == 0) {
+			resetButton.doClick();
+		}
 	}
 
 	@Override
@@ -208,12 +294,13 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				scoreLabel.setText("Score: " + piScore);
 				piTextArea.setText(piValue.substring(0, piStartIndex));
 				// If the score is greater than 1 but less than 101, play the normal skip sound
-				if (piScore > 1 && piScore < 101) {
+				if (piScore >= 1 && piScore < 101) {
 					playSkipSound();
 				} else if (piScore == 101) {
 					// If the score is equal to 101, play congratulations sound instead and show
 					// "special" congratulations message
-					// TODO: add a congratulations message here
+					// DONE: add "special" congratulations message here
+					specialCongratulationsMessage();
 				} else if (piScore > 1) {
 					// If the current skipped value is greater than 3., then set decimalPointAdded
 					// to true since it will add the decimal to the JTextField when we skip
@@ -233,8 +320,19 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				piScore = 0;
 				decimalPointAdded = false;
 				scoreLabel.setText("Score: " + piScore);
-				piTextArea.setEnabled(true); // sets to true in case the user already has finished the 101 digits and
-												// they want to reset their progress
+
+				elapsedTime = 0;
+				secondsPassed = 0;
+				minutesPassed = 0;
+				hoursPassed = 0;
+
+				secondsString = String.format("%02d", secondsPassed);
+				minutesString = String.format("%02d", minutesPassed);
+				hoursString = String.format("%02d", hoursPassed);
+
+				timerLabel.setText(hoursString + ":" + minutesString + ":" + secondsString);
+
+				myTimer.stop();
 			}
 		}
 
@@ -249,13 +347,43 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	}
 
+	public void playBackgroundMusic() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(backgroundMusicURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-36.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void playCongratsSound() {
 		try {
 			streamAudio = AudioSystem.getAudioInputStream(congratulationsSoundURL);
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-6.0f);
+			controlVolume.setValue(-12.0f);
+			audioClip.start();
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playMaxScoreSound() {
+		try {
+			streamAudio = AudioSystem.getAudioInputStream(maxScoreSoundURL);
+			audioClip = AudioSystem.getClip();
+			audioClip.open(streamAudio);
+			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+			controlVolume.setValue(-12.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -270,7 +398,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-6.0f);
+			controlVolume.setValue(-12.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -285,7 +413,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-6.0f);
+			controlVolume.setValue(-12.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -300,7 +428,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-6.0f);
+			controlVolume.setValue(-12.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
@@ -315,7 +443,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			audioClip = AudioSystem.getClip();
 			audioClip.open(streamAudio);
 			controlVolume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-			controlVolume.setValue(-6.0f);
+			controlVolume.setValue(-12.0f);
 			audioClip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
