@@ -78,7 +78,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		titleLabel = new JLabel("Pi 101", JLabel.CENTER);
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setFont(new Font(null, Font.BOLD, 32));
-		titleLabel.setPreferredSize(new Dimension(1024, 64));
+		titleLabel.setPreferredSize(new Dimension(1024, 32));
 		gamePanel.add(titleLabel);
 
 		instructionsLabel = new JLabel("Instructions: Type the first 101 digits of Pi!", JLabel.CENTER);
