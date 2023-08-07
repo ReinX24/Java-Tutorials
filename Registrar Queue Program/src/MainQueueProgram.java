@@ -19,7 +19,18 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 
 	Queue<Integer> queueNumber = new LinkedList<>();
 
+	SoundEffects soundEffects = new SoundEffects(); // custom SoundEffects class for various sound effects
+
 	public MainQueueProgram() {
+
+		try {
+			// Set System L&F
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		} catch (Exception e) {
+			// Do nothing
+		}
+
+		// TODO: set icon for program
 		this.setTitle("Registrar Queue Program");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
@@ -68,10 +79,10 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 		pendingTicketsArea.setFont(new Font(null, Font.PLAIN, 32));
 		pendingTicketsArea.setLineWrap(true);
 		pendingTicketsArea.setEditable(false);
-		pendingTicketsArea.setText("Pending Tickets: " + 0);
+		pendingTicketsArea.setText("Pending Tickets: " + queueNumber.toString());
 
 		mainPanel.add(pendingTicketsArea);
-		
+
 		// TODO: style buttons to look better
 		buttonsPanel = new JPanel();
 		buttonsPanel.setForeground(Color.WHITE);
@@ -79,30 +90,33 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 		buttonsPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		buttonsPanel.setPreferredSize(new Dimension(768, 128));
 		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
-		
+
 		mainPanel.add(buttonsPanel);
-		
-		giveTicketButton = new JButton("Give Ticket");
+
+		giveTicketButton = new JButton("GIVE TICKET");
 		giveTicketButton.setFocusable(false);
 		giveTicketButton.addActionListener(this);
-		giveTicketButton.setPreferredSize(new Dimension(192, 96));
-		
+		giveTicketButton.setPreferredSize(new Dimension(224, 96));
+		giveTicketButton.setFont(new Font(null, Font.BOLD, 16));
+
 		buttonsPanel.add(giveTicketButton);
-		
-		nextTicketButton = new JButton("Next Ticket");
+
+		nextTicketButton = new JButton("NEXT TICKET");
 		nextTicketButton.setFocusable(false);
 		nextTicketButton.addActionListener(this);
-		nextTicketButton.setPreferredSize(new Dimension(192, 96));
-		
+		nextTicketButton.setPreferredSize(new Dimension(224, 96));
+		nextTicketButton.setFont(new Font(null, Font.BOLD, 16));
+
 		buttonsPanel.add(nextTicketButton);
-		
-		resetTicketsButton = new JButton("Reset Tickets");
+
+		resetTicketsButton = new JButton("RESET TICKETS");
 		resetTicketsButton.setFocusable(false);
 		resetTicketsButton.addActionListener(this);
-		resetTicketsButton.setPreferredSize(new Dimension(192, 96));
-		
+		resetTicketsButton.setPreferredSize(new Dimension(224, 96));
+		resetTicketsButton.setFont(new Font(null, Font.BOLD, 16));
+
 		buttonsPanel.add(resetTicketsButton);
-		
+
 		this.add(mainPanel);
 
 		this.pack();
@@ -112,30 +126,55 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		if (arg0.getSource() == giveTicketButton) {
 			queueNumber.offer(currentTicket);
 			currentTicket++;
 			pendingTicketsArea.setText("Pending Tickets: " + queueNumber.toString());
 			nextServingTicketLabel.setText("Next Ticket: " + String.valueOf(queueNumber.peek()));
+			soundEffects.playGiveTicketSound();
 		}
-		
+
 		if (arg0.getSource() == nextTicketButton) {
+			// If the user clicks the next ticket button but there is none pending, print a
+			// message that says that there are no more tickets
 			if (queueNumber.isEmpty()) {
-				
-			}
-			// Removing the head of the queue
-			currentServingTicketLabel.setText("Current Ticket: " + String.valueOf(queueNumber.poll()));
-			if (queueNumber.isEmpty()) {
-				pendingTicketsArea.setText("Pending Tickets: " + 0);
+				soundEffects.playNoTicketSound();
+				JOptionPane.showMessageDialog(null, "No Pending Tickets!", "No Tickets Message",
+						JOptionPane.INFORMATION_MESSAGE);
+				currentServingTicketLabel.setText("Current Ticket: " + 0);
 				nextServingTicketLabel.setText("Next Ticket: " + 0);
 			} else {
+				soundEffects.playNextTicketSound();
+				// If the queue does have an element within, update ticket labels
+				// Showing and removing the head of the queue
+				currentServingTicketLabel.setText("Current Ticket: " + String.valueOf(queueNumber.poll()));
+				// If there are no next tickets, set to 0
+				if (queueNumber.isEmpty()) {
+					nextServingTicketLabel.setText("Next Ticket: " + 0);
+				} else {
+					nextServingTicketLabel.setText("Next Ticket: " + String.valueOf(queueNumber.peek()));
+				}
 				// Updating the contents of pending tickets and the next ticket
 				pendingTicketsArea.setText("Pending Tickets: " + queueNumber.toString());
-				nextServingTicketLabel.setText("Next Ticket: " + String.valueOf(queueNumber.peek()));
 			}
 		}
 
+		if (arg0.getSource() == resetTicketsButton) {
+			soundEffects.playAskResetSound();
+			int confirmReset = JOptionPane.showConfirmDialog(null,
+					"Reset ticket numbers?\nWill remove current and pending tickets.", "Reset Confirmation Message",
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (confirmReset == JOptionPane.YES_OPTION) {
+				soundEffects.playResetConfirmedSound();
+				// Clears all elements stored in queueNumber
+				queueNumber.clear();
+				currentTicket = 1;
+				currentServingTicketLabel.setText("Current Ticket: " + 0);
+				nextServingTicketLabel.setText("Next Ticket: " + 0);
+				pendingTicketsArea.setText("Pending Tickets: " + queueNumber.toString());
+			}
+		}
 	}
 
 	public static void main(String[] args) {
