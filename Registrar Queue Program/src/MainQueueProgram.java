@@ -2,8 +2,11 @@ import javax.swing.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 
 public class MainQueueProgram extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
 
 	int currentTicket = 1;
 
@@ -21,6 +24,8 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 
 	SoundEffects soundEffects = new SoundEffects(); // custom SoundEffects class for various sound effects
 
+	URL programIconURL = getClass().getResource("queuePhoto.png");
+
 	public MainQueueProgram() {
 
 		try {
@@ -30,10 +35,11 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 			// Do nothing
 		}
 
-		// TODO: set icon for program
+		// DONE: set icon for program
 		this.setTitle("Registrar Queue Program");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
+		this.setIconImage(new ImageIcon(programIconURL).getImage());
 
 		mainPanel = new JPanel();
 		mainPanel.setBackground(new Color(0x000468));
@@ -83,7 +89,7 @@ public class MainQueueProgram extends JFrame implements ActionListener {
 
 		mainPanel.add(pendingTicketsArea);
 
-		// TODO: style buttons to look better
+		// DONE: style buttons to look better
 		buttonsPanel = new JPanel();
 		buttonsPanel.setForeground(Color.WHITE);
 		buttonsPanel.setBackground(new Color(0x062A80));
