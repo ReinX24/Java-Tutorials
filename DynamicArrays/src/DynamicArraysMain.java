@@ -15,14 +15,22 @@ public class DynamicArraysMain {
 		staticArray[0] = "E";
 
 		// Dynamic array
-		DynamicArray dynamicArray = new DynamicArray();
+		DynamicArray dynamicArray = new DynamicArray(5);
 
 		dynamicArray.add("A");
 		dynamicArray.add("B");
 		dynamicArray.add("C");
+		dynamicArray.add("D");
+		dynamicArray.add("E");
+		dynamicArray.add("F");
 		
-		dynamicArray.insert(0, "X");
+//		dynamicArray.insert(0, "X");
+//		dynamicArray.delete("A");
+//		System.out.println(dynamicArray.search("C")); // prints 2, the index of "C"
+		
 		dynamicArray.delete("A");
+		dynamicArray.delete("B");
+		dynamicArray.delete("C");
 		
 		System.out.println(dynamicArray);
 		System.out.println("Size: " + dynamicArray.sizeNum);

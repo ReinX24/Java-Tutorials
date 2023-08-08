@@ -67,15 +67,36 @@ public class DynamicArray {
 	}
 
 	public int search(Object objectData) {
-		return -1;
+		for (int i = 0; i < sizeNum; i++) {
+			if (myArray[i] == objectData) {
+				return i; // returns the index of the Object
+			}
+		}
+		return -1; // if Object was not found
 	}
 
+	// Shrink the Object array to half whenever the amount of elements (sizeNum) is
+	// less than or equal to 1 / 3 of the current capacityNum
 	private void grow() {
+		int newCapacity = capacityNum * 2; // doubling current capacity
+		Object[] newArray = new Object[newCapacity]; // creating an Object array with newCapacity
 
+		for (int i = 0; i < sizeNum; i++) {
+			newArray[i] = myArray[i];
+		}
+		capacityNum = newCapacity;
+		myArray = newArray; // replace myArray with newArray, it has the same contents but has more space
 	}
 
 	private void shrink() {
+		int newCapacity = capacityNum / 2;
+		Object[] newArray = new Object[newCapacity];
 
+		for (int i = 0; i < sizeNum; i++) {
+			newArray[i] = myArray[i];
+		}
+		capacityNum = newCapacity;
+		myArray = newArray;
 	}
 
 	public boolean isEmpty() {
