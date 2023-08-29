@@ -1,11 +1,16 @@
 package com.main.inheritance;
 
 public class Box {
+
 	double boxLength;
 	double boxWidth;
 	double boxHeight;
+//	private double boxId; // this is not passed down to children classes of this class, this can only be
+	// used in this class
+//	double classID = 0;
 
 	public Box() {
+		super(); // this calls the constructor of the Object class, does not do anything for now
 		this.boxLength = -1;
 		this.boxWidth = -1;
 		this.boxHeight = -1;
@@ -19,6 +24,7 @@ public class Box {
 	}
 
 	public Box(double boxLength, double boxWidth, double boxHeight) {
+//		System.out.println("Box class constructor called!");
 		this.boxLength = boxLength;
 		this.boxWidth = boxWidth;
 		this.boxHeight = boxHeight;
