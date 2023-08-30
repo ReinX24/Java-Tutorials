@@ -16,6 +16,7 @@ public class Main {
 		circleOne.shapeArea();
 		triangleOne.shapeArea();
 		squareOne.shapeArea();
+		
 
 	}
 

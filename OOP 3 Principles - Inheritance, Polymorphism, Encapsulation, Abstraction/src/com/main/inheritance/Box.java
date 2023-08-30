@@ -9,6 +9,10 @@ public class Box {
 	// used in this class
 //	double classID = 0;
 
+	static void greeting() {
+		System.out.println("Hey, I am in Box class. Greetings!");
+	}
+	
 	public Box() {
 		super(); // this calls the constructor of the Object class, does not do anything for now
 		this.boxLength = -1;

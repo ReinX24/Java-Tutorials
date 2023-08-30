@@ -5,6 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 //		Box boxOne = new Box(4.6, 7.9, 9.9);
 //		boxOne.displayBoxInfo();
+//		Box.greeting();
 
 //		Box boxTwo = new Box(boxOne);
 //		boxTwo.displayBoxInfo();
@@ -37,11 +38,20 @@ public class Main {
 //		BoxPrice boxPriceThree = new BoxPrice(5, 8, 200); // side, weight, cost
 //		boxPriceThree.displayBoxInfo();
 
-		BoxColor boxColorOne = new BoxColor();
-		boxColorOne.displayBoxInfo();
+//		BoxColor boxColorOne = new BoxColor();
+//		boxColorOne.displayBoxInfo();
+//
+//		BoxColor boxColorTwo = new BoxColor(6, 8, "Red");
+//		boxColorTwo.displayBoxInfo();
+		
+		Box greetBox = new BoxWeight();
+		greetBox.greeting();
+		// Prints the greeting method in the BoxWeight object
+		// The method can be inherited but it cannot be overridden
 
-		BoxColor boxColorTwo = new BoxColor(6, 8, "Red");
-		boxColorTwo.displayBoxInfo();
+		// Recommended way of calling static methods
+		Box.greeting();
+		BoxWeight.greeting();
 
 	}
 

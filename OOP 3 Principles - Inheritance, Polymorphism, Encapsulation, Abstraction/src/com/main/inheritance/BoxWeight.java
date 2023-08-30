@@ -6,6 +6,11 @@ public class BoxWeight extends Box {
 	double boxWeight;
 //	double classID = 1;
 
+	// This does not actually override the same method in the parent class
+	static void greeting() {
+		System.out.println("Hey, I am in BoxWeight class. Greetings!");
+	}
+
 	public BoxWeight() {
 		super();// This calls the constructor in the parent class as well
 		this.boxWeight = -1;
