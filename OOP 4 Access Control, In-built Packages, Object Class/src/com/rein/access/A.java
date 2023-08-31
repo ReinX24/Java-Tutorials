@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class A {
 
-	int aNum;
-	String aString;
-	int[] aArr;
+	private int aNum; // can only be accessed in this class
+	String aString; // can only be accessed by classes in the same package
+	protected int[] aArr; // can be accessed by subclasses in different packages
 
 	public A(int aNum, String aString) {
 		this.aNum = aNum;
