@@ -6,6 +6,11 @@ public class Son extends Parent {
 		super(sonAge);
 	}
 
+	@Override
+	void sayHello() {
+		super.sayHello();
+	}
+
 	// We are required to have this method in this class because Parent and this
 	// method are abstract
 	@Override

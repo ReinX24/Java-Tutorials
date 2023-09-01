@@ -3,11 +3,11 @@ import java.util.ArrayList;
 public class Graph {
 
 	ArrayList<Node> nodesList; // ArrayList that will store our nodes
-	int[][] matrix;
+	int[][] graphMatrix;
 
 	public Graph(int size) {
 		nodesList = new ArrayList<>();
-		matrix = new int[size][size];
+		graphMatrix = new int[size][size];
 	}
 
 	public void addNode(Node node) {
@@ -18,11 +18,11 @@ public class Graph {
 		// Adding an edge between two nodes, this means that there is a path between two
 		// nodes and we represent this path by putting in 1 in an index
 		// src = row, dst = column
-		matrix[src][dst] = 1;
+		graphMatrix[src][dst] = 1;
 	}
 
 	public boolean checkEdge(int src, int dst) {
-		return matrix[src][dst] == 1;
+		return graphMatrix[src][dst] == 1;
 	}
 
 	public void print() {
@@ -31,10 +31,10 @@ public class Graph {
 			System.out.print(eachNode.data + " ");
 		}
 		System.out.println();
-		for (int i = 0; i < matrix.length; i++) {
+		for (int i = 0; i < graphMatrix.length; i++) {
 			System.out.print(nodesList.get(i).data + " ");
-			for (int j = 0; j < matrix[i].length; j++) {
-				System.out.print(matrix[i][j] + " ");
+			for (int j = 0; j < graphMatrix[i].length; j++) {
+				System.out.print(graphMatrix[i][j] + " ");
 			}
 			System.out.println();
 		}

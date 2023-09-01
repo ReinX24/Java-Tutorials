@@ -7,6 +7,11 @@ public class Daughter extends Parent {
 	}
 
 	@Override
+	void sayHello() {
+		super.sayHello();
+	}
+
+	@Override
 	void setCareer(String careerName) {
 		System.out.println("I am going to be a " + careerName);
 	}
