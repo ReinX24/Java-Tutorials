@@ -1,3 +1,0 @@
-email:rein@gmail.com,
-username:rein,
-password:test

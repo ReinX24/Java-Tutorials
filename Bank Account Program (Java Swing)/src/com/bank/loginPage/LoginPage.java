@@ -12,17 +12,18 @@ import javax.sql.rowset.CachedRowSet;
 import javax.swing.*;
 
 import com.bank.accountStorage.UserData;
+import com.bank.userPage.AccountPanel;
 
 public class LoginPage implements ActionListener {
 
 	JFrame loginFrame;
-	JPanel mainPanel;
+	public static JPanel mainPanel;
 
 	JLabel headerLabel;
 	JPanel headerPanel;
 
 	JPanel sideBarPanel;
-	JPanel userPanel;
+	public static JPanel userPanel;
 	JPanel aboutPanel;
 
 	JButton loginButton;
@@ -63,7 +64,6 @@ public class LoginPage implements ActionListener {
 
 		headerPanel = new JPanel();
 		headerPanel.setPreferredSize(new Dimension(1280, 128));
-		headerPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		headerPanel.setBackground(HEADER_BACKGROUND_COLOR);
 		headerPanel.setLayout(new BorderLayout());
 
@@ -169,6 +169,9 @@ public class LoginPage implements ActionListener {
 			userPanel.add(enterPasswordLabel);
 			userPanel.add(passwordField);
 
+			userPanel.add(reEnterPasswordLabel);
+			userPanel.add(reEnterPasswordField);
+
 			userPanel.add(loginUserButton);
 			userPanel.add(clearButton);
 
@@ -202,23 +205,36 @@ public class LoginPage implements ActionListener {
 
 		}
 
+		if (e.getSource() == clearButton) {
+			mailField.setText("");
+			nameField.setText("");
+			passwordField.setText("");
+			reEnterPasswordField.setText("");
+		}
+
 		if (e.getSource() == aboutButton) {
 			System.out.println("About button pressed");
 		}
 
 		if (e.getSource() == loginUserButton) {
-			UserData.readUserData(mailField.getText(), String.valueOf(passwordField.getPassword()));
+			if (String.valueOf(passwordField.getPassword())
+					.equals(String.valueOf(reEnterPasswordField.getPassword()))) {
+				UserData.readUserData(mailField.getText(), String.valueOf(passwordField.getPassword()));
+			} else {
+				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
+						JOptionPane.WARNING_MESSAGE);
+			}
+
 		}
 
 		if (e.getSource() == registerUserButton) {
-			// To check if the password in passwordField and reEnterPasswordField are the
-			// same
 			if (String.valueOf(passwordField.getPassword())
 					.equals(String.valueOf(reEnterPasswordField.getPassword()))) {
 				UserData.recordUserData(mailField.getText(), nameField.getText(),
 						String.valueOf(passwordField.getPassword()));
 			} else {
-				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 

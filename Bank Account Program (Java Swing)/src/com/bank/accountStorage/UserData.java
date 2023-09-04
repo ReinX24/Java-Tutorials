@@ -9,33 +9,43 @@ import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
+import com.bank.loginPage.LoginPage;
+import com.bank.userPage.AccountPanel;
+
 public class UserData {
 
 	public static void recordUserData(String userMail, String userName, String userPassword) {
-		// For creating the text file with the user's email, user name, and password
-		File userFile = new File("src/com/bank/accountStorage/" + userMail + ".txt");
-		try {
-			if (userFile.createNewFile()) {
-				FileWriter userWriter = new FileWriter(userFile);
-				// TODO: write a regex that checks if this is a valid email
-				userWriter.write("email:" + userMail + ",\n");
-				userWriter.write("username:" + userName + ",\n");
-				userWriter.write("password:" + userPassword);
-				userWriter.close();
-				JOptionPane.showMessageDialog(null, userMail + " account created!", "Account Created",
-						JOptionPane.INFORMATION_MESSAGE);
+		// Regex that checks if the email is a valid email, checks if it has and @
+		// between text
+		if (Pattern.matches("^(.+)@(.+)$", userMail)) {
+			// For creating the text file with the user's email, user name, and password
+			File userFile = new File("src/com/bank/accountStorage/" + userMail + ".txt");
+			try {
+				if (userFile.createNewFile()) {
+					FileWriter userWriter = new FileWriter(userFile);
+					userWriter.write("email:" + userMail + ",\n");
+					userWriter.write("username:" + userName + ",\n");
+					userWriter.write("password:" + userPassword);
+					userWriter.close();
+					JOptionPane.showMessageDialog(null, userMail + " account created!", "Account Created",
+							JOptionPane.INFORMATION_MESSAGE);
 
-			} else {
-				JOptionPane.showMessageDialog(null, "Account already exists!", "Account Exists",
-						JOptionPane.WARNING_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "Account already exists!", "Account Exists",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Error occurred!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error occurred!", "Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Not a valid email!", "Invalid email", JOptionPane.WARNING_MESSAGE);
 		}
+
 	}
 
 	public static void readUserData(String userMail, String userPassword) {
@@ -62,8 +72,16 @@ public class UserData {
 
 			// Checking if the user's email is the same with the aligned password
 			if (userPassword.equals(userDataMap.get("password"))) {
-				JOptionPane.showMessageDialog(null, "Valid Password!", "Login Successful",
+				JOptionPane.showMessageDialog(null, "Login Successful!", "Login Successful",
 						JOptionPane.INFORMATION_MESSAGE);
+				
+				// TODO: When we add userAccountPanel, we will be adding the user's information
+				AccountPanel userAccountPanel = new AccountPanel();
+				LoginPage.mainPanel.remove(LoginPage.userPanel);
+				LoginPage.mainPanel.add(userAccountPanel);
+				LoginPage.mainPanel.validate();
+				LoginPage.mainPanel.repaint();
+				
 			} else {
 				JOptionPane.showMessageDialog(null, "Wrong Password!", "Incorrect Password",
 						JOptionPane.WARNING_MESSAGE);
