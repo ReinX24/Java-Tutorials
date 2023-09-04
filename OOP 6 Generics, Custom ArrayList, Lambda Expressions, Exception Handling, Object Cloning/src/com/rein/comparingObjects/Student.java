@@ -13,7 +13,7 @@ public class Student implements Comparable<Student> {
 
 	@Override
 	public int compareTo(Student o) {
-		System.out.println("Running compareTo");
+//		System.out.println("Running compareTo");
 		int diffNum = (int) (this.studentMarks - o.studentMarks);
 		return diffNum;
 		// if diffNum == 0: both objects have equal value

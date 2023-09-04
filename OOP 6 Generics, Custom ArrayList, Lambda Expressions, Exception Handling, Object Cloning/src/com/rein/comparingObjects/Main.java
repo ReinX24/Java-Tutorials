@@ -1,6 +1,7 @@
 package com.rein.comparingObjects;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Main {
 
@@ -16,7 +17,20 @@ public class Main {
 		Student[] studentArr = { reinStudent, claraStudent, mariaStudent, reeseStudent, jadeStudent, aliceStudent };
 
 		System.out.println(Arrays.toString(studentArr));
-		Arrays.sort(studentArr); // sorts the Student objects using the compareTo method, using their marks
+		// Sorts the Student objects using the compareTo method, using their marks
+//		Arrays.sort(studentArr, new Comparator<Student>() {
+//
+//			@Override
+//			public int compare(Student o1, Student o2) {
+////				return (int) (o1.studentMarks - o2.studentMarks); // ascending order
+//				return -(int) (o1.studentMarks - o2.studentMarks); // descending order
+//			}
+//
+//		});
+
+		// Using lambda expressions to create a compare method
+		Arrays.sort(studentArr, (o1, o2) -> -(int) (o1.studentMarks - o2.studentMarks));
+
 		System.out.println(Arrays.toString(studentArr));
 
 		// Prints the statement because reinStudent has higher marks than Clara
