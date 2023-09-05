@@ -1,6 +1,5 @@
 package com.bank.loginPage;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -15,7 +14,7 @@ public class SidePanel extends JPanel {
 
 	public SidePanel() {
 		this.setPreferredSize(new Dimension(256, 768));
-		this.setBorder(BorderFactory.createLineBorder(Color.RED));
+		this.setBorder(BorderFactory.createLineBorder(LoginPage.DARK_GREEN));
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 	}
 
@@ -25,7 +24,7 @@ public class SidePanel extends JPanel {
 		this.add(sidePanelButtons.addRegisterButton());
 		this.add(sidePanelButtons.addAboutButton());
 	}
-	
+
 	public void addLoggedInSidePanelButtons() {
 		AccountButtons loggedInSidePanelButtons = new AccountButtons();
 		this.add(loggedInSidePanelButtons.addDepositButton());

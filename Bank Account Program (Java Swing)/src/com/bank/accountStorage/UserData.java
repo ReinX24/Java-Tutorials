@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 import com.bank.loginPage.LoginPage;
-import com.bank.userPage.AccountButtons;
 import com.bank.userPage.AccountPanel;
 
 public class UserData {
@@ -125,6 +124,9 @@ public class UserData {
 			JOptionPane.showMessageDialog(null, "Account not found!", "No Account Fount", JOptionPane.WARNING_MESSAGE);
 		}
 	}
+
+	// TODO: create a custom method that reads a file and updates the balance field
+	// within that file
 
 	/* Helper methods for our program */
 

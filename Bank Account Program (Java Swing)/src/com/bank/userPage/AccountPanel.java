@@ -1,10 +1,8 @@
 package com.bank.userPage;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -14,20 +12,19 @@ public class AccountPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	UserData currentUser;
+	static UserData currentUser;
 
-	JLabel userNameLabel;
-	JLabel balanceLabel;
+	static JLabel userNameLabel;
+	static JLabel balanceLabel;
 
 	public AccountPanel(UserData currentUser) {
-		this.setPreferredSize(new Dimension(768, 768));
-		this.setBorder(BorderFactory.createLineBorder(Color.RED));
+		this.setPreferredSize(new Dimension(1024, 768));
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 
-		this.currentUser = currentUser;
+		AccountPanel.currentUser = currentUser;
 
-		userNameLabel = new JLabel("Welcome " + this.currentUser.getUserName() + "!");
-		balanceLabel = new JLabel("Balance: P" + this.currentUser.getUserBalance());
+		userNameLabel = new JLabel("Welcome " + AccountPanel.currentUser.getUserName() + "!");
+		balanceLabel = new JLabel("Balance: P" + AccountPanel.currentUser.getUserBalance());
 
 		this.add(userNameLabel);
 		this.add(balanceLabel);

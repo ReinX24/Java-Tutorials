@@ -1,0 +1,4 @@
+email:nikole@gmail.com,
+username:nikole,
+password:cute,
+balance:0

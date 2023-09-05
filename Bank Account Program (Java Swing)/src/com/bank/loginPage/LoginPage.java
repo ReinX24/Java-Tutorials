@@ -45,8 +45,8 @@ public class LoginPage implements ActionListener {
 
 	public static JPanel loggedInAccountPanel;
 
-	final Color HEADER_BACKGROUND_COLOR = new Color(20, 89, 80);
-	final Color HEADER_FONT_COLOR = new Color(234, 236, 236);
+	static final Color DARK_GREEN = new Color(20, 89, 80);
+	static final Color HEADER_FONT_COLOR = new Color(234, 236, 236);
 
 	public LoginPage() {
 		loginFrame = new JFrame();
@@ -65,7 +65,7 @@ public class LoginPage implements ActionListener {
 
 		headerPanel = new JPanel();
 		headerPanel.setPreferredSize(new Dimension(1280, 128));
-		headerPanel.setBackground(HEADER_BACKGROUND_COLOR);
+		headerPanel.setBackground(DARK_GREEN);
 		headerPanel.setLayout(new BorderLayout());
 
 		headerPanel.add(headerLabel, BorderLayout.CENTER);
@@ -79,7 +79,6 @@ public class LoginPage implements ActionListener {
 
 		userPanel = new JPanel();
 		userPanel.setPreferredSize(new Dimension(1024, 768));
-		userPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		userPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 
 		mainPanel.add(userPanel);
