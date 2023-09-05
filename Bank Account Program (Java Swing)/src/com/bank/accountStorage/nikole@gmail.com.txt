@@ -1,3 +1,0 @@
-email:nikole@gmail.com,
-username:nikole,
-password:cutie

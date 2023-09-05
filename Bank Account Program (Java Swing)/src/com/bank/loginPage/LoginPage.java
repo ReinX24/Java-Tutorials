@@ -7,12 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 
-import javax.sql.rowset.CachedRowSet;
 import javax.swing.*;
 
 import com.bank.accountStorage.UserData;
-import com.bank.userPage.AccountPanel;
 
 public class LoginPage implements ActionListener {
 
@@ -22,27 +21,29 @@ public class LoginPage implements ActionListener {
 	JLabel headerLabel;
 	JPanel headerPanel;
 
-	JPanel sideBarPanel;
+	public static SidePanel sideBarPanel;
 	public static JPanel userPanel;
 	JPanel aboutPanel;
 
-	JButton loginButton;
-	JButton registerButton;
-	JButton aboutButton;
+	public static JButton loginButton;
+	public static JButton registerButton;
+	public static JButton aboutButton;
 
-	JButton loginUserButton;
-	JButton registerUserButton;
-	JButton clearButton;
+	static JButton loginUserButton;
+	static JButton registerUserButton;
+	static JButton clearButton;
 
-	JLabel enterMailLabel;
-	JLabel enterNameLabel;
-	JLabel enterPasswordLabel;
-	JLabel reEnterPasswordLabel;
+	static JLabel enterMailLabel;
+	static JLabel enterNameLabel;
+	static JLabel enterPasswordLabel;
+	static JLabel reEnterPasswordLabel;
 
-	JTextField mailField;
-	JTextField nameField;
-	JPasswordField passwordField;
-	JPasswordField reEnterPasswordField;
+	public static JTextField mailField;
+	public static JTextField nameField;
+	public static JPasswordField passwordField;
+	public static JPasswordField reEnterPasswordField;
+
+	public static JPanel loggedInAccountPanel;
 
 	final Color HEADER_BACKGROUND_COLOR = new Color(20, 89, 80);
 	final Color HEADER_FONT_COLOR = new Color(234, 236, 236);
@@ -71,34 +72,13 @@ public class LoginPage implements ActionListener {
 
 		mainPanel.add(headerPanel);
 
-		sideBarPanel = new JPanel();
-		sideBarPanel.setPreferredSize(new Dimension(256, 768));
-		sideBarPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-		sideBarPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-
-		loginButton = new JButton("Login");
-		loginButton.addActionListener(this);
-		loginButton.setFocusable(false);
-		loginButton.setPreferredSize(new Dimension(256, 64));
-
-		registerButton = new JButton("Sign Up");
-		registerButton.addActionListener(this);
-		registerButton.setFocusable(false);
-		registerButton.setPreferredSize(new Dimension(256, 64));
-
-		aboutButton = new JButton("About");
-		aboutButton.addActionListener(this);
-		aboutButton.setFocusable(false);
-		aboutButton.setPreferredSize(new Dimension(256, 64));
-
-		sideBarPanel.add(loginButton);
-		sideBarPanel.add(registerButton);
-		sideBarPanel.add(aboutButton);
-
+		sideBarPanel = new SidePanel();
+		sideBarPanel.addMenuSidePanelButtons();
+		
 		mainPanel.add(sideBarPanel);
 
 		userPanel = new JPanel();
-		userPanel.setPreferredSize(new Dimension(768, 768));
+		userPanel.setPreferredSize(new Dimension(1024, 768));
 		userPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		userPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 
@@ -114,42 +94,42 @@ public class LoginPage implements ActionListener {
 		 * login and register
 		 */
 		enterMailLabel = new JLabel("Email:");
-		enterMailLabel.setPreferredSize(new Dimension(128, 32));
+		enterMailLabel.setPreferredSize(new Dimension(192, 32));
 
 		enterNameLabel = new JLabel("Name:");
-		enterNameLabel.setPreferredSize(new Dimension(128, 32));
+		enterNameLabel.setPreferredSize(new Dimension(192, 32));
 
 		enterPasswordLabel = new JLabel("Password:");
-		enterPasswordLabel.setPreferredSize(new Dimension(128, 32));
+		enterPasswordLabel.setPreferredSize(new Dimension(192, 32));
 
 		reEnterPasswordLabel = new JLabel("Re-enter Password:");
-		reEnterPasswordLabel.setPreferredSize(new Dimension(128, 32));
+		reEnterPasswordLabel.setPreferredSize(new Dimension(192, 32));
 
 		mailField = new JTextField();
-		mailField.setPreferredSize(new Dimension(512, 32));
+		mailField.setPreferredSize(new Dimension(640, 40));
 
 		nameField = new JTextField();
-		nameField.setPreferredSize(new Dimension(512, 32));
+		nameField.setPreferredSize(new Dimension(640, 40));
 
 		passwordField = new JPasswordField();
-		passwordField.setPreferredSize(new Dimension(512, 32));
+		passwordField.setPreferredSize(new Dimension(640, 40));
 
 		reEnterPasswordField = new JPasswordField();
-		reEnterPasswordField.setPreferredSize(new Dimension(512, 32));
+		reEnterPasswordField.setPreferredSize(new Dimension(640, 40));
 
 		registerUserButton = new JButton("Register");
 		registerUserButton.addActionListener(this);
-		registerUserButton.setPreferredSize(new Dimension(128, 32));
+		registerUserButton.setPreferredSize(new Dimension(160, 40));
 		registerUserButton.setFocusable(false);
 
 		clearButton = new JButton("Clear");
 		clearButton.addActionListener(this);
-		clearButton.setPreferredSize(new Dimension(128, 32));
+		clearButton.setPreferredSize(new Dimension(160, 40));
 		clearButton.setFocusable(false);
 
 		loginUserButton = new JButton("Login");
 		loginUserButton.addActionListener(this);
-		loginUserButton.setPreferredSize(new Dimension(128, 32));
+		loginUserButton.setPreferredSize(new Dimension(160, 40));
 		loginUserButton.setFocusable(false);
 
 	}
@@ -157,69 +137,21 @@ public class LoginPage implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == loginButton) {
-
-			System.out.println("Login button pressed");
-
-			userPanel.removeAll();
-
-			userPanel.add(enterMailLabel);
-			userPanel.add(mailField);
-
-			userPanel.add(enterPasswordLabel);
-			userPanel.add(passwordField);
-
-			userPanel.add(reEnterPasswordLabel);
-			userPanel.add(reEnterPasswordField);
-
-			userPanel.add(loginUserButton);
-			userPanel.add(clearButton);
-
-			userPanel.validate();
-			userPanel.repaint();
-		}
-
-		if (e.getSource() == registerButton) {
-
-			System.out.println("Sign up button pressed");
-
-			userPanel.removeAll();
-
-			userPanel.add(enterMailLabel);
-			userPanel.add(mailField);
-
-			userPanel.add(enterNameLabel);
-			userPanel.add(nameField);
-
-			userPanel.add(enterPasswordLabel);
-			userPanel.add(passwordField);
-
-			userPanel.add(reEnterPasswordLabel);
-			userPanel.add(reEnterPasswordField);
-
-			userPanel.add(registerUserButton);
-			userPanel.add(clearButton);
-
-			userPanel.validate();
-			userPanel.repaint();
-
-		}
-
 		if (e.getSource() == clearButton) {
-			mailField.setText("");
-			nameField.setText("");
-			passwordField.setText("");
-			reEnterPasswordField.setText("");
-		}
-
-		if (e.getSource() == aboutButton) {
-			System.out.println("About button pressed");
+			LoginPage.mailField.setText("");
+			LoginPage.nameField.setText("");
+			LoginPage.passwordField.setText("");
+			LoginPage.reEnterPasswordField.setText("");
 		}
 
 		if (e.getSource() == loginUserButton) {
-			if (String.valueOf(passwordField.getPassword())
-					.equals(String.valueOf(reEnterPasswordField.getPassword()))) {
-				UserData.readUserData(mailField.getText(), String.valueOf(passwordField.getPassword()));
+			if (String.valueOf(LoginPage.passwordField.getPassword())
+					.equals(String.valueOf(LoginPage.reEnterPasswordField.getPassword()))) {
+
+				UserData loginUserData = new UserData(LoginPage.mailField.getText(),
+						String.valueOf(LoginPage.passwordField.getPassword()));
+				loginUserData.readUserData();
+
 			} else {
 				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
 						JOptionPane.WARNING_MESSAGE);
@@ -228,15 +160,105 @@ public class LoginPage implements ActionListener {
 		}
 
 		if (e.getSource() == registerUserButton) {
-			if (String.valueOf(passwordField.getPassword())
-					.equals(String.valueOf(reEnterPasswordField.getPassword()))) {
-				UserData.recordUserData(mailField.getText(), nameField.getText(),
-						String.valueOf(passwordField.getPassword()));
+			if (String.valueOf(LoginPage.passwordField.getPassword())
+					.equals(String.valueOf(LoginPage.reEnterPasswordField.getPassword()))) {
+
+				UserData newUserData = new UserData(LoginPage.mailField.getText(), LoginPage.nameField.getText(),
+						String.valueOf(LoginPage.passwordField.getPassword()), new BigDecimal(0));
+				newUserData.recordUserData();
+
 			} else {
 				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
 						JOptionPane.WARNING_MESSAGE);
 			}
 		}
+
+//		if (e.getSource() == loginButton) {
+//
+//			System.out.println("Login button pressed");
+//
+//			userPanel.removeAll();
+//
+//			userPanel.add(enterMailLabel);
+//			userPanel.add(mailField);
+//
+//			userPanel.add(enterPasswordLabel);
+//			userPanel.add(passwordField);
+//
+//			userPanel.add(reEnterPasswordLabel);
+//			userPanel.add(reEnterPasswordField);
+//
+//			userPanel.add(loginUserButton);
+//			userPanel.add(clearButton);
+//
+//			userPanel.validate();
+//			userPanel.repaint();
+//		}
+//
+//		if (e.getSource() == registerButton) {
+//
+//			System.out.println("Sign up button pressed");
+//
+//			userPanel.removeAll();
+//
+//			userPanel.add(enterMailLabel);
+//			userPanel.add(mailField);
+//
+//			userPanel.add(enterNameLabel);
+//			userPanel.add(nameField);
+//
+//			userPanel.add(enterPasswordLabel);
+//			userPanel.add(passwordField);
+//
+//			userPanel.add(reEnterPasswordLabel);
+//			userPanel.add(reEnterPasswordField);
+//
+//			userPanel.add(registerUserButton);
+//			userPanel.add(clearButton);
+//
+//			userPanel.validate();
+//			userPanel.repaint();
+//
+//		}
+//
+//		if (e.getSource() == clearButton) {
+//			mailField.setText("");
+//			nameField.setText("");
+//			passwordField.setText("");
+//			reEnterPasswordField.setText("");
+//		}
+//
+//		if (e.getSource() == aboutButton) {
+//			System.out.println("About button pressed");
+//		}
+//
+//		if (e.getSource() == loginUserButton) {
+//			if (String.valueOf(passwordField.getPassword())
+//					.equals(String.valueOf(reEnterPasswordField.getPassword()))) {
+//
+//				UserData loginUserData = new UserData(mailField.getText(), String.valueOf(passwordField.getPassword()));
+//				loginUserData.readUserData();
+//
+//			} else {
+//				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
+//						JOptionPane.WARNING_MESSAGE);
+//			}
+//
+//		}
+//
+//		if (e.getSource() == registerUserButton) {
+//			if (String.valueOf(passwordField.getPassword())
+//					.equals(String.valueOf(reEnterPasswordField.getPassword()))) {
+//
+//				UserData newUserData = new UserData(mailField.getText(), nameField.getText(),
+//						String.valueOf(passwordField.getPassword()), new BigDecimal(0));
+//				newUserData.recordUserData();
+//
+//			} else {
+//				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
+//						JOptionPane.WARNING_MESSAGE);
+//			}
+//		}
 
 	}
 
