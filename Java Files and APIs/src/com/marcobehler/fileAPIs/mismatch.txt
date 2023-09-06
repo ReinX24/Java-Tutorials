@@ -1,0 +1,1 @@
+This is a text file used as an example to check for mismatches
