@@ -1,4 +1,6 @@
-package com.bank.loginPage;
+package com.bank.launchMain;
+
+import com.bank.loginPage.LoginPage;
 
 public class Main {
 

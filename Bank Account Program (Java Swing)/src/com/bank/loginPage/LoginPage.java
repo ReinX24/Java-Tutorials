@@ -23,7 +23,11 @@ public class LoginPage implements ActionListener {
 
 	public static SidePanel sideBarPanel;
 	public static JPanel userPanel;
-	JPanel aboutPanel;
+	static JPanel aboutPanel;
+
+	JLabel aboutTitleLabel;
+	JLabel aboutDescriptionLabel;
+	JLabel featuresLabel;
 
 	public static JButton loginButton;
 	public static JButton registerButton;
@@ -46,7 +50,8 @@ public class LoginPage implements ActionListener {
 	public static JPanel loggedInAccountPanel;
 
 	static final Color DARK_GREEN = new Color(20, 89, 80);
-	static final Color HEADER_FONT_COLOR = new Color(234, 236, 236);
+	static final Color WHITE = new Color(234, 236, 236);
+	static final Color BLACK = new Color(34, 34, 34);
 
 	public LoginPage() {
 		loginFrame = new JFrame();
@@ -59,8 +64,8 @@ public class LoginPage implements ActionListener {
 		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
 		headerLabel = new JLabel("bAccess | Online Banking Software Solutions");
-		headerLabel.setFont(new Font("Monospace", Font.PLAIN, 26));
-		headerLabel.setForeground(HEADER_FONT_COLOR);
+		headerLabel.setFont(new Font("Arial", Font.PLAIN, 26));
+		headerLabel.setForeground(WHITE);
 		headerLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		headerPanel = new JPanel();
@@ -74,14 +79,29 @@ public class LoginPage implements ActionListener {
 
 		sideBarPanel = new SidePanel();
 		sideBarPanel.addMenuSidePanelButtons();
-		
+
 		mainPanel.add(sideBarPanel);
 
+		/* For adding labels and fields that ask for login details */
 		userPanel = new JPanel();
 		userPanel.setPreferredSize(new Dimension(1024, 768));
 		userPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
+s
 
-		mainPanel.add(userPanel);
+		aboutPanel.add(aboutDescriptionLabel);
+		
+		// TODO: add a list that contains the programs features
+		featuresLabel = new JLabel("<html> "
+				+ "<body>"
+				+ "<h3>bAccess Features<h3>"
+				+ "<ul>"
+				+ "<li>Test</li>"
+				+ "</ul>"
+				+ "</body>"
+				+ " <html>");
+		aboutPanel.add(featuresLabel);
+
+		mainPanel.add(aboutPanel);
 
 		loginFrame.getContentPane().add(mainPanel);
 		loginFrame.pack();

@@ -93,6 +93,10 @@ public class SideButtons implements ActionListener {
 
 		if (e.getSource() == aboutButton) {
 			System.out.println("About button pressed");
+			LoginPage.mainPanel.remove(LoginPage.userPanel);
+			LoginPage.mainPanel.add(LoginPage.aboutPanel);
+			LoginPage.mainPanel.revalidate();
+			LoginPage.mainPanel.repaint();
 		}
 
 	}
