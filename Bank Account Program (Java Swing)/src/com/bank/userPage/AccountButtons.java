@@ -9,6 +9,7 @@ import com.bank.loginPage.LoginPage;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class AccountButtons implements ActionListener {
 
@@ -17,7 +18,11 @@ public class AccountButtons implements ActionListener {
 	JButton sendFundsButton;
 	JButton logoutButton;
 
+	JButton confirmDespositButton;
+	JButton confirmWithdrawButton;
+
 	public AccountButtons() {
+		/* New side buttons that will lead to deposit, withdraw, or send funds panels */
 		depositButton = new JButton("Deposit Funds");
 		depositButton.addActionListener(this);
 		depositButton.setFocusable(false);
@@ -37,6 +42,10 @@ public class AccountButtons implements ActionListener {
 		logoutButton.addActionListener(this);
 		logoutButton.setFocusable(false);
 		logoutButton.setPreferredSize(new Dimension(256, 64));
+
+		/* Buttons that the user clicks to deposit, withdraw, or send funds */
+		confirmDespositButton = new JButton("Confirm Deposit");
+		confirmDespositButton.setPreferredSize(new Dimension(160, 40));
 	}
 
 	public JButton addDepositButton() {
@@ -54,6 +63,14 @@ public class AccountButtons implements ActionListener {
 	public JButton addLogoutButton() {
 		return logoutButton;
 	}
+	
+	public JButton addConfirmDepositButton() {
+		return confirmDespositButton;
+	}
+	
+	public JButton addConfirmWithdrawButton() {
+		return addConfirmWithdrawButton();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -61,11 +78,20 @@ public class AccountButtons implements ActionListener {
 		// TODO: add checks for if the user enters a String instead of a number valid
 		// for BigInteger
 		if (e.getSource() == depositButton) {
-			System.out.println("Deposit button clicked!");
-			BigDecimal depositAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be deposited",
-					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
-			AccountPanel.currentUser.setUserBalance(AccountPanel.currentUser.getUserBalance().add(depositAmount));
-			AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
+
+			LoginPage.loggedInAccountPanel.removeAll();
+			
+			DepositPanel depositPanel = new DepositPanel();
+			LoginPage.loggedInAccountPanel.add(depositPanel.initializePanel());
+
+			LoginPage.loggedInAccountPanel.revalidate();
+			LoginPage.loggedInAccountPanel.repaint();
+
+//			System.out.println("Deposit button clicked!");
+//			BigDecimal depositAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be deposited",
+//					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
+//			AccountPanel.currentUser.setUserBalance(AccountPanel.currentUser.getUserBalance().add(depositAmount));
+//			AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
 		}
 		if (e.getSource() == withdrawButton) {
 			System.out.println("Withdraw button clicked!");

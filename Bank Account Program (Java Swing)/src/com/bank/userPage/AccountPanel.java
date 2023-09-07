@@ -19,7 +19,7 @@ public class AccountPanel extends JPanel {
 
 	public AccountPanel(UserData currentUser) {
 		this.setPreferredSize(new Dimension(1024, 768));
-		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
+		this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		AccountPanel.currentUser = currentUser;
 

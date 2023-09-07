@@ -28,15 +28,15 @@ public class SideButtons implements ActionListener {
 		aboutButton.setFocusable(false);
 		aboutButton.setPreferredSize(new Dimension(256, 64));
 	}
-	
+
 	public JButton addLoginButton() {
 		return loginButton;
 	}
-	
+
 	public JButton addRegisterButton() {
 		return registerButton;
 	}
-	
+
 	public JButton addAboutButton() {
 		return aboutButton;
 	}
@@ -45,7 +45,8 @@ public class SideButtons implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == loginButton) {
 
-			System.out.println("Login button pressed");
+			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
+			LoginPage.mainPanel.add(LoginPage.userPanel);
 
 			LoginPage.userPanel.removeAll();
 
@@ -61,13 +62,14 @@ public class SideButtons implements ActionListener {
 			LoginPage.userPanel.add(LoginPage.loginUserButton);
 			LoginPage.userPanel.add(LoginPage.clearButton);
 
-			LoginPage.userPanel.validate();
-			LoginPage.userPanel.repaint();
+			LoginPage.mainPanel.validate();
+			LoginPage.mainPanel.repaint();
 		}
 
 		if (e.getSource() == registerButton) {
 
-			System.out.println("Sign up button pressed");
+			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
+			LoginPage.mainPanel.add(LoginPage.userPanel);
 
 			LoginPage.userPanel.removeAll();
 
@@ -86,13 +88,12 @@ public class SideButtons implements ActionListener {
 			LoginPage.userPanel.add(LoginPage.registerUserButton);
 			LoginPage.userPanel.add(LoginPage.clearButton);
 
-			LoginPage.userPanel.validate();
-			LoginPage.userPanel.repaint();
+			LoginPage.mainPanel.validate();
+			LoginPage.mainPanel.repaint();
 
 		}
 
 		if (e.getSource() == aboutButton) {
-			System.out.println("About button pressed");
 			LoginPage.mainPanel.remove(LoginPage.userPanel);
 			LoginPage.mainPanel.add(LoginPage.aboutPanel);
 			LoginPage.mainPanel.revalidate();

@@ -27,7 +27,11 @@ public class LoginPage implements ActionListener {
 
 	JLabel aboutTitleLabel;
 	JLabel aboutDescriptionLabel;
-	JLabel featuresLabel;
+	JLabel featuresLabelTitle;
+	JLabel featureOne;
+	JLabel featureTwo;
+	JLabel featureThree;
+	JLabel featureFour;
 
 	public static JButton loginButton;
 	public static JButton registerButton;
@@ -64,7 +68,7 @@ public class LoginPage implements ActionListener {
 		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
 		headerLabel = new JLabel("bAccess | Online Banking Software Solutions");
-		headerLabel.setFont(new Font("Arial", Font.PLAIN, 26));
+		headerLabel.setFont(new Font(null, Font.PLAIN, 32));
 		headerLabel.setForeground(WHITE);
 		headerLabel.setHorizontalAlignment(JLabel.CENTER);
 
@@ -86,20 +90,62 @@ public class LoginPage implements ActionListener {
 		userPanel = new JPanel();
 		userPanel.setPreferredSize(new Dimension(1024, 768));
 		userPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
-s
+
+		/* Starting page that shows that the program is about */
+		aboutPanel = new JPanel();
+		aboutPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		aboutPanel.setPreferredSize(new Dimension(1024, 768));
+		aboutPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 16, 16));
+
+		aboutTitleLabel = new JLabel("Welcome to bAccess!");
+		aboutTitleLabel.setFont(new Font(null, Font.BOLD, 32));
+		aboutTitleLabel.setForeground(BLACK);
+		aboutTitleLabel.setPreferredSize(new Dimension(1024, 32));
+
+		aboutPanel.add(aboutTitleLabel);
+
+		aboutDescriptionLabel = new JLabel("\"Empowering Your Financial Future With Technology\"");
+		aboutDescriptionLabel.setFont(new Font(null, Font.ITALIC, 28));
+		aboutDescriptionLabel.setForeground(BLACK);
+		aboutDescriptionLabel.setPreferredSize(new Dimension(1024, 32));
 
 		aboutPanel.add(aboutDescriptionLabel);
-		
+
 		// TODO: add a list that contains the programs features
-		featuresLabel = new JLabel("<html> "
-				+ "<body>"
-				+ "<h3>bAccess Features<h3>"
-				+ "<ul>"
-				+ "<li>Test</li>"
-				+ "</ul>"
-				+ "</body>"
-				+ " <html>");
-		aboutPanel.add(featuresLabel);
+		featuresLabelTitle = new JLabel("Features:");
+		featuresLabelTitle.setFont(new Font(null, Font.PLAIN, 24));
+		featuresLabelTitle.setForeground(BLACK);
+		featuresLabelTitle.setPreferredSize(new Dimension(1024, 32));
+
+		aboutPanel.add(featuresLabelTitle);
+
+		featureOne = new JLabel(" - 24/7 Accessibility");
+		featureOne.setFont(new Font(null, Font.PLAIN, 20));
+		featureOne.setForeground(BLACK);
+		featureOne.setPreferredSize(new Dimension(1024, 32));
+
+		aboutPanel.add(featureOne);
+
+		featureTwo = new JLabel(" - Real-Time Account Monitoring");
+		featureTwo.setFont(new Font(null, Font.PLAIN, 20));
+		featureTwo.setForeground(BLACK);
+		featureTwo.setPreferredSize(new Dimension(1024, 32));
+
+		aboutPanel.add(featureTwo);
+
+		featureThree = new JLabel(" - Easy Fund Transfers");
+		featureThree.setFont(new Font(null, Font.PLAIN, 20));
+		featureThree.setForeground(BLACK);
+		featureThree.setPreferredSize(new Dimension(1024, 32));
+
+		aboutPanel.add(featureThree);
+
+		featureFour = new JLabel(" - Enhanced Security");
+		featureFour.setFont(new Font(null, Font.PLAIN, 20));
+		featureFour.setForeground(BLACK);
+		featureFour.setPreferredSize(new Dimension(1024, 32));
+
+		aboutPanel.add(featureFour);
 
 		mainPanel.add(aboutPanel);
 
