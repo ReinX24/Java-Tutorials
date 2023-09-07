@@ -21,13 +21,18 @@ public class Main {
 			Files.writeString(utfFile, "This is a String!");
 			System.out.println("utfFile = " + utfFile);
 			
-			try (BufferedWriter bufferedWriter = Files.newBufferedWriter(utfFile)) {
-				
-			}
+//			try (BufferedWriter bufferedWriter = Files.newBufferedWriter(utfFile)) {
+//				// handle reader
+//			}
+//			
+//			try (OutputStream outStream = Files.newOutputStream(utfFile)){
+//			    // handle output stream
+//			}
 			
-			try (OutputStream outStream = Files.newOutputStream(utfFile)){
-				
-			}
+			String myStr = Files.readString(utfFile);
+			System.out.println("myStr = " + myStr);
+			
+			
 			
 			
 		} catch (IOException e) {
