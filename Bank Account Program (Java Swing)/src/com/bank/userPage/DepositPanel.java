@@ -13,14 +13,11 @@ public class DepositPanel extends JPanel {
 	JTextField depositFundsField;
 
 	public DepositPanel() {
-		
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 		this.setPreferredSize(new Dimension(1024, 768));
-	
 	};
-
-	public void initializePanel() {
-
+	
+	public void addDepositLabelComponents() {
 		depositFundsLabel = new JLabel("Deposit Funds:");
 		depositFundsLabel.setPreferredSize(new Dimension(192, 32));
 		
@@ -33,7 +30,6 @@ public class DepositPanel extends JPanel {
 
 		AccountButtons accountButtons = new AccountButtons();
 		this.add(accountButtons.addConfirmDepositButton());
-
 	}
 
 }

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
-import com.bank.loginPage.LoginPage;
+import com.bank.loginPage.MainPanel;
 import com.bank.userPage.AccountPanel;
 
 public class UserData {
@@ -96,22 +96,22 @@ public class UserData {
 				 * Removing entered data in fields and replacing side buttons and mainPanel with
 				 * UI for logged in users
 				 */
-				LoginPage.mailField.setText("");
-				LoginPage.nameField.setText("");
-				LoginPage.passwordField.setText("");
-				LoginPage.reEnterPasswordField.setText("");
+				MainPanel.mailField.setText("");
+				MainPanel.nameField.setText("");
+				MainPanel.passwordField.setText("");
+				MainPanel.reEnterPasswordField.setText("");
 
 				// DONE: When we add userAccountPanel, we will be adding the user's information
-				LoginPage.loggedInAccountPanel = new AccountPanel(this);
+				MainPanel.loggedInAccountPanel = new AccountPanel(this);
 
-				LoginPage.mainPanel.remove(LoginPage.userPanel);
-				LoginPage.mainPanel.add(LoginPage.loggedInAccountPanel);
+				MainPanel.mainPanel.remove(MainPanel.userPanel);
+				MainPanel.mainPanel.add(MainPanel.loggedInAccountPanel);
 
-				LoginPage.sideBarPanel.removeAll();
-				LoginPage.sideBarPanel.addLoggedInSidePanelButtons();
+				MainPanel.sideBarPanel.removeAll();
+				MainPanel.sideBarPanel.addLoggedInSidePanelButtons();
 
-				LoginPage.mainPanel.validate();
-				LoginPage.mainPanel.repaint();
+				MainPanel.mainPanel.validate();
+				MainPanel.mainPanel.repaint();
 
 				fileReader.close();
 

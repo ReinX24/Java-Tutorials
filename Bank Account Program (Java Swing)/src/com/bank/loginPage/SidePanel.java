@@ -14,7 +14,7 @@ public class SidePanel extends JPanel {
 
 	public SidePanel() {
 		this.setPreferredSize(new Dimension(256, 768));
-		this.setBorder(BorderFactory.createLineBorder(LoginPage.DARK_GREEN));
+		this.setBorder(BorderFactory.createLineBorder(MainPanel.DARK_GREEN));
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 	}
 

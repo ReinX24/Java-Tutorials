@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
-import com.bank.loginPage.LoginPage;
+import com.bank.loginPage.MainPanel;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -45,7 +45,10 @@ public class AccountButtons implements ActionListener {
 
 		/* Buttons that the user clicks to deposit, withdraw, or send funds */
 		confirmDespositButton = new JButton("Confirm Deposit");
-		confirmDespositButton.setPreferredSize(new Dimension(160, 40));
+		confirmDespositButton.setPreferredSize(new Dimension(180, 40));
+
+		confirmWithdrawButton = new JButton("Confirm Withdraw");
+		confirmWithdrawButton.setPreferredSize(new Dimension(180, 40));
 	}
 
 	public JButton addDepositButton() {
@@ -63,13 +66,13 @@ public class AccountButtons implements ActionListener {
 	public JButton addLogoutButton() {
 		return logoutButton;
 	}
-	
+
 	public JButton addConfirmDepositButton() {
 		return confirmDespositButton;
 	}
-	
+
 	public JButton addConfirmWithdrawButton() {
-		return addConfirmWithdrawButton();
+		return confirmWithdrawButton;
 	}
 
 	@Override
@@ -79,14 +82,14 @@ public class AccountButtons implements ActionListener {
 		// for BigInteger
 		if (e.getSource() == depositButton) {
 
-			LoginPage.loggedInAccountPanel.removeAll();
-			
-			DepositPanel depositPanel = new DepositPanel();
-			depositPanel.initializePanel();
-			LoginPage.loggedInAccountPanel.add(depositPanel);
+			MainPanel.loggedInAccountPanel.removeAll();
 
-			LoginPage.loggedInAccountPanel.revalidate();
-			LoginPage.loggedInAccountPanel.repaint();
+			DepositPanel depositPanel = new DepositPanel();
+			depositPanel.addDepositLabelComponents();
+			MainPanel.loggedInAccountPanel.add(depositPanel);
+
+			MainPanel.loggedInAccountPanel.revalidate();
+			MainPanel.loggedInAccountPanel.repaint();
 
 //			System.out.println("Deposit button clicked!");
 //			BigDecimal depositAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be deposited",
@@ -95,21 +98,31 @@ public class AccountButtons implements ActionListener {
 //			AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
 		}
 		if (e.getSource() == withdrawButton) {
-			System.out.println("Withdraw button clicked!");
-			BigDecimal withdrawAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be withdrawn",
-					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
-			// Checks if the currentUser's balance is less than the withdrawAmount
-			if (AccountPanel.currentUser.getUserBalance().compareTo(withdrawAmount) < 0) {
-				JOptionPane.showMessageDialog(null, "Not enough funds!", "Insufficient Funds",
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				int confirmWithdraw = JOptionPane.showConfirmDialog(null, "Withdraw P" + withdrawAmount + "?");
-				if (confirmWithdraw == JOptionPane.YES_OPTION) {
-					AccountPanel.currentUser
-							.setUserBalance(AccountPanel.currentUser.getUserBalance().subtract(withdrawAmount));
-					AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
-				}
-			}
+			
+			MainPanel.loggedInAccountPanel.removeAll();
+			
+			WithdrawPanel withdrawPanel = new WithdrawPanel();
+			withdrawPanel.addWithdrawPanelComponents();
+			MainPanel.loggedInAccountPanel.add(withdrawPanel);
+			
+			MainPanel.loggedInAccountPanel.revalidate();
+			MainPanel.loggedInAccountPanel.repaint();
+			
+//			System.out.println("Withdraw button clicked!");
+//			BigDecimal withdrawAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be withdrawn",
+//					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
+//			// Checks if the currentUser's balance is less than the withdrawAmount
+//			if (AccountPanel.currentUser.getUserBalance().compareTo(withdrawAmount) < 0) {
+//				JOptionPane.showMessageDialog(null, "Not enough funds!", "Insufficient Funds",
+//						JOptionPane.WARNING_MESSAGE);
+//			} else {
+//				int confirmWithdraw = JOptionPane.showConfirmDialog(null, "Withdraw P" + withdrawAmount + "?");
+//				if (confirmWithdraw == JOptionPane.YES_OPTION) {
+//					AccountPanel.currentUser
+//							.setUserBalance(AccountPanel.currentUser.getUserBalance().subtract(withdrawAmount));
+//					AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
+//				}
+//			}
 		}
 		if (e.getSource() == sendFundsButton) {
 			System.out.println("Send funds button clicked!");
@@ -119,14 +132,14 @@ public class AccountButtons implements ActionListener {
 			// respective text file
 			System.out.println("Logout button clicked");
 
-			LoginPage.mainPanel.remove(LoginPage.loggedInAccountPanel);
-			LoginPage.mainPanel.add(LoginPage.userPanel);
+			MainPanel.mainPanel.remove(MainPanel.loggedInAccountPanel);
+			MainPanel.mainPanel.add(MainPanel.userPanel);
 
-			LoginPage.sideBarPanel.removeAll();
-			LoginPage.sideBarPanel.addMenuSidePanelButtons();
+			MainPanel.sideBarPanel.removeAll();
+			MainPanel.sideBarPanel.addMenuSidePanelButtons();
 
-			LoginPage.mainPanel.repaint();
-			LoginPage.mainPanel.revalidate();
+			MainPanel.mainPanel.repaint();
+			MainPanel.mainPanel.revalidate();
 		}
 
 	}

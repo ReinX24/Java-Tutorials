@@ -13,7 +13,7 @@ import javax.swing.*;
 
 import com.bank.accountStorage.UserData;
 
-public class LoginPage implements ActionListener {
+public class MainPanel implements ActionListener {
 
 	JFrame loginFrame;
 	public static JPanel mainPanel;
@@ -21,7 +21,6 @@ public class LoginPage implements ActionListener {
 	HeaderPanel headerPanel;
 	public static SidePanel sideBarPanel;
 	public static JPanel userPanel;
-	static AboutPanel aboutPanel;
 
 	JLabel aboutTitleLabel;
 	JLabel aboutDescriptionLabel;
@@ -55,7 +54,7 @@ public class LoginPage implements ActionListener {
 	static final Color WHITE = new Color(234, 236, 236);
 	static final Color BLACK = new Color(34, 34, 34);
 
-	public LoginPage() {
+	public MainPanel() {
 
 		loginFrame = new JFrame();
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,10 +67,10 @@ public class LoginPage implements ActionListener {
 
 		/* Header of program */
 		headerPanel = new HeaderPanel();
-		headerPanel.addHeaderLabel();
+		headerPanel.addHeaderLabelComponents();
 		mainPanel.add(headerPanel);
 
-		/* Sidebar that contains buttons with different functions */
+		/* Side bar that contains buttons with different functions */
 		sideBarPanel = new SidePanel();
 		sideBarPanel.addMenuSidePanelButtons();
 		mainPanel.add(sideBarPanel);
@@ -79,13 +78,14 @@ public class LoginPage implements ActionListener {
 		/* For adding labels and fields that ask for login details */
 		userPanel = new JPanel();
 		userPanel.setPreferredSize(new Dimension(1024, 768));
-
+		mainPanel.add(userPanel);
+		
 		/* Starting page that shows that the program is about */
-		aboutPanel = new AboutPanel();
-		aboutPanel.addPanelComponents();
-
-		mainPanel.add(aboutPanel);
-
+		AboutPanel aboutPanel = new AboutPanel();
+		aboutPanel.addAboutPanelComponents();
+		userPanel.add(aboutPanel);
+		
+		/* Finish instantiating our loginFrame */
 		loginFrame.getContentPane().add(mainPanel);
 		loginFrame.pack();
 		loginFrame.setLocationRelativeTo(null);
@@ -137,18 +137,18 @@ public class LoginPage implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == clearButton) {
-			LoginPage.mailField.setText("");
-			LoginPage.nameField.setText("");
-			LoginPage.passwordField.setText("");
-			LoginPage.reEnterPasswordField.setText("");
+			MainPanel.mailField.setText("");
+			MainPanel.nameField.setText("");
+			MainPanel.passwordField.setText("");
+			MainPanel.reEnterPasswordField.setText("");
 		}
 
 		if (e.getSource() == loginUserButton) {
-			if (String.valueOf(LoginPage.passwordField.getPassword())
-					.equals(String.valueOf(LoginPage.reEnterPasswordField.getPassword()))) {
+			if (String.valueOf(MainPanel.passwordField.getPassword())
+					.equals(String.valueOf(MainPanel.reEnterPasswordField.getPassword()))) {
 
-				UserData loginUserData = new UserData(LoginPage.mailField.getText(),
-						String.valueOf(LoginPage.passwordField.getPassword()));
+				UserData loginUserData = new UserData(MainPanel.mailField.getText(),
+						String.valueOf(MainPanel.passwordField.getPassword()));
 				loginUserData.readUserData();
 
 			} else {
@@ -159,11 +159,11 @@ public class LoginPage implements ActionListener {
 		}
 
 		if (e.getSource() == registerUserButton) {
-			if (String.valueOf(LoginPage.passwordField.getPassword())
-					.equals(String.valueOf(LoginPage.reEnterPasswordField.getPassword()))) {
+			if (String.valueOf(MainPanel.passwordField.getPassword())
+					.equals(String.valueOf(MainPanel.reEnterPasswordField.getPassword()))) {
 
-				UserData newUserData = new UserData(LoginPage.mailField.getText(), LoginPage.nameField.getText(),
-						String.valueOf(LoginPage.passwordField.getPassword()), new BigDecimal(0));
+				UserData newUserData = new UserData(MainPanel.mailField.getText(), MainPanel.nameField.getText(),
+						String.valueOf(MainPanel.passwordField.getPassword()), new BigDecimal(0));
 				newUserData.recordUserData();
 
 			} else {

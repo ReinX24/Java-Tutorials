@@ -1,11 +1,11 @@
 package com.bank.launchMain;
 
-import com.bank.loginPage.LoginPage;
+import com.bank.loginPage.MainPanel;
 
 public class Main {
 
 	public static void main(String[] args) {
-		new LoginPage();
+		new MainPanel();
 	}
 
 }

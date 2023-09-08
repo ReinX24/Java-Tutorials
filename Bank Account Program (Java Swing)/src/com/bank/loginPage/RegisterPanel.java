@@ -5,16 +5,19 @@ import java.awt.FlowLayout;
 
 import javax.swing.JPanel;
 
-public class LoginPanel extends JPanel {
+public class RegisterPanel extends JPanel {
 
-	public LoginPanel() {
+	public RegisterPanel() {
 		this.setPreferredSize(new Dimension(1024, 768));
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 	}
 	
-	public void addLoginPanelComponents() {
+	public void addRegisterPanelComponents() {
 		this.add(MainPanel.enterMailLabel);
 		this.add(MainPanel.mailField);
+
+		this.add(MainPanel.enterNameLabel);
+		this.add(MainPanel.nameField);
 
 		this.add(MainPanel.enterPasswordLabel);
 		this.add(MainPanel.passwordField);
@@ -22,7 +25,7 @@ public class LoginPanel extends JPanel {
 		this.add(MainPanel.reEnterPasswordLabel);
 		this.add(MainPanel.reEnterPasswordField);
 
-		this.add(MainPanel.loginUserButton);
+		this.add(MainPanel.registerUserButton);
 		this.add(MainPanel.clearButton);
 	}
 

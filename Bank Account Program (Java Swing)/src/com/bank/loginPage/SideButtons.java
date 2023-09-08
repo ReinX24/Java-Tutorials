@@ -44,64 +44,40 @@ public class SideButtons implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == loginButton) {
-
-			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
-			LoginPage.mainPanel.add(LoginPage.userPanel);
-
-			LoginPage.userPanel.removeAll();
+			MainPanel.mainPanel.add(MainPanel.userPanel);
+			MainPanel.userPanel.removeAll();
 
 			LoginPanel loginPanel = new LoginPanel();
-			LoginPage.userPanel.add(loginPanel.initializeLoginPanel());
+			loginPanel.addLoginPanelComponents();
+			MainPanel.userPanel.add(loginPanel);
 
-//			LoginPage.userPanel.add(LoginPage.enterMailLabel);
-//			LoginPage.userPanel.add(LoginPage.mailField);
-//
-//			LoginPage.userPanel.add(LoginPage.enterPasswordLabel);
-//			LoginPage.userPanel.add(LoginPage.passwordField);
-//
-//			LoginPage.userPanel.add(LoginPage.reEnterPasswordLabel);
-//			LoginPage.userPanel.add(LoginPage.reEnterPasswordField);
-//
-//			LoginPage.userPanel.add(LoginPage.loginUserButton);
-//			LoginPage.userPanel.add(LoginPage.clearButton);
-
-			LoginPage.mainPanel.validate();
-			LoginPage.mainPanel.repaint();
+			MainPanel.mainPanel.validate();
+			MainPanel.mainPanel.repaint();
 		}
 
 		if (e.getSource() == registerButton) {
+			MainPanel.mainPanel.add(MainPanel.userPanel);
+			MainPanel.userPanel.removeAll();
 
-			// TODO: contain this in a single class
-			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
-			LoginPage.mainPanel.add(LoginPage.userPanel);
+			RegisterPanel registerPanel = new RegisterPanel();
+			registerPanel.addRegisterPanelComponents();
+			MainPanel.userPanel.add(registerPanel);
 
-			LoginPage.userPanel.removeAll();
-
-			LoginPage.userPanel.add(LoginPage.enterMailLabel);
-			LoginPage.userPanel.add(LoginPage.mailField);
-
-			LoginPage.userPanel.add(LoginPage.enterNameLabel);
-			LoginPage.userPanel.add(LoginPage.nameField);
-
-			LoginPage.userPanel.add(LoginPage.enterPasswordLabel);
-			LoginPage.userPanel.add(LoginPage.passwordField);
-
-			LoginPage.userPanel.add(LoginPage.reEnterPasswordLabel);
-			LoginPage.userPanel.add(LoginPage.reEnterPasswordField);
-
-			LoginPage.userPanel.add(LoginPage.registerUserButton);
-			LoginPage.userPanel.add(LoginPage.clearButton);
-
-			LoginPage.mainPanel.validate();
-			LoginPage.mainPanel.repaint();
+			MainPanel.mainPanel.validate();
+			MainPanel.mainPanel.repaint();
 
 		}
 
 		if (e.getSource() == aboutButton) {
-			LoginPage.mainPanel.remove(LoginPage.userPanel);
-			LoginPage.mainPanel.add(LoginPage.aboutPanel);
-			LoginPage.mainPanel.revalidate();
-			LoginPage.mainPanel.repaint();
+			MainPanel.mainPanel.add(MainPanel.userPanel);
+			MainPanel.userPanel.removeAll();
+			
+			AboutPanel aboutPanel = new AboutPanel();
+			aboutPanel.addAboutPanelComponents();
+			MainPanel.userPanel.add(aboutPanel);
+			
+			MainPanel.mainPanel.revalidate();
+			MainPanel.mainPanel.repaint();
 		}
 
 	}
