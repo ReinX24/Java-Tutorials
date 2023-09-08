@@ -19,8 +19,9 @@ public class Main {
 		System.out.println("absPath.siAbsolute() = " + absPath.isAbsolute());
 		// ^ needs to start from src for this to point to the src folder of the project
 		// folder this is inside of
-		
-		Path relativizedPath = Paths.get(srcFolder.toString()).relativize(absPath);
+
+		// Giving a base path and adding on top of that path using relativize
+		Path relativizedPath = Paths.get("/home/rein/repos/Java-Tutorials/Java Files and APIs").relativize(absPath);
 		System.out.println(relativizedPath);
 
 		// Checking if the srcFolder does exits
@@ -30,6 +31,11 @@ public class Main {
 //			e.printStackTrace();
 //		}
 
+		// Getting the absolute path where this class is located
+		Path thisClassPath = Paths.get("com", "marcobehler", "absoluteRelativeCanonicalFiles", "Main.java");
+		String absolutePathStr = thisClassPath.toAbsolutePath().toString();
+		System.out.println("This class is located at: " + absolutePathStr);
+		
 	}
 
 }

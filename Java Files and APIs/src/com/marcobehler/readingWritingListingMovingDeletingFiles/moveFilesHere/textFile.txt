@@ -1,0 +1,2 @@
+I am writing text to this text file!
+Now I will be reading the text inside!

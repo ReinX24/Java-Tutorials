@@ -44,7 +44,7 @@ public class SideButtons implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == loginButton) {
-
+			
 			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
 			LoginPage.mainPanel.add(LoginPage.userPanel);
 
@@ -68,6 +68,7 @@ public class SideButtons implements ActionListener {
 
 		if (e.getSource() == registerButton) {
 
+			// TODO: contain this in a single class
 			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
 			LoginPage.mainPanel.add(LoginPage.userPanel);
 

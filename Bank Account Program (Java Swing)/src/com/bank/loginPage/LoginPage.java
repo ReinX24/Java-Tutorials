@@ -18,12 +18,10 @@ public class LoginPage implements ActionListener {
 	JFrame loginFrame;
 	public static JPanel mainPanel;
 
-	JLabel headerLabel;
-	JPanel headerPanel;
-
+	HeaderPanel headerPanel;
 	public static SidePanel sideBarPanel;
 	public static JPanel userPanel;
-	static JPanel aboutPanel;
+	static AboutPanel aboutPanel;
 
 	JLabel aboutTitleLabel;
 	JLabel aboutDescriptionLabel;
@@ -58,6 +56,7 @@ public class LoginPage implements ActionListener {
 	static final Color BLACK = new Color(34, 34, 34);
 
 	public LoginPage() {
+
 		loginFrame = new JFrame();
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginFrame.setResizable(false);
@@ -67,23 +66,14 @@ public class LoginPage implements ActionListener {
 		mainPanel.setPreferredSize(new Dimension(1280, 720));
 		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
-		headerLabel = new JLabel("bAccess | Online Banking Software Solutions");
-		headerLabel.setFont(new Font(null, Font.PLAIN, 32));
-		headerLabel.setForeground(WHITE);
-		headerLabel.setHorizontalAlignment(JLabel.CENTER);
-
-		headerPanel = new JPanel();
-		headerPanel.setPreferredSize(new Dimension(1280, 128));
-		headerPanel.setBackground(DARK_GREEN);
-		headerPanel.setLayout(new BorderLayout());
-
-		headerPanel.add(headerLabel, BorderLayout.CENTER);
-
+		/* Header of program */
+		headerPanel = new HeaderPanel();
+		headerPanel.addHeaderLabel();
 		mainPanel.add(headerPanel);
 
+		/* Sidebar that contains buttons with different functions */
 		sideBarPanel = new SidePanel();
 		sideBarPanel.addMenuSidePanelButtons();
-
 		mainPanel.add(sideBarPanel);
 
 		/* For adding labels and fields that ask for login details */
@@ -92,60 +82,8 @@ public class LoginPage implements ActionListener {
 		userPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 
 		/* Starting page that shows that the program is about */
-		aboutPanel = new JPanel();
-		aboutPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-		aboutPanel.setPreferredSize(new Dimension(1024, 768));
-		aboutPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 16, 16));
-
-		aboutTitleLabel = new JLabel("Welcome to bAccess!");
-		aboutTitleLabel.setFont(new Font(null, Font.BOLD, 32));
-		aboutTitleLabel.setForeground(BLACK);
-		aboutTitleLabel.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(aboutTitleLabel);
-
-		aboutDescriptionLabel = new JLabel("\"Empowering Your Financial Future With Technology\"");
-		aboutDescriptionLabel.setFont(new Font(null, Font.ITALIC, 28));
-		aboutDescriptionLabel.setForeground(BLACK);
-		aboutDescriptionLabel.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(aboutDescriptionLabel);
-
-		// TODO: add a list that contains the programs features
-		featuresLabelTitle = new JLabel("Features:");
-		featuresLabelTitle.setFont(new Font(null, Font.PLAIN, 24));
-		featuresLabelTitle.setForeground(BLACK);
-		featuresLabelTitle.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(featuresLabelTitle);
-
-		featureOne = new JLabel(" - 24/7 Accessibility");
-		featureOne.setFont(new Font(null, Font.PLAIN, 20));
-		featureOne.setForeground(BLACK);
-		featureOne.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(featureOne);
-
-		featureTwo = new JLabel(" - Real-Time Account Monitoring");
-		featureTwo.setFont(new Font(null, Font.PLAIN, 20));
-		featureTwo.setForeground(BLACK);
-		featureTwo.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(featureTwo);
-
-		featureThree = new JLabel(" - Easy Fund Transfers");
-		featureThree.setFont(new Font(null, Font.PLAIN, 20));
-		featureThree.setForeground(BLACK);
-		featureThree.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(featureThree);
-
-		featureFour = new JLabel(" - Enhanced Security");
-		featureFour.setFont(new Font(null, Font.PLAIN, 20));
-		featureFour.setForeground(BLACK);
-		featureFour.setPreferredSize(new Dimension(1024, 32));
-
-		aboutPanel.add(featureFour);
+		aboutPanel = new AboutPanel();
+		aboutPanel.addPanelComponents();
 
 		mainPanel.add(aboutPanel);
 
@@ -154,10 +92,7 @@ public class LoginPage implements ActionListener {
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
 
-		/*
-		 * For the fields and buttons in the userPanel, the panel where the user could
-		 * login and register
-		 */
+		/* User inputs such as email, name, and password */
 		enterMailLabel = new JLabel("Email:");
 		enterMailLabel.setPreferredSize(new Dimension(192, 32));
 
