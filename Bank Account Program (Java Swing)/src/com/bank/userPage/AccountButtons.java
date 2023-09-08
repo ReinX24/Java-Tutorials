@@ -82,7 +82,8 @@ public class AccountButtons implements ActionListener {
 			LoginPage.loggedInAccountPanel.removeAll();
 			
 			DepositPanel depositPanel = new DepositPanel();
-			LoginPage.loggedInAccountPanel.add(depositPanel.initializePanel());
+			depositPanel.initializePanel();
+			LoginPage.loggedInAccountPanel.add(depositPanel);
 
 			LoginPage.loggedInAccountPanel.revalidate();
 			LoginPage.loggedInAccountPanel.repaint();

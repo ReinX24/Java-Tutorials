@@ -79,7 +79,6 @@ public class LoginPage implements ActionListener {
 		/* For adding labels and fields that ask for login details */
 		userPanel = new JPanel();
 		userPanel.setPreferredSize(new Dimension(1024, 768));
-		userPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 
 		/* Starting page that shows that the program is about */
 		aboutPanel = new AboutPanel();

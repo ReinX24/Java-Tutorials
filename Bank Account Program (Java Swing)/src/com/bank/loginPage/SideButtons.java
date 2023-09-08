@@ -44,23 +44,26 @@ public class SideButtons implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == loginButton) {
-			
+
 			LoginPage.mainPanel.remove(LoginPage.aboutPanel);
 			LoginPage.mainPanel.add(LoginPage.userPanel);
 
 			LoginPage.userPanel.removeAll();
 
-			LoginPage.userPanel.add(LoginPage.enterMailLabel);
-			LoginPage.userPanel.add(LoginPage.mailField);
+			LoginPanel loginPanel = new LoginPanel();
+			LoginPage.userPanel.add(loginPanel.initializeLoginPanel());
 
-			LoginPage.userPanel.add(LoginPage.enterPasswordLabel);
-			LoginPage.userPanel.add(LoginPage.passwordField);
-
-			LoginPage.userPanel.add(LoginPage.reEnterPasswordLabel);
-			LoginPage.userPanel.add(LoginPage.reEnterPasswordField);
-
-			LoginPage.userPanel.add(LoginPage.loginUserButton);
-			LoginPage.userPanel.add(LoginPage.clearButton);
+//			LoginPage.userPanel.add(LoginPage.enterMailLabel);
+//			LoginPage.userPanel.add(LoginPage.mailField);
+//
+//			LoginPage.userPanel.add(LoginPage.enterPasswordLabel);
+//			LoginPage.userPanel.add(LoginPage.passwordField);
+//
+//			LoginPage.userPanel.add(LoginPage.reEnterPasswordLabel);
+//			LoginPage.userPanel.add(LoginPage.reEnterPasswordField);
+//
+//			LoginPage.userPanel.add(LoginPage.loginUserButton);
+//			LoginPage.userPanel.add(LoginPage.clearButton);
 
 			LoginPage.mainPanel.validate();
 			LoginPage.mainPanel.repaint();
