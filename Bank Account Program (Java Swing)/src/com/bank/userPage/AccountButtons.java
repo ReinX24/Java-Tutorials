@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 public class AccountButtons implements ActionListener {
 
+	JButton accountInfoButton;
 	JButton depositButton;
 	JButton withdrawButton;
 	JButton sendFundsButton;
@@ -20,9 +21,15 @@ public class AccountButtons implements ActionListener {
 
 	JButton confirmDespositButton;
 	JButton confirmWithdrawButton;
+	JButton confirmSendButton;
 
 	public AccountButtons() {
 		/* New side buttons that will lead to deposit, withdraw, or send funds panels */
+		accountInfoButton = new JButton("Account Information");
+		accountInfoButton.addActionListener(this);
+		accountInfoButton.setFocusable(false);
+		accountInfoButton.setPreferredSize(new Dimension(256, 64));
+
 		depositButton = new JButton("Deposit Funds");
 		depositButton.addActionListener(this);
 		depositButton.setFocusable(false);
@@ -37,6 +44,8 @@ public class AccountButtons implements ActionListener {
 		sendFundsButton.addActionListener(this);
 		sendFundsButton.setFocusable(false);
 		sendFundsButton.setPreferredSize(new Dimension(256, 64));
+		
+		// TODO: add a button that lets the user reset their password
 
 		logoutButton = new JButton("Logout");
 		logoutButton.addActionListener(this);
@@ -49,6 +58,9 @@ public class AccountButtons implements ActionListener {
 
 		confirmWithdrawButton = new JButton("Confirm Withdraw");
 		confirmWithdrawButton.setPreferredSize(new Dimension(180, 40));
+
+		confirmSendButton = new JButton("Confirm Sending Funds");
+		confirmSendButton.setPreferredSize(new Dimension(240, 40));
 	}
 
 	public JButton addDepositButton() {
@@ -75,11 +87,30 @@ public class AccountButtons implements ActionListener {
 		return confirmWithdrawButton;
 	}
 
+	public JButton addConfirmSendFundsButton() {
+		return confirmSendButton;
+	}
+
+	public JButton addAccountInfoButton() {
+		return accountInfoButton;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		// TODO: add checks for if the user enters a String instead of a number valid
-		// for BigInteger
+		if (e.getSource() == accountInfoButton) {
+
+			MainPanel.loggedInAccountPanel.removeAll();
+
+			AccountInfoPanel accountInfoPanel = new AccountInfoPanel();
+			accountInfoPanel.addAccountInfoPanelComponents();
+			MainPanel.loggedInAccountPanel.add(accountInfoPanel);
+
+			MainPanel.loggedInAccountPanel.revalidate();
+			MainPanel.loggedInAccountPanel.repaint();
+
+		}
+
 		if (e.getSource() == depositButton) {
 
 			MainPanel.loggedInAccountPanel.removeAll();
@@ -98,16 +129,16 @@ public class AccountButtons implements ActionListener {
 //			AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
 		}
 		if (e.getSource() == withdrawButton) {
-			
+
 			MainPanel.loggedInAccountPanel.removeAll();
-			
+
 			WithdrawPanel withdrawPanel = new WithdrawPanel();
 			withdrawPanel.addWithdrawPanelComponents();
 			MainPanel.loggedInAccountPanel.add(withdrawPanel);
-			
+
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
-			
+
 //			System.out.println("Withdraw button clicked!");
 //			BigDecimal withdrawAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be withdrawn",
 //					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
@@ -125,7 +156,16 @@ public class AccountButtons implements ActionListener {
 //			}
 		}
 		if (e.getSource() == sendFundsButton) {
-			System.out.println("Send funds button clicked!");
+
+			MainPanel.loggedInAccountPanel.removeAll();
+
+			SendFundsPanel sendFundsPanel = new SendFundsPanel();
+			sendFundsPanel.addSendFundsPanelComponents();
+			MainPanel.loggedInAccountPanel.add(sendFundsPanel);
+
+			MainPanel.loggedInAccountPanel.revalidate();
+			MainPanel.loggedInAccountPanel.repaint();
+
 		}
 		if (e.getSource() == logoutButton) {
 			// TODO: when the user is logging out, update their information in their

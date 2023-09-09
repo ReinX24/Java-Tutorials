@@ -16,11 +16,11 @@ public class DepositPanel extends JPanel {
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 		this.setPreferredSize(new Dimension(1024, 768));
 	};
-	
+
 	public void addDepositLabelComponents() {
 		depositFundsLabel = new JLabel("Deposit Funds:");
 		depositFundsLabel.setPreferredSize(new Dimension(192, 32));
-		
+
 		this.add(depositFundsLabel);
 
 		depositFundsField = new JTextField();

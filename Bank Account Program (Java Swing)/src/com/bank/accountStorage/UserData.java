@@ -11,7 +11,12 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
+import com.bank.loginPage.LoginPanel;
+import com.bank.loginPage.MainButtons;
 import com.bank.loginPage.MainPanel;
+import com.bank.loginPage.RegisterPanel;
+import com.bank.loginPage.SidePanel;
+import com.bank.userPage.AccountInfoPanel;
 import com.bank.userPage.AccountPanel;
 
 public class UserData {
@@ -96,19 +101,24 @@ public class UserData {
 				 * Removing entered data in fields and replacing side buttons and mainPanel with
 				 * UI for logged in users
 				 */
-				MainPanel.mailField.setText("");
-				MainPanel.nameField.setText("");
-				MainPanel.passwordField.setText("");
-				MainPanel.reEnterPasswordField.setText("");
+				LoginPanel.mailField.setText("");
+				LoginPanel.passwordField.setText("");
+				LoginPanel.reEnterPasswordField.setText("");
 
-				// DONE: When we add userAccountPanel, we will be adding the user's information
-				MainPanel.loggedInAccountPanel = new AccountPanel(this);
+//				RegisterPanel.mailField.setText("");
+//				RegisterPanel.nameField.setText("");
+//				RegisterPanel.passwordField.setText("");
+//				RegisterPanel.reEnterPasswordField.setText("");
+
+				AccountPanel loggedInAccountPanel = new AccountPanel(this);
 
 				MainPanel.mainPanel.remove(MainPanel.userPanel);
-				MainPanel.mainPanel.add(MainPanel.loggedInAccountPanel);
-
+				MainPanel.mainPanel.add(loggedInAccountPanel);
+				
+				// TODO: add user info as starting screen when logging in
+				
 				MainPanel.sideBarPanel.removeAll();
-				MainPanel.sideBarPanel.addLoggedInSidePanelButtons();
+				MainPanel.sideBarPanel.addLoggedInSidePanelButtons();				
 
 				MainPanel.mainPanel.validate();
 				MainPanel.mainPanel.repaint();
@@ -125,11 +135,7 @@ public class UserData {
 		}
 	}
 
-	// TODO: create a custom method that reads a file and updates the balance field
-	// within that file
-
 	/* Helper methods for our program */
-
 	public String getUserMail() {
 		return userMail;
 	}
