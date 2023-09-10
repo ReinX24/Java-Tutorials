@@ -19,10 +19,8 @@ public class realtorApi {
 		HttpResponse<String> apiResponse = null;
 
 		try {
-
 			apiResponse = HttpClient.newHttpClient().send(apiRequest, HttpResponse.BodyHandlers.ofString());
 			System.out.println(apiResponse.body().toString());
-
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}

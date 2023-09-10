@@ -22,9 +22,9 @@ public class Call {
 
 			responseList = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 			System.out.println(responseList.body().toString());
-
+			
 			// Cleaning up the data that we have received
-			String responseStr = responseList.body().toString();
+			String responseStr = responseList.body().toString();			
 			String jokeStr = responseStr.substring(responseStr.indexOf(" "),
 					responseStr.lastIndexOf("}")).trim();
 			
