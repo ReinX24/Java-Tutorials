@@ -6,28 +6,26 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 public class FileReaderExample {
-	
+
 	public static void main(String[] args) {
-		
+
 		Path projectPath = Paths.get("src", "com", "rein", "streams").resolve("textFile.txt").toAbsolutePath();
 		File textFile = new File(projectPath.toString());
-		
+
 		try (FileReader fileReader = new FileReader(textFile)) {
-			
-			int fileLetters = fileReader.read();
-			
+
+			int fileLetters;
+
 			while (fileReader.ready()) {
+				fileLetters = fileReader.read(); // .read() returns an integer
 				System.out.println((char) fileLetters);
-				fileLetters = fileReader.read();
 			}
-			
-			
+
 		} catch (IOException e) {
 			e.getMessage();
 		}
-		
+
 	}
 
 }

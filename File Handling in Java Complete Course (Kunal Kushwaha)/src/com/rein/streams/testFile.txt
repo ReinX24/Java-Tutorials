@@ -1,0 +1,1 @@
+Writing in this file with a BufferedWriter object.

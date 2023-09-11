@@ -12,8 +12,9 @@ public class InputStreamReaderExample {
 			System.out.print("Enter some letters: ");
 			int letters = inputStreamReader.read();
 			while (inputStreamReader.ready()) {
-				System.out.println((char) letters);
 				letters = inputStreamReader.read();
+				System.out.println((char) letters);
+	
 			}
 
 		} catch (IOException e) {
