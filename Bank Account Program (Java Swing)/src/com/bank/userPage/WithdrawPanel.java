@@ -2,6 +2,7 @@ package com.bank.userPage;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.math.BigDecimal;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,7 +11,7 @@ import javax.swing.JTextField;
 public class WithdrawPanel extends JPanel {
 
 	JLabel withdrawFundsLabel;
-	JTextField withdrawFundsField;
+	static JTextField withdrawFundsField;
 
 	public WithdrawPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
@@ -30,6 +31,11 @@ public class WithdrawPanel extends JPanel {
 
 		AccountButtons accountButtons = new AccountButtons();
 		this.add(accountButtons.addConfirmWithdrawButton());
+	}
+
+	public static BigDecimal getWithdrawAmount() {
+		// TODO: check if the user enters a number and not a string when withdrawing
+		return BigDecimal.valueOf(Long.parseLong(withdrawFundsField.getText().toString()));
 	}
 
 }

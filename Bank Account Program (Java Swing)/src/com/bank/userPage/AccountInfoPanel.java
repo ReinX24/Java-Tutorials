@@ -1,13 +1,17 @@
 package com.bank.userPage;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bank.accountStorage.UserData;
+import com.bank.loginPage.MainPanel;
 
 public class AccountInfoPanel extends JPanel {
 
@@ -20,6 +24,8 @@ public class AccountInfoPanel extends JPanel {
 	JLabel userNameLabel;
 	JLabel userBalanceLabel;
 
+	static NumberFormat numberFormat;
+	
 	public AccountInfoPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 		this.setPreferredSize(new Dimension(1024, 768));
@@ -34,48 +40,55 @@ public class AccountInfoPanel extends JPanel {
 
 	public void addAccountInfoPanelComponents() {
 		userMailLabel = new JLabel("Email: " + getUserMail());
+		userMailLabel.setPreferredSize(new Dimension(1024, 64));
+		userMailLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 
 		this.add(userMailLabel);
 
 		userNameLabel = new JLabel("Name: " + getUserName());
+		userNameLabel.setPreferredSize(new Dimension(1024, 64));
+		userNameLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 
 		this.add(userNameLabel);
 
-		userBalanceLabel = new JLabel("Balance: " + getUserBalance());
+		numberFormat = NumberFormat.getInstance();
+		userBalanceLabel = new JLabel("Balance: " + numberFormat.format(getUserBalance()));
+		userBalanceLabel.setPreferredSize(new Dimension(1024, 64));
+		userBalanceLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
 
 		this.add(userBalanceLabel);
 
 	}
 
-	public String getUserMail() {
+	public static String getUserMail() {
 		return userMail;
 	}
 
-	public void setUserMail(String userMail) {
+	public static void setUserMail(String userMail) {
 		AccountInfoPanel.userMail = userMail;
 	}
 
-	public String getUserName() {
+	public static String getUserName() {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
+	public static void setUserName(String userName) {
 		AccountInfoPanel.userName = userName;
 	}
 
-	public String getUserPassword() {
+	public static String getUserPassword() {
 		return userPassword;
 	}
 
-	public void setUserPassword(String userPassword) {
+	public static void setUserPassword(String userPassword) {
 		AccountInfoPanel.userPassword = userPassword;
 	}
 
-	public BigDecimal getUserBalance() {
+	public static BigDecimal getUserBalance() {
 		return userBalance;
 	}
 
-	public void setUserBalance(BigDecimal userBalance) {
+	public static void setUserBalance(BigDecimal userBalance) {
 		AccountInfoPanel.userBalance = userBalance;
 	}
 

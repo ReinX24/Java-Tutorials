@@ -3,8 +3,16 @@ package com.bank.userPage;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashMap;
 
+import com.bank.accountStorage.UserData;
 import com.bank.loginPage.MainPanel;
 
 import javax.swing.JButton;
@@ -44,9 +52,8 @@ public class AccountButtons implements ActionListener {
 		sendFundsButton.addActionListener(this);
 		sendFundsButton.setFocusable(false);
 		sendFundsButton.setPreferredSize(new Dimension(256, 64));
-		
-		// TODO: add a button that lets the user reset their password
 
+		// TODO: add a button that lets the user reset their password
 		logoutButton = new JButton("Logout");
 		logoutButton.addActionListener(this);
 		logoutButton.setFocusable(false);
@@ -54,12 +61,15 @@ public class AccountButtons implements ActionListener {
 
 		/* Buttons that the user clicks to deposit, withdraw, or send funds */
 		confirmDespositButton = new JButton("Confirm Deposit");
+		confirmDespositButton.addActionListener(this);
 		confirmDespositButton.setPreferredSize(new Dimension(180, 40));
 
 		confirmWithdrawButton = new JButton("Confirm Withdraw");
+		confirmWithdrawButton.addActionListener(this);
 		confirmWithdrawButton.setPreferredSize(new Dimension(180, 40));
 
 		confirmSendButton = new JButton("Confirm Sending Funds");
+		confirmSendButton.addActionListener(this);
 		confirmSendButton.setPreferredSize(new Dimension(240, 40));
 	}
 
@@ -95,6 +105,12 @@ public class AccountButtons implements ActionListener {
 		return accountInfoButton;
 	}
 
+	public static boolean recipientExists(String recipientMail) {
+		// TODO: use a Path object to point to the recipient's text fil;e
+		File recipientFile = new File("src/com/bank/accountStorage/" + recipientMail + ".txt");
+		return recipientFile.exists();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -121,13 +137,8 @@ public class AccountButtons implements ActionListener {
 
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
-
-//			System.out.println("Deposit button clicked!");
-//			BigDecimal depositAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be deposited",
-//					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
-//			AccountPanel.currentUser.setUserBalance(AccountPanel.currentUser.getUserBalance().add(depositAmount));
-//			AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
 		}
+
 		if (e.getSource() == withdrawButton) {
 
 			MainPanel.loggedInAccountPanel.removeAll();
@@ -139,22 +150,8 @@ public class AccountButtons implements ActionListener {
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
 
-//			System.out.println("Withdraw button clicked!");
-//			BigDecimal withdrawAmount = new BigDecimal(JOptionPane.showInputDialog(null, "Enter funds to be withdrawn",
-//					"Deposit Funds", JOptionPane.INFORMATION_MESSAGE));
-//			// Checks if the currentUser's balance is less than the withdrawAmount
-//			if (AccountPanel.currentUser.getUserBalance().compareTo(withdrawAmount) < 0) {
-//				JOptionPane.showMessageDialog(null, "Not enough funds!", "Insufficient Funds",
-//						JOptionPane.WARNING_MESSAGE);
-//			} else {
-//				int confirmWithdraw = JOptionPane.showConfirmDialog(null, "Withdraw P" + withdrawAmount + "?");
-//				if (confirmWithdraw == JOptionPane.YES_OPTION) {
-//					AccountPanel.currentUser
-//							.setUserBalance(AccountPanel.currentUser.getUserBalance().subtract(withdrawAmount));
-//					AccountPanel.balanceLabel.setText("Balance: P" + AccountPanel.currentUser.getUserBalance());
-//				}
-//			}
 		}
+
 		if (e.getSource() == sendFundsButton) {
 
 			MainPanel.loggedInAccountPanel.removeAll();
@@ -167,11 +164,91 @@ public class AccountButtons implements ActionListener {
 			MainPanel.loggedInAccountPanel.repaint();
 
 		}
-		if (e.getSource() == logoutButton) {
-			// TODO: when the user is logging out, update their information in their
-			// respective text file
-			System.out.println("Logout button clicked");
 
+		if (e.getSource() == confirmDespositButton) {
+			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+			String userMail = AccountInfoPanel.getUserMail();
+			String userName = AccountInfoPanel.getUserName();
+			String userPassword = AccountInfoPanel.getUserPassword();
+			BigDecimal newBalance = AccountInfoPanel.getUserBalance().add(DepositPanel.getDepositAmount());
+			UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+			JOptionPane.showMessageDialog(null, "You have deposited P" + currentUserBalance, "Deposit Message",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+
+		if (e.getSource() == confirmWithdrawButton) {
+			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+			BigDecimal withdrawAmount = WithdrawPanel.getWithdrawAmount();
+			// if the withdrawAmount is greater than currentUserBalance
+			if (withdrawAmount.compareTo(currentUserBalance) == 1) {
+				JOptionPane.showMessageDialog(null, "Not Enough Funds To Withdraw!", "Withdraw Amount Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				String userMail = AccountInfoPanel.getUserMail();
+				String userName = AccountInfoPanel.getUserName();
+				String userPassword = AccountInfoPanel.getUserPassword();
+				BigDecimal newBalance = currentUserBalance.subtract(withdrawAmount);
+				UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+				JOptionPane.showMessageDialog(null, "You have withdrawn P" + withdrawAmount, "Withdraw Message",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		if (e.getSource() == confirmSendButton) {
+			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+			BigDecimal sendAmount = SendFundsPanel.getSendAmount();
+			String recipientMail = SendFundsPanel.getRecipientMail();
+			// sendAmount is greater than currentUserBalance
+			if (sendAmount.compareTo(currentUserBalance) == 1) {
+				JOptionPane.showMessageDialog(null, "Not Enough Funds To Send!", "Send Amount Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else if (recipientExists(recipientMail)) {
+
+				BufferedReader fileReader;
+				try {
+					fileReader = new BufferedReader(
+							new FileReader("src/com/bank/accountStorage/" + recipientMail + ".txt"));
+					
+					String userDataTemp;
+					StringBuilder userData = new StringBuilder();
+					
+					while ((userDataTemp = fileReader.readLine()) != null) {
+						userData.append(userDataTemp);
+					}
+
+					String[] userDataArray = new String[4];
+					userDataArray = userData.toString().split(",");
+
+					HashMap<String, String> userDataMap = new HashMap<>();
+					for (int i = 0; i < userDataArray.length; i++) {
+						String[] tempArr = userDataArray[i].split(":");
+						userDataMap.put(tempArr[0], tempArr[1]);
+					}
+					// TODO: update the recipient and the user's data after sending funds
+					System.out.println(userDataMap);
+					
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			
+				
+//				String userMail = AccountInfoPanel.getUserMail();
+//				String userName = AccountInfoPanel.getUserName();
+//				String userPassword = AccountInfoPanel.getUserPassword();
+//				BigDecimal newBalance = currentUserBalance.subtract(sendAmount);
+//				
+//				UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+//				JOptionPane.showMessageDialog(null, "You have sent P" + sendAmount, "Withdraw Message",
+//						JOptionPane.INFORMATION_MESSAGE);
+
+			} else {
+				JOptionPane.showMessageDialog(null, "Recipient Not Found!", "Recipient Mail Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+
+		if (e.getSource() == logoutButton) {
 			MainPanel.mainPanel.remove(MainPanel.loggedInAccountPanel);
 			MainPanel.mainPanel.add(MainPanel.userPanel);
 

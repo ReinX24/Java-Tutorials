@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import com.bank.loginPage.LoginPanel;
 import com.bank.loginPage.MainButtons;
@@ -43,6 +45,8 @@ public class UserData {
 		// between text
 		if (Pattern.matches("^(.+)@(.+)$", userMail)) {
 			// For creating the text file with the user's email, user name, and password
+			// TODO: change pathing of files to be absolute and instead of instantiating
+			// within the File object, use Path objects
 			File userFile = new File("src/com/bank/accountStorage/" + userMail + ".txt");
 			try {
 				if (userFile.createNewFile()) {
@@ -97,28 +101,21 @@ public class UserData {
 				JOptionPane.showMessageDialog(null, "Login Successful!", "Login Successful",
 						JOptionPane.INFORMATION_MESSAGE);
 
-				/*
-				 * Removing entered data in fields and replacing side buttons and mainPanel with
-				 * UI for logged in users
-				 */
 				LoginPanel.mailField.setText("");
 				LoginPanel.passwordField.setText("");
 				LoginPanel.reEnterPasswordField.setText("");
 
-//				RegisterPanel.mailField.setText("");
-//				RegisterPanel.nameField.setText("");
-//				RegisterPanel.passwordField.setText("");
-//				RegisterPanel.reEnterPasswordField.setText("");
-
-				AccountPanel loggedInAccountPanel = new AccountPanel(this);
+				MainPanel.loggedInAccountPanel = new AccountPanel(this);
 
 				MainPanel.mainPanel.remove(MainPanel.userPanel);
-				MainPanel.mainPanel.add(loggedInAccountPanel);
-				
-				// TODO: add user info as starting screen when logging in
-				
+				MainPanel.mainPanel.add(MainPanel.loggedInAccountPanel);
+
+				AccountInfoPanel accountInfoPanel = new AccountInfoPanel();
+				accountInfoPanel.addAccountInfoPanelComponents();
+				MainPanel.loggedInAccountPanel.add(accountInfoPanel);
+
 				MainPanel.sideBarPanel.removeAll();
-				MainPanel.sideBarPanel.addLoggedInSidePanelButtons();				
+				MainPanel.sideBarPanel.addLoggedInSidePanelButtons();
 
 				MainPanel.mainPanel.validate();
 				MainPanel.mainPanel.repaint();
@@ -132,6 +129,21 @@ public class UserData {
 
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Account not found!", "No Account Fount", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	public static void updateUserBalance(String userMail, String userName, String userPassword, BigDecimal newBalance) {
+		File userFile = new File("src/com/bank/accountStorage/" + userMail + ".txt");
+		try {
+			FileWriter userWriter = new FileWriter(userFile);
+			userWriter.write("email:" + userMail + ",\n");
+			userWriter.write("username:" + userName + ",\n");
+			userWriter.write("password:" + userPassword + ",\n");
+			userWriter.write("balance:" + newBalance);
+			userWriter.close();
+			AccountInfoPanel.setUserBalance(newBalance);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

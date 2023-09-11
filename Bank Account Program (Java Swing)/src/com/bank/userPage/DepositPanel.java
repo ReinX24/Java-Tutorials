@@ -2,6 +2,8 @@ package com.bank.userPage;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,7 +12,7 @@ import javax.swing.JTextField;
 public class DepositPanel extends JPanel {
 
 	JLabel depositFundsLabel;
-	JTextField depositFundsField;
+	static JTextField depositFundsField;
 
 	public DepositPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
@@ -30,6 +32,12 @@ public class DepositPanel extends JPanel {
 
 		AccountButtons accountButtons = new AccountButtons();
 		this.add(accountButtons.addConfirmDepositButton());
+	}
+	
+	public static BigDecimal getDepositAmount() {
+		// TODO: check if the user enters a number and not a string when depositing
+		// TODO: add a message that tells the user they have deposited a certain amount
+		return BigDecimal.valueOf(Long.parseLong(depositFundsField.getText().toString()));
 	}
 
 }

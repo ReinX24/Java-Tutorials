@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import javax.swing.*;
 
 import com.bank.accountStorage.UserData;
+import com.bank.userPage.AccountPanel;
 
 public class MainPanel {
 
@@ -22,7 +23,7 @@ public class MainPanel {
 	public static SidePanel sideBarPanel;
 	public static JPanel userPanel;
 
-	public static JPanel loggedInAccountPanel;
+	public static AccountPanel loggedInAccountPanel;
 
 	static final Color DARK_GREEN = new Color(20, 89, 80);
 	static final Color WHITE = new Color(234, 236, 236);
@@ -57,7 +58,7 @@ public class MainPanel {
 		/* Starting page that shows that the program is about */
 		AboutPanel aboutPanel = new AboutPanel();
 		aboutPanel.addAboutPanelComponents();
-		userPanel.add(aboutPanel);
+		userPanel.add(aboutPanel);		
 
 		/* Finish instantiating our loginFrame */
 		loginFrame.getContentPane().add(mainPanel);
