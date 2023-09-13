@@ -43,6 +43,7 @@ public class Graph {
 	public void depthFirstSearch(int src) {
 		boolean[] visited = new boolean[nodeMatrix.length]; // for checking if a node is visited
 		dfsHelper(src, visited);
+		System.out.println();
 	}
 
 	private void dfsHelper(int src, boolean[] visited) {

@@ -4,6 +4,7 @@ public class DepthFirstSearchExample {
 	
 	public static void main(String[] args) {
 		
+		// directedGraphOne.png
 		Graph graphOne = new Graph(5);
 		
 		graphOne.addNode(new Node('A'));
@@ -23,6 +24,25 @@ public class DepthFirstSearchExample {
 		graphOne.printGraph();
 		
 		graphOne.depthFirstSearch(0);
+		
+		// directedGraphTwo.png
+		Graph graphTwo = new Graph(4);
+		
+		graphTwo.addNode(new Node('A')); // 1
+		graphTwo.addNode(new Node('B')); // 2
+		graphTwo.addNode(new Node('C')); // 3
+		graphTwo.addNode(new Node('D')); // 4
+		
+		graphTwo.addEdge(0, 1);
+		graphTwo.addEdge(0, 2);
+		graphTwo.addEdge(2, 1);
+		graphTwo.addEdge(2, 3);
+		graphTwo.addEdge(3, 2);
+		
+		graphTwo.printGraph();
+		
+		graphTwo.depthFirstSearch(0);
+		
 	}
 
 }
