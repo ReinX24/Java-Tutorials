@@ -40,14 +40,18 @@ public class UserData {
 		this.userPassword = userPassword;
 	}
 
+	public static boolean validEmail(String userMail) {
+		return Pattern.matches("^(.+)@(.+)$", userMail);
+	}
+
 	public void recordUserData() {
 		// Regex that checks if the email is a valid email, checks if it has and @
 		// between text
-		if (Pattern.matches("^(.+)@(.+)$", userMail)) {
+		if (validEmail(this.userMail)) {
 			// For creating the text file with the user's email, user name, and password
 			// TODO: change pathing of files to be absolute and instead of instantiating
 			// within the File object, use Path objects
-			File userFile = new File("src/com/bank/accountStorage/" + userMail + ".txt");
+			File userFile = new File("src/com/bank/accountStorage/" + this.userMail + ".txt");
 			try {
 				if (userFile.createNewFile()) {
 					FileWriter userWriter = new FileWriter(userFile);
@@ -141,7 +145,6 @@ public class UserData {
 			userWriter.write("password:" + userPassword + ",\n");
 			userWriter.write("balance:" + newBalance);
 			userWriter.close();
-			AccountInfoPanel.setUserBalance(newBalance);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

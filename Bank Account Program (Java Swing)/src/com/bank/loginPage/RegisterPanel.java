@@ -67,4 +67,6 @@ public class RegisterPanel extends JPanel {
 		this.add(registerButton.addClearDetailsButton());
 	}
 
+	// TODO: add getters for RegisterPanel textfields and refactor code when registering in UserData class
+	
 }

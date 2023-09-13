@@ -36,7 +36,6 @@ public class DepositPanel extends JPanel {
 	
 	public static BigDecimal getDepositAmount() {
 		// TODO: check if the user enters a number and not a string when depositing
-		// TODO: add a message that tells the user they have deposited a certain amount
 		return BigDecimal.valueOf(Long.parseLong(depositFundsField.getText().toString()));
 	}
 

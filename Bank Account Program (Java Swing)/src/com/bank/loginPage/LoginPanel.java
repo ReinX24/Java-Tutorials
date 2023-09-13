@@ -56,5 +56,17 @@ public class LoginPanel extends JPanel {
 		this.add(loginButton.addLoginAccountButton());
 		this.add(loginButton.addClearDetailsButton());
 	}
+	
+	public static String getLoginMail() {
+		return mailField.getText();
+	}
+	
+	public static String getLoginPassword() {
+		return String.valueOf(passwordField.getPassword());
+	}
+	
+	public static String getLoginReEnterPassword() {
+		return String.valueOf(reEnterPasswordField.getPassword());
+	}
 
 }

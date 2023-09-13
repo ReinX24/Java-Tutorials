@@ -1,0 +1,4 @@
+email:null,
+username:nikole,
+password:null,
+balance:24100

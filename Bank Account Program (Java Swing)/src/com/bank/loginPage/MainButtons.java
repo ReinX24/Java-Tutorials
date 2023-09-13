@@ -116,11 +116,19 @@ public class MainButtons implements ActionListener {
 		}
 
 		if (e.getSource() == loginAccountButton) {
-			if (String.valueOf(LoginPanel.passwordField.getPassword())
-					.equals(String.valueOf(LoginPanel.reEnterPasswordField.getPassword()))) {
 
-				UserData loginUserData = new UserData(LoginPanel.mailField.getText(),
-						String.valueOf(LoginPanel.passwordField.getPassword()));
+			String loginMail = LoginPanel.getLoginMail();
+			String loginPassword = LoginPanel.getLoginPassword();
+			String loginReEnterPassword = LoginPanel.getLoginReEnterPassword();
+
+			// Checking if the email typed in is valid
+			if (!UserData.validEmail(loginMail)) {
+				JOptionPane.showMessageDialog(null, "Invalid Email", "Invalid Email Message",
+						JOptionPane.ERROR_MESSAGE);
+			} else if (loginPassword.equals(loginReEnterPassword)) {
+				
+				UserData loginUserData = new UserData(loginMail,
+						loginPassword);
 				loginUserData.readUserData();
 
 			} else {
@@ -133,8 +141,9 @@ public class MainButtons implements ActionListener {
 			if (String.valueOf(RegisterPanel.passwordField.getPassword())
 					.equals(String.valueOf(RegisterPanel.reEnterPasswordField.getPassword()))) {
 
-				UserData newUserData = new UserData(RegisterPanel.mailField.getText(), RegisterPanel.nameField.getText(),
-						String.valueOf(RegisterPanel.passwordField.getPassword()), new BigDecimal(0));
+				UserData newUserData = new UserData(RegisterPanel.mailField.getText(),
+						RegisterPanel.nameField.getText(), String.valueOf(RegisterPanel.passwordField.getPassword()),
+						new BigDecimal(0));
 				newUserData.recordUserData();
 
 			} else {
@@ -147,7 +156,7 @@ public class MainButtons implements ActionListener {
 			LoginPanel.mailField.setText("");
 			LoginPanel.passwordField.setText("");
 			LoginPanel.reEnterPasswordField.setText("");
-			
+
 			RegisterPanel.mailField.setText("");
 			RegisterPanel.nameField.setText("");
 			RegisterPanel.passwordField.setText("");

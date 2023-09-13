@@ -3,6 +3,7 @@ package com.bank.userPage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
@@ -20,15 +21,16 @@ public class AccountInfoPanel extends JPanel {
 	static String userPassword;
 	static BigDecimal userBalance;
 
+	JLabel greetUserLabel;
 	JLabel userMailLabel;
 	JLabel userNameLabel;
 	JLabel userBalanceLabel;
 
 	static NumberFormat numberFormat;
-	
+
 	public AccountInfoPanel() {
-		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
 		this.setPreferredSize(new Dimension(1024, 768));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 16, 16));
 	}
 
 	public void setAccountInfo(UserData userInfo) {
@@ -39,22 +41,31 @@ public class AccountInfoPanel extends JPanel {
 	}
 
 	public void addAccountInfoPanelComponents() {
+
+		// TODO: greet the user with a good morning, good afternoon, or good evening,
+		// depending on the system's time
+		greetUserLabel = new JLabel("Hello " + getUserName() + "!");
+		greetUserLabel.setPreferredSize(new Dimension(1024, 96));
+		greetUserLabel.setFont(new Font(null, Font.BOLD, 32));
+
+		this.add(greetUserLabel);
+
 		userMailLabel = new JLabel("Email: " + getUserMail());
-		userMailLabel.setPreferredSize(new Dimension(1024, 64));
-		userMailLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		userMailLabel.setPreferredSize(new Dimension(1024, 32));
+		userMailLabel.setFont(new Font(null, Font.PLAIN, 18));
 
 		this.add(userMailLabel);
 
 		userNameLabel = new JLabel("Name: " + getUserName());
-		userNameLabel.setPreferredSize(new Dimension(1024, 64));
-		userNameLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		userNameLabel.setPreferredSize(new Dimension(1024, 32));
+		userNameLabel.setFont(new Font(null, Font.PLAIN, 18));
 
 		this.add(userNameLabel);
 
 		numberFormat = NumberFormat.getInstance();
 		userBalanceLabel = new JLabel("Balance: " + numberFormat.format(getUserBalance()));
-		userBalanceLabel.setPreferredSize(new Dimension(1024, 64));
-		userBalanceLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		userBalanceLabel.setPreferredSize(new Dimension(1024, 32));
+		userBalanceLabel.setFont(new Font(null, Font.PLAIN, 18));
 
 		this.add(userBalanceLabel);
 

@@ -167,13 +167,20 @@ public class AccountButtons implements ActionListener {
 
 		if (e.getSource() == confirmDespositButton) {
 			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+			BigDecimal depositAmount = DepositPanel.getDepositAmount();
+
 			String userMail = AccountInfoPanel.getUserMail();
 			String userName = AccountInfoPanel.getUserName();
 			String userPassword = AccountInfoPanel.getUserPassword();
-			BigDecimal newBalance = AccountInfoPanel.getUserBalance().add(DepositPanel.getDepositAmount());
+			BigDecimal newBalance = currentUserBalance.add(DepositPanel.getDepositAmount());
 			UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
-			JOptionPane.showMessageDialog(null, "You have deposited P" + currentUserBalance, "Deposit Message",
+			AccountInfoPanel.setUserBalance(newBalance);
+			JOptionPane.showMessageDialog(null, "You have deposited P" + depositAmount, "Deposit Message",
 					JOptionPane.INFORMATION_MESSAGE);
+
+			// Clear DepositPanel JTextField
+			DepositPanel.depositFundsField.setText("");
+
 		}
 
 		if (e.getSource() == confirmWithdrawButton) {
@@ -189,28 +196,44 @@ public class AccountButtons implements ActionListener {
 				String userPassword = AccountInfoPanel.getUserPassword();
 				BigDecimal newBalance = currentUserBalance.subtract(withdrawAmount);
 				UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+				AccountInfoPanel.setUserBalance(newBalance);
 				JOptionPane.showMessageDialog(null, "You have withdrawn P" + withdrawAmount, "Withdraw Message",
 						JOptionPane.INFORMATION_MESSAGE);
+
+				// Clear WithdrawPanel JTextField
+				WithdrawPanel.withdrawFundsField.setText("");
+
 			}
 		}
 		if (e.getSource() == confirmSendButton) {
+
 			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
 			BigDecimal sendAmount = SendFundsPanel.getSendAmount();
 			String recipientMail = SendFundsPanel.getRecipientMail();
+
 			// sendAmount is greater than currentUserBalance
 			if (sendAmount.compareTo(currentUserBalance) == 1) {
 				JOptionPane.showMessageDialog(null, "Not Enough Funds To Send!", "Send Amount Error",
 						JOptionPane.ERROR_MESSAGE);
 			} else if (recipientExists(recipientMail)) {
 
-				BufferedReader fileReader;
 				try {
-					fileReader = new BufferedReader(
-							new FileReader("src/com/bank/accountStorage/" + recipientMail + ".txt"));
+
+					// Updating current user's information
+					String userMail = AccountInfoPanel.getUserMail();
+					String userName = AccountInfoPanel.getUserName();
+					String userPassword = AccountInfoPanel.getUserPassword();
+					BigDecimal newBalance = AccountInfoPanel.getUserBalance().subtract(sendAmount);
+					UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+					AccountInfoPanel.setUserBalance(newBalance);
 					
+					// Updating the recipients information
+					BufferedReader fileReader = new BufferedReader(
+							new FileReader("src/com/bank/accountStorage/" + recipientMail + ".txt"));
+
 					String userDataTemp;
 					StringBuilder userData = new StringBuilder();
-					
+
 					while ((userDataTemp = fileReader.readLine()) != null) {
 						userData.append(userDataTemp);
 					}
@@ -223,16 +246,25 @@ public class AccountButtons implements ActionListener {
 						String[] tempArr = userDataArray[i].split(":");
 						userDataMap.put(tempArr[0], tempArr[1]);
 					}
-					// TODO: update the recipient and the user's data after sending funds
-					System.out.println(userDataMap);
-					
+
+					String sendAmountStr = String
+							.valueOf(BigDecimal.valueOf(Long.parseLong(userDataMap.get("balance"))).add(sendAmount));
+
+					userDataMap.put("balance", sendAmountStr);
+
+					BigDecimal recipientNewBalance = BigDecimal.valueOf(Long.parseLong(userDataMap.get("balance")));
+
+					UserData.updateUserBalance(userDataMap.get("email"), userDataMap.get("username"),
+							userDataMap.get("password"), recipientNewBalance);
+
+					fileReader.close();
+
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			
-				
+
 //				String userMail = AccountInfoPanel.getUserMail();
 //				String userName = AccountInfoPanel.getUserName();
 //				String userPassword = AccountInfoPanel.getUserPassword();
