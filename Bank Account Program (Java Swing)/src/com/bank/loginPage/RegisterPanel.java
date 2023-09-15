@@ -36,16 +36,16 @@ public class RegisterPanel extends JPanel {
 		reEnterPasswordLabel = new JLabel("Re-enter Password:");
 		reEnterPasswordLabel.setPreferredSize(new Dimension(192, 32));
 
-		mailField = new JTextField();
+		mailField = new JTextField("");
 		mailField.setPreferredSize(new Dimension(640, 40));
 
-		nameField = new JTextField();
+		nameField = new JTextField("");
 		nameField.setPreferredSize(new Dimension(640, 40));
 
-		passwordField = new JPasswordField();
+		passwordField = new JPasswordField("");
 		passwordField.setPreferredSize(new Dimension(640, 40));
 
-		reEnterPasswordField = new JPasswordField();
+		reEnterPasswordField = new JPasswordField("");
 		reEnterPasswordField.setPreferredSize(new Dimension(640, 40));
 	}
 
@@ -63,10 +63,24 @@ public class RegisterPanel extends JPanel {
 		this.add(reEnterPasswordField);
 
 		MainButtons registerButton = new MainButtons();
-		this.add(registerButton.addRegisterAccountButton());
-		this.add(registerButton.addClearDetailsButton());
+		this.add(registerButton.getRegisterAccountButton());
+		this.add(registerButton.getClearDetailsButton());
 	}
 
-	// TODO: add getters for RegisterPanel textfields and refactor code when registering in UserData class
+	public static String getRegisterMail() {
+		return mailField.getText();
+	}
+	
+	public static String getRegisterName() {
+		return nameField.getText();
+	}
+	
+	public static String getRegisterPassword() {
+		return passwordField.getPassword().toString();
+	}
+	
+	public static String getRegisterRePassword() {
+		return reEnterPasswordField.getPassword().toString();
+	}
 	
 }

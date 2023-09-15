@@ -19,6 +19,8 @@ public class MainButtons implements ActionListener {
 	JButton loginAccountButton;
 	JButton registerAccountButton;
 	JButton clearDetailsButton;
+	
+	final BigDecimal DEFAULT_BALANCE = BigDecimal.valueOf(0);
 
 	public MainButtons() {
 		loginButton = new JButton("Login");
@@ -52,67 +54,67 @@ public class MainButtons implements ActionListener {
 		clearDetailsButton.setFocusable(false);
 	}
 
-	public JButton addLoginButton() {
+	public JButton getLoginButton() {
 		return loginButton;
 	}
 
-	public JButton addRegisterButton() {
+	public JButton getRegisterButton() {
 		return registerButton;
 	}
 
-	public JButton addAboutButton() {
+	public JButton getAboutButton() {
 		return aboutButton;
 	}
 
-	public JButton addLoginAccountButton() {
+	public JButton getLoginAccountButton() {
 		return loginAccountButton;
 	}
 
-	public JButton addRegisterAccountButton() {
+	public JButton getRegisterAccountButton() {
 		return registerAccountButton;
 	}
 
-	public JButton addClearDetailsButton() {
+	public JButton getClearDetailsButton() {
 		return clearDetailsButton;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getSource() == loginButton) {
-			MainPanel.mainPanel.add(MainPanel.userPanel);
-			MainPanel.userPanel.removeAll();
+			
+			MainPanel.addAndClearUserPanel();
 
 			LoginPanel loginPanel = new LoginPanel();
 			loginPanel.addLoginPanelComponents();
 			MainPanel.userPanel.add(loginPanel);
 
-			MainPanel.mainPanel.validate();
-			MainPanel.mainPanel.repaint();
+			MainPanel.repaintAndRevalidate();
+			
 		}
 
 		if (e.getSource() == registerButton) {
-			MainPanel.mainPanel.add(MainPanel.userPanel);
-			MainPanel.userPanel.removeAll();
-
+			
+			MainPanel.addAndClearUserPanel();
+			
 			RegisterPanel registerPanel = new RegisterPanel();
 			registerPanel.addRegisterPanelComponents();
 			MainPanel.userPanel.add(registerPanel);
 
-			MainPanel.mainPanel.validate();
-			MainPanel.mainPanel.repaint();
+			MainPanel.repaintAndRevalidate();
 
 		}
 
 		if (e.getSource() == aboutButton) {
-			MainPanel.mainPanel.add(MainPanel.userPanel);
-			MainPanel.userPanel.removeAll();
-
+			
+			MainPanel.addAndClearUserPanel();
+			
 			AboutPanel aboutPanel = new AboutPanel();
 			aboutPanel.addAboutPanelComponents();
 			MainPanel.userPanel.add(aboutPanel);
 
-			MainPanel.mainPanel.revalidate();
-			MainPanel.mainPanel.repaint();
+			MainPanel.repaintAndRevalidate();
+			
 		}
 
 		if (e.getSource() == loginAccountButton) {
@@ -123,36 +125,45 @@ public class MainButtons implements ActionListener {
 
 			// Checking if the email typed in is valid
 			if (!UserData.validEmail(loginMail)) {
+
 				JOptionPane.showMessageDialog(null, "Invalid Email", "Invalid Email Message",
 						JOptionPane.ERROR_MESSAGE);
+
 			} else if (loginPassword.equals(loginReEnterPassword)) {
-				
-				UserData loginUserData = new UserData(loginMail,
-						loginPassword);
+
+				UserData loginUserData = new UserData(loginMail, loginPassword);
 				loginUserData.readUserData();
 
 			} else {
+
 				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
 						JOptionPane.WARNING_MESSAGE);
+
 			}
 		}
 
 		if (e.getSource() == registerAccountButton) {
-			if (String.valueOf(RegisterPanel.passwordField.getPassword())
-					.equals(String.valueOf(RegisterPanel.reEnterPasswordField.getPassword()))) {
 
-				UserData newUserData = new UserData(RegisterPanel.mailField.getText(),
-						RegisterPanel.nameField.getText(), String.valueOf(RegisterPanel.passwordField.getPassword()),
-						new BigDecimal(0));
+			String registerMail = RegisterPanel.getRegisterMail();
+			String registerName = RegisterPanel.getRegisterName();
+			String registerPassword = RegisterPanel.getRegisterPassword();
+			String registerRePassword = RegisterPanel.getRegisterRePassword();
+
+			if (registerPassword.equals(registerRePassword)) {
+
+				UserData newUserData = new UserData(registerMail, registerName, registerPassword, DEFAULT_BALANCE);
 				newUserData.recordUserData();
 
 			} else {
+
 				JOptionPane.showMessageDialog(null, "Passwords do not match!", "Password Mismatch",
 						JOptionPane.WARNING_MESSAGE);
+
 			}
 		}
 
 		if (e.getSource() == clearDetailsButton) {
+			
 			LoginPanel.mailField.setText("");
 			LoginPanel.passwordField.setText("");
 			LoginPanel.reEnterPasswordField.setText("");
@@ -161,6 +172,7 @@ public class MainButtons implements ActionListener {
 			RegisterPanel.nameField.setText("");
 			RegisterPanel.passwordField.setText("");
 			RegisterPanel.reEnterPasswordField.setText("");
+			
 		}
 
 	}

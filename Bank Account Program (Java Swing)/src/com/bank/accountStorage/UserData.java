@@ -6,18 +6,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import com.bank.loginPage.LoginPanel;
-import com.bank.loginPage.MainButtons;
 import com.bank.loginPage.MainPanel;
-import com.bank.loginPage.RegisterPanel;
-import com.bank.loginPage.SidePanel;
 import com.bank.userPage.AccountInfoPanel;
 import com.bank.userPage.AccountPanel;
 
@@ -27,6 +24,10 @@ public class UserData {
 	String userName;
 	String userPassword;
 	BigDecimal userBalance;
+
+	// Creating a Path object that points to the folder this program is inside of
+	public final static Path programPath = Paths.get("").toAbsolutePath();
+	public final static Path userDataPath = Paths.get("").resolve("UserData").toAbsolutePath();
 
 	public UserData(String userMail, String userName, String userPassword, BigDecimal userBalance) {
 		this.userMail = userMail;
@@ -44,14 +45,21 @@ public class UserData {
 		return Pattern.matches("^(.+)@(.+)$", userMail);
 	}
 
+	public static void createUserDataFolder() {
+
+		File userDataFolder = new File(programPath.resolve("UserData").toString());
+		if (!userDataFolder.exists()) {
+			userDataFolder.mkdir();
+		}
+
+	}
+
 	public void recordUserData() {
 		// Regex that checks if the email is a valid email, checks if it has and @
 		// between text
 		if (validEmail(this.userMail)) {
 			// For creating the text file with the user's email, user name, and password
-			// TODO: change pathing of files to be absolute and instead of instantiating
-			// within the File object, use Path objects
-			File userFile = new File("src/com/bank/accountStorage/" + this.userMail + ".txt");
+			File userFile = new File(userDataPath.resolve(this.userMail + ".txt").toString());
 			try {
 				if (userFile.createNewFile()) {
 					FileWriter userWriter = new FileWriter(userFile);
@@ -80,7 +88,7 @@ public class UserData {
 		try {
 
 			BufferedReader fileReader = new BufferedReader(
-					new FileReader("src/com/bank/accountStorage/" + userMail + ".txt"));
+					new FileReader(userDataPath.resolve(userMail + ".txt").toString()));
 			String userDataTemp;
 			StringBuilder userData = new StringBuilder();
 			while ((userDataTemp = fileReader.readLine()) != null) {
@@ -137,7 +145,7 @@ public class UserData {
 	}
 
 	public static void updateUserBalance(String userMail, String userName, String userPassword, BigDecimal newBalance) {
-		File userFile = new File("src/com/bank/accountStorage/" + userMail + ".txt");
+		File userFile = new File(userDataPath.resolve(userMail + ".txt").toString());
 		try {
 			FileWriter userWriter = new FileWriter(userFile);
 			userWriter.write("email:" + userMail + ",\n");
@@ -183,6 +191,7 @@ public class UserData {
 		this.userBalance = userBalance;
 	}
 
+	// TODO: remove this toString() function after fully debugging program
 	@Override
 	public String toString() {
 		return "UserData [userMail=" + userMail + ", userName=" + userName + ", userPassword=" + userPassword

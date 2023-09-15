@@ -49,7 +49,7 @@ public class SendFundsPanel extends JPanel {
 	public static BigDecimal getSendAmount() {
 		return BigDecimal.valueOf(Long.parseLong(sendFundsField.getText().toString()));
 	}
-	
+
 	public static String getRecipientMail() {
 		return recipientNameField.getText();
 	}

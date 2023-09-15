@@ -106,8 +106,8 @@ public class AccountButtons implements ActionListener {
 	}
 
 	public static boolean recipientExists(String recipientMail) {
-		// TODO: use a Path object to point to the recipient's text fil;e
-		File recipientFile = new File("src/com/bank/accountStorage/" + recipientMail + ".txt");
+		// TODO: use a Path object to point to the recipient's text file
+		File recipientFile = new File(UserData.userDataPath.resolve(recipientMail + ".txt").toString());
 		return recipientFile.exists();
 	}
 
@@ -218,7 +218,6 @@ public class AccountButtons implements ActionListener {
 			} else if (recipientExists(recipientMail)) {
 
 				try {
-
 					// Updating current user's information
 					String userMail = AccountInfoPanel.getUserMail();
 					String userName = AccountInfoPanel.getUserName();
@@ -226,10 +225,10 @@ public class AccountButtons implements ActionListener {
 					BigDecimal newBalance = AccountInfoPanel.getUserBalance().subtract(sendAmount);
 					UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
 					AccountInfoPanel.setUserBalance(newBalance);
-					
+
 					// Updating the recipients information
 					BufferedReader fileReader = new BufferedReader(
-							new FileReader("src/com/bank/accountStorage/" + recipientMail + ".txt"));
+							new FileReader(UserData.userDataPath.resolve(recipientMail + ".txt").toString()));
 
 					String userDataTemp;
 					StringBuilder userData = new StringBuilder();
@@ -257,6 +256,8 @@ public class AccountButtons implements ActionListener {
 					UserData.updateUserBalance(userDataMap.get("email"), userDataMap.get("username"),
 							userDataMap.get("password"), recipientNewBalance);
 
+					JOptionPane.showMessageDialog(null, "Successfully sent P" + sendAmount + " to " + recipientMail);
+
 					fileReader.close();
 
 				} catch (FileNotFoundException e1) {
@@ -264,16 +265,6 @@ public class AccountButtons implements ActionListener {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-
-//				String userMail = AccountInfoPanel.getUserMail();
-//				String userName = AccountInfoPanel.getUserName();
-//				String userPassword = AccountInfoPanel.getUserPassword();
-//				BigDecimal newBalance = currentUserBalance.subtract(sendAmount);
-//				
-//				UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
-//				JOptionPane.showMessageDialog(null, "You have sent P" + sendAmount, "Withdraw Message",
-//						JOptionPane.INFORMATION_MESSAGE);
-
 			} else {
 				JOptionPane.showMessageDialog(null, "Recipient Not Found!", "Recipient Mail Error",
 						JOptionPane.ERROR_MESSAGE);

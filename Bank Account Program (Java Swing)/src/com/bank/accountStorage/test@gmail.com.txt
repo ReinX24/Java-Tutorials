@@ -1,4 +1,0 @@
-email:test@gmail.com,
-username:test,
-password:test,
-balance:0

@@ -7,7 +7,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import com.bank.userPage.AccountButtons;
-import com.bank.userPage.AccountInfoPanel;
 
 public class SidePanel extends JPanel {
 
@@ -18,19 +17,25 @@ public class SidePanel extends JPanel {
 	}
 
 	public void addMenuSidePanelButtons() {
+		
 		MainButtons sidePanelButtons = new MainButtons();
-		this.add(sidePanelButtons.addLoginButton());
-		this.add(sidePanelButtons.addRegisterButton());
-		this.add(sidePanelButtons.addAboutButton());
+		
+		this.add(sidePanelButtons.getLoginButton());
+		this.add(sidePanelButtons.getRegisterButton());
+		this.add(sidePanelButtons.getAboutButton());
+		
 	}
 
 	public void addLoggedInSidePanelButtons() {
+		
 		AccountButtons loggedInSidePanelButtons = new AccountButtons();
+		
 		this.add(loggedInSidePanelButtons.addAccountInfoButton());
 		this.add(loggedInSidePanelButtons.addDepositButton());
 		this.add(loggedInSidePanelButtons.addWithdrawButton());
 		this.add(loggedInSidePanelButtons.addSendFundsButton());
 		this.add(loggedInSidePanelButtons.addLogoutButton());
+		
 	}
 
 }

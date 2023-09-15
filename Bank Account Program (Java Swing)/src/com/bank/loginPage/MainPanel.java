@@ -1,13 +1,8 @@
 package com.bank.loginPage;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 
 import javax.swing.*;
 
@@ -65,6 +60,19 @@ public class MainPanel {
 		loginFrame.pack();
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
+		
+		/* Creating a folder that will contain our user's login information */
+		UserData.createUserDataFolder();
+	}
+	
+	public static void addAndClearUserPanel() {
+		mainPanel.add(userPanel);
+		userPanel.removeAll();
+	}
+	
+	public static void repaintAndRevalidate() {
+		mainPanel.repaint();
+		mainPanel.revalidate();
 	}
 
 }
