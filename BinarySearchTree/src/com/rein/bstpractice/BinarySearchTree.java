@@ -91,7 +91,7 @@ public class BinarySearchTree {
 				rootNode.leftNode = removeHelper(rootNode.leftNode, rootNode.nodeData);
 			}
 		}
-		
+
 		return rootNode;
 
 	}
@@ -107,9 +107,9 @@ public class BinarySearchTree {
 
 	// Find the greatest value below the left child of this root node
 	private int predecessor(Node rootNode) {
-		rootNode = rootNode.leftNode;
-		while (rootNode.rightNode != null) {
-			rootNode = rootNode.rightNode;
+		rootNode = rootNode.rightNode;
+		while (rootNode.leftNode != null) {
+			rootNode = rootNode.leftNode;
 		}
 		return rootNode.nodeData;
 	}
