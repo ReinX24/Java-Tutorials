@@ -1,4 +1,4 @@
 email:nikole@gmail.com,
 username:nikole,
 password:test,
-balance:2750
+balance:7750

@@ -34,7 +34,6 @@ public class WithdrawPanel extends JPanel {
 	}
 
 	public static BigDecimal getWithdrawAmount() {
-		// TODO: check if the user enters a number and not a string when withdrawing
 		return BigDecimal.valueOf(Long.parseLong(withdrawFundsField.getText().toString()));
 	}
 

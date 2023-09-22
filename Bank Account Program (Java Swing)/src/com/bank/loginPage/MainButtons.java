@@ -1,6 +1,7 @@
 package com.bank.loginPage;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -27,31 +28,43 @@ public class MainButtons implements ActionListener {
 		loginButton.addActionListener(this);
 		loginButton.setFocusable(false);
 		loginButton.setPreferredSize(new Dimension(256, 64));
+		loginButton.setFont(new Font(null, Font.BOLD, 16));
+		loginButton.setForeground(MainPanel.BLACK);
 
 		registerButton = new JButton("Sign Up");
 		registerButton.addActionListener(this);
 		registerButton.setFocusable(false);
 		registerButton.setPreferredSize(new Dimension(256, 64));
-
+		registerButton.setFont(new Font(null, Font.BOLD, 16));
+		registerButton.setForeground(MainPanel.BLACK);
+		
 		aboutButton = new JButton("About");
 		aboutButton.addActionListener(this);
 		aboutButton.setFocusable(false);
 		aboutButton.setPreferredSize(new Dimension(256, 64));
+		aboutButton.setFont(new Font(null, Font.BOLD, 16));
+		aboutButton.setForeground(MainPanel.BLACK);
 
 		loginAccountButton = new JButton("Login");
 		loginAccountButton.addActionListener(this);
 		loginAccountButton.setPreferredSize(new Dimension(160, 40));
 		loginAccountButton.setFocusable(false);
+		loginAccountButton.setFont(new Font(null, Font.BOLD, 16));
+		loginAccountButton.setForeground(MainPanel.BLACK);
 
 		registerAccountButton = new JButton("Register");
 		registerAccountButton.addActionListener(this);
 		registerAccountButton.setPreferredSize(new Dimension(160, 40));
 		registerAccountButton.setFocusable(false);
+		registerAccountButton.setFont(new Font(null, Font.BOLD, 16));
+		registerAccountButton.setForeground(MainPanel.BLACK);
 
 		clearDetailsButton = new JButton("Clear");
 		clearDetailsButton.addActionListener(this);
 		clearDetailsButton.setPreferredSize(new Dimension(160, 40));
 		clearDetailsButton.setFocusable(false);
+		clearDetailsButton.setFont(new Font(null, Font.BOLD, 16));
+		clearDetailsButton.setForeground(MainPanel.BLACK);
 	}
 
 	public JButton getLoginButton() {

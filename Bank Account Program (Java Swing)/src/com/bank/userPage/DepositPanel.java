@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -33,10 +34,11 @@ public class DepositPanel extends JPanel {
 		AccountButtons accountButtons = new AccountButtons();
 		this.add(accountButtons.addConfirmDepositButton());
 	}
-	
+
 	public static BigDecimal getDepositAmount() {
-		// TODO: check if the user enters a number and not a string when depositing
-		return BigDecimal.valueOf(Long.parseLong(depositFundsField.getText().toString()));
+		BigDecimal depositAmount = BigDecimal.valueOf(Long.parseLong(depositFundsField.getText().toString()));
+
+		return depositAmount;
 	}
 
 }

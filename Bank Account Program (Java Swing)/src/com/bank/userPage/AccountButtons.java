@@ -1,6 +1,7 @@
 package com.bank.userPage;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -37,40 +38,57 @@ public class AccountButtons implements ActionListener {
 		accountInfoButton.addActionListener(this);
 		accountInfoButton.setFocusable(false);
 		accountInfoButton.setPreferredSize(new Dimension(256, 64));
+		accountInfoButton.setFont(new Font(null, Font.BOLD, 16));
+		accountInfoButton.setForeground(MainPanel.BLACK);
 
 		depositButton = new JButton("Deposit Funds");
 		depositButton.addActionListener(this);
 		depositButton.setFocusable(false);
 		depositButton.setPreferredSize(new Dimension(256, 64));
+		depositButton.setFont(new Font(null, Font.BOLD, 16));
+		depositButton.setForeground(MainPanel.BLACK);
 
 		withdrawButton = new JButton("Withdraw Funds");
 		withdrawButton.addActionListener(this);
 		withdrawButton.setFocusable(false);
 		withdrawButton.setPreferredSize(new Dimension(256, 64));
+		withdrawButton.setFont(new Font(null, Font.BOLD, 16));
+		withdrawButton.setForeground(MainPanel.BLACK);
 
 		sendFundsButton = new JButton("Send Funds");
 		sendFundsButton.addActionListener(this);
 		sendFundsButton.setFocusable(false);
 		sendFundsButton.setPreferredSize(new Dimension(256, 64));
+		sendFundsButton.setFont(new Font(null, Font.BOLD, 16));
+		withdrawButton.setForeground(MainPanel.BLACK);
 
 		// TODO: add a button that lets the user reset their password
+
 		logoutButton = new JButton("Logout");
 		logoutButton.addActionListener(this);
 		logoutButton.setFocusable(false);
 		logoutButton.setPreferredSize(new Dimension(256, 64));
+		logoutButton.setFont(new Font(null, Font.BOLD, 16));
+		logoutButton.setForeground(MainPanel.BLACK);
 
 		/* Buttons that the user clicks to deposit, withdraw, or send funds */
 		confirmDespositButton = new JButton("Confirm Deposit");
 		confirmDespositButton.addActionListener(this);
-		confirmDespositButton.setPreferredSize(new Dimension(180, 40));
+		confirmDespositButton.setPreferredSize(new Dimension(240, 40));
+		confirmDespositButton.setFont(new Font(null, Font.BOLD, 16));
+		confirmDespositButton.setForeground(MainPanel.BLACK);
 
 		confirmWithdrawButton = new JButton("Confirm Withdraw");
 		confirmWithdrawButton.addActionListener(this);
-		confirmWithdrawButton.setPreferredSize(new Dimension(180, 40));
+		confirmWithdrawButton.setPreferredSize(new Dimension(240, 40));
+		confirmWithdrawButton.setFont(new Font(null, Font.BOLD, 16));
+		confirmWithdrawButton.setForeground(MainPanel.BLACK);
 
 		confirmSendButton = new JButton("Confirm Sending Funds");
 		confirmSendButton.addActionListener(this);
 		confirmSendButton.setPreferredSize(new Dimension(240, 40));
+		confirmSendButton.setFont(new Font(null, Font.BOLD, 16));
+		confirmSendButton.setForeground(MainPanel.BLACK);
 	}
 
 	public JButton addDepositButton() {
@@ -106,7 +124,6 @@ public class AccountButtons implements ActionListener {
 	}
 
 	public static boolean recipientExists(String recipientMail) {
-		// TODO: use a Path object to point to the recipient's text file
 		File recipientFile = new File(UserData.userDataPath.resolve(recipientMail + ".txt").toString());
 		return recipientFile.exists();
 	}
@@ -166,58 +183,85 @@ public class AccountButtons implements ActionListener {
 		}
 
 		if (e.getSource() == confirmDespositButton) {
-			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
-			BigDecimal depositAmount = DepositPanel.getDepositAmount();
 
-			String userMail = AccountInfoPanel.getUserMail();
-			String userName = AccountInfoPanel.getUserName();
-			String userPassword = AccountInfoPanel.getUserPassword();
-			BigDecimal newBalance = currentUserBalance.add(DepositPanel.getDepositAmount());
-			UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
-			AccountInfoPanel.setUserBalance(newBalance);
-			JOptionPane.showMessageDialog(null, "You have deposited P" + depositAmount, "Deposit Message",
-					JOptionPane.INFORMATION_MESSAGE);
+			try {
+				BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+				BigDecimal depositAmount = DepositPanel.getDepositAmount();
 
-			// Clear DepositPanel JTextField
-			DepositPanel.depositFundsField.setText("");
+				String userMail = AccountInfoPanel.getUserMail();
+				String userName = AccountInfoPanel.getUserName();
+				String userPassword = AccountInfoPanel.getUserPassword();
+
+				BigDecimal newBalance = currentUserBalance.add(depositAmount);
+
+				UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+
+				AccountInfoPanel.setUserBalance(newBalance);
+
+				JOptionPane.showMessageDialog(null, "You have deposited P" + depositAmount, "Deposit Message",
+						JOptionPane.INFORMATION_MESSAGE);
+
+				// Clear DepositPanel JTextField
+				DepositPanel.depositFundsField.setText("");
+			} catch (NumberFormatException e1) {
+				JOptionPane.showMessageDialog(null, "Invalid Input!\nPlease Enter a number", "Invalid Input Message",
+						JOptionPane.WARNING_MESSAGE);
+				DepositPanel.depositFundsField.setText(""); // removes invalid input
+			}
 
 		}
 
 		if (e.getSource() == confirmWithdrawButton) {
-			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
-			BigDecimal withdrawAmount = WithdrawPanel.getWithdrawAmount();
-			// if the withdrawAmount is greater than currentUserBalance
-			if (withdrawAmount.compareTo(currentUserBalance) == 1) {
-				JOptionPane.showMessageDialog(null, "Not Enough Funds To Withdraw!", "Withdraw Amount Error",
-						JOptionPane.ERROR_MESSAGE);
-			} else {
-				String userMail = AccountInfoPanel.getUserMail();
-				String userName = AccountInfoPanel.getUserName();
-				String userPassword = AccountInfoPanel.getUserPassword();
-				BigDecimal newBalance = currentUserBalance.subtract(withdrawAmount);
-				UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
-				AccountInfoPanel.setUserBalance(newBalance);
-				JOptionPane.showMessageDialog(null, "You have withdrawn P" + withdrawAmount, "Withdraw Message",
-						JOptionPane.INFORMATION_MESSAGE);
 
-				// Clear WithdrawPanel JTextField
+			try {
+				BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+				BigDecimal withdrawAmount = WithdrawPanel.getWithdrawAmount();
+
+				// if the withdrawAmount is greater than currentUserBalance
+				if (withdrawAmount.compareTo(currentUserBalance) == 1) {
+					JOptionPane.showMessageDialog(null, "Not Enough Funds To Withdraw!", "Withdraw Amount Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+
+					String userMail = AccountInfoPanel.getUserMail();
+					String userName = AccountInfoPanel.getUserName();
+					String userPassword = AccountInfoPanel.getUserPassword();
+
+					BigDecimal newBalance = currentUserBalance.subtract(withdrawAmount);
+
+					UserData.updateUserBalance(userMail, userName, userPassword, newBalance);
+
+					AccountInfoPanel.setUserBalance(newBalance);
+
+					JOptionPane.showMessageDialog(null, "You have withdrawn P" + withdrawAmount, "Withdraw Message",
+							JOptionPane.INFORMATION_MESSAGE);
+
+					// Clear WithdrawPanel JTextField
+					WithdrawPanel.withdrawFundsField.setText("");
+
+				}
+			} catch (NumberFormatException e2) {
+				JOptionPane.showMessageDialog(null, "Invalid Input!\nPlease Enter a number", "Invalid Input Message",
+						JOptionPane.WARNING_MESSAGE);
 				WithdrawPanel.withdrawFundsField.setText("");
-
 			}
+
 		}
+
 		if (e.getSource() == confirmSendButton) {
 
-			BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
-			BigDecimal sendAmount = SendFundsPanel.getSendAmount();
-			String recipientMail = SendFundsPanel.getRecipientMail();
+			try {
 
-			// sendAmount is greater than currentUserBalance
-			if (sendAmount.compareTo(currentUserBalance) == 1) {
-				JOptionPane.showMessageDialog(null, "Not Enough Funds To Send!", "Send Amount Error",
-						JOptionPane.ERROR_MESSAGE);
-			} else if (recipientExists(recipientMail)) {
+				BigDecimal currentUserBalance = AccountInfoPanel.getUserBalance();
+				BigDecimal sendAmount = SendFundsPanel.getSendAmount();
+				String recipientMail = SendFundsPanel.getRecipientMail();
 
-				try {
+				// sendAmount is greater than currentUserBalance
+				if (sendAmount.compareTo(currentUserBalance) == 1) {
+					JOptionPane.showMessageDialog(null, "Not Enough Funds To Send!", "Send Amount Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else if (recipientExists(recipientMail)) {
+
 					// Updating current user's information
 					String userMail = AccountInfoPanel.getUserMail();
 					String userName = AccountInfoPanel.getUserName();
@@ -260,15 +304,21 @@ public class AccountButtons implements ActionListener {
 
 					fileReader.close();
 
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} else {
+					JOptionPane.showMessageDialog(null, "Recipient Not Found!", "Recipient Mail Error",
+							JOptionPane.ERROR_MESSAGE);
 				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Recipient Not Found!", "Recipient Mail Error",
-						JOptionPane.ERROR_MESSAGE);
+
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (NumberFormatException e2) {
+				JOptionPane.showMessageDialog(null, "Invalid Input!\nPlease Enter a number", "Invalid Input Message",
+						JOptionPane.WARNING_MESSAGE);
+				SendFundsPanel.sendFundsField.setText("");
 			}
+
 		}
 
 		if (e.getSource() == logoutButton) {
@@ -283,5 +333,4 @@ public class AccountButtons implements ActionListener {
 		}
 
 	}
-
 }

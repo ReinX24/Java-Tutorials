@@ -2,6 +2,7 @@ package com.bank.loginPage;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,15 +27,23 @@ public class RegisterPanel extends JPanel {
 
 		enterMailLabel = new JLabel("Email:");
 		enterMailLabel.setPreferredSize(new Dimension(192, 32));
+		enterMailLabel.setFont(new Font(null, Font.BOLD, 16));
+		enterMailLabel.setForeground(MainPanel.BLACK);
 
 		enterNameLabel = new JLabel("Name:");
 		enterNameLabel.setPreferredSize(new Dimension(192, 32));
+		enterNameLabel.setFont(new Font(null, Font.BOLD, 16));
+		enterNameLabel.setForeground(MainPanel.BLACK);
 
 		enterPasswordLabel = new JLabel("Password:");
 		enterPasswordLabel.setPreferredSize(new Dimension(192, 32));
+		enterPasswordLabel.setFont(new Font(null, Font.BOLD, 16));
+		enterPasswordLabel.setForeground(MainPanel.BLACK);
 
 		reEnterPasswordLabel = new JLabel("Re-enter Password:");
 		reEnterPasswordLabel.setPreferredSize(new Dimension(192, 32));
+		reEnterPasswordLabel.setFont(new Font(null, Font.BOLD, 16));
+		reEnterPasswordLabel.setForeground(MainPanel.BLACK);
 
 		mailField = new JTextField("");
 		mailField.setPreferredSize(new Dimension(640, 40));

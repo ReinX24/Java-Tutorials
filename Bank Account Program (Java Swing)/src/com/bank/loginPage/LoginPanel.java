@@ -67,7 +67,6 @@ public class LoginPanel extends JPanel {
 		this.add(reEnterPasswordLabel);
 		this.add(reEnterPasswordField);
 
-		// TODO: style LoginPanel buttons
 		MainButtons loginButton = new MainButtons();
 		this.add(loginButton.getLoginAccountButton());
 		this.add(loginButton.getClearDetailsButton());

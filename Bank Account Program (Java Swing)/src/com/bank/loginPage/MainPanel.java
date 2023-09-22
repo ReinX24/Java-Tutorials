@@ -22,7 +22,7 @@ public class MainPanel {
 
 	static final Color DARK_GREEN = new Color(20, 89, 80);
 	static final Color WHITE = new Color(234, 236, 236);
-	static final Color BLACK = new Color(34, 34, 34);
+	public static final Color BLACK = new Color(34, 34, 34);
 
 	public MainPanel() {
 
