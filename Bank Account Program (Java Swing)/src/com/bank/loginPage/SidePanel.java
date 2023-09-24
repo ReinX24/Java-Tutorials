@@ -34,6 +34,7 @@ public class SidePanel extends JPanel {
 		this.add(loggedInSidePanelButtons.addDepositButton());
 		this.add(loggedInSidePanelButtons.addWithdrawButton());
 		this.add(loggedInSidePanelButtons.addSendFundsButton());
+		this.add(loggedInSidePanelButtons.addResetPasswordButton());
 		this.add(loggedInSidePanelButtons.addLogoutButton());
 		
 	}

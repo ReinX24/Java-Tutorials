@@ -26,11 +26,13 @@ public class AccountButtons implements ActionListener {
 	JButton depositButton;
 	JButton withdrawButton;
 	JButton sendFundsButton;
+	JButton resetPasswordButton;
 	JButton logoutButton;
 
 	JButton confirmDespositButton;
 	JButton confirmWithdrawButton;
 	JButton confirmSendButton;
+	JButton confirmResetPasswordButton;
 
 	public AccountButtons() {
 		/* New side buttons that will lead to deposit, withdraw, or send funds panels */
@@ -60,10 +62,17 @@ public class AccountButtons implements ActionListener {
 		sendFundsButton.setFocusable(false);
 		sendFundsButton.setPreferredSize(new Dimension(256, 64));
 		sendFundsButton.setFont(new Font(null, Font.BOLD, 16));
-		withdrawButton.setForeground(MainPanel.BLACK);
+		sendFundsButton.setForeground(MainPanel.BLACK);
 
 		// TODO: add a button that lets the user reset their password
+		resetPasswordButton = new JButton("Reset Password");
+		resetPasswordButton.addActionListener(this);
+		resetPasswordButton.setFocusable(false);
+		resetPasswordButton.setPreferredSize(new Dimension(256, 64));
+		resetPasswordButton.setFont(new Font(null, Font.BOLD, 16));
+		resetPasswordButton.setForeground(MainPanel.BLACK);
 
+		// TODO: add a button that lets the user delete their account
 		logoutButton = new JButton("Logout");
 		logoutButton.addActionListener(this);
 		logoutButton.setFocusable(false);
@@ -89,6 +98,12 @@ public class AccountButtons implements ActionListener {
 		confirmSendButton.setPreferredSize(new Dimension(240, 40));
 		confirmSendButton.setFont(new Font(null, Font.BOLD, 16));
 		confirmSendButton.setForeground(MainPanel.BLACK);
+		
+		confirmResetPasswordButton = new JButton("Confirm Reset Password");
+		confirmResetPasswordButton.addActionListener(this);
+		confirmResetPasswordButton.setPreferredSize(new Dimension(280, 40));
+		confirmResetPasswordButton.setFont(new Font(null, Font.BOLD, 16));
+		confirmResetPasswordButton.setForeground(MainPanel.BLACK);
 	}
 
 	public JButton addDepositButton() {
@@ -101,6 +116,10 @@ public class AccountButtons implements ActionListener {
 
 	public JButton addSendFundsButton() {
 		return sendFundsButton;
+	}
+
+	public JButton addResetPasswordButton() {
+		return resetPasswordButton;
 	}
 
 	public JButton addLogoutButton() {
@@ -117,6 +136,10 @@ public class AccountButtons implements ActionListener {
 
 	public JButton addConfirmSendFundsButton() {
 		return confirmSendButton;
+	}
+	
+	public JButton addConfirmResetPasswordButton() {
+		return confirmResetPasswordButton;
 	}
 
 	public JButton addAccountInfoButton() {
@@ -149,11 +172,12 @@ public class AccountButtons implements ActionListener {
 			MainPanel.loggedInAccountPanel.removeAll();
 
 			DepositPanel depositPanel = new DepositPanel();
-			depositPanel.addDepositLabelComponents();
+			depositPanel.addDepositPanelComponents();
 			MainPanel.loggedInAccountPanel.add(depositPanel);
 
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
+
 		}
 
 		if (e.getSource() == withdrawButton) {
@@ -180,6 +204,19 @@ public class AccountButtons implements ActionListener {
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
 
+		}
+		
+		if (e.getSource() == resetPasswordButton) {
+			
+			MainPanel.loggedInAccountPanel.removeAll();
+
+			PasswordResetPanel passwordResetPanel = new PasswordResetPanel();
+			passwordResetPanel.addResetPasswordPanelComponents();
+			MainPanel.loggedInAccountPanel.add(passwordResetPanel);
+
+			MainPanel.loggedInAccountPanel.revalidate();
+			MainPanel.loggedInAccountPanel.repaint();
+			
 		}
 
 		if (e.getSource() == confirmDespositButton) {
@@ -319,6 +356,13 @@ public class AccountButtons implements ActionListener {
 				SendFundsPanel.sendFundsField.setText("");
 			}
 
+		}
+		
+		if (e.getSource() == confirmResetPasswordButton) {
+			
+			UserData currentUser = new UserData(AccountInfoPanel.getUserMail(), AccountInfoPanel.getUserPassword());
+			currentUser.resetUserPassword();
+			
 		}
 
 		if (e.getSource() == logoutButton) {

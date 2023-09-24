@@ -2,6 +2,7 @@ package com.bank.accountStorage;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import com.bank.loginPage.LoginPanel;
 import com.bank.loginPage.MainPanel;
 import com.bank.userPage.AccountInfoPanel;
 import com.bank.userPage.AccountPanel;
+import com.bank.userPage.PasswordResetPanel;
 
 public class UserData {
 
@@ -110,6 +112,7 @@ public class UserData {
 
 			// Checking if the user's email is the same with the aligned password
 			if (userPassword.equals(userDataMap.get("password"))) {
+
 				JOptionPane.showMessageDialog(null, "Login Successful!", "Login Successful",
 						JOptionPane.INFORMATION_MESSAGE);
 
@@ -156,6 +159,68 @@ public class UserData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void resetUserPassword() {
+
+		// For finding a text file and reading its data
+		try {
+			
+			String currentPassword = PasswordResetPanel.getCurrentPassword();
+
+			BufferedReader fileReader = new BufferedReader(
+					new FileReader(userDataPath.resolve(userMail + ".txt").toString()));
+			String userDataTemp;
+			StringBuilder userData = new StringBuilder();
+			while ((userDataTemp = fileReader.readLine()) != null) {
+				userData.append(userDataTemp);
+			}
+
+			// Storing the user's email, user name password, and funds in a hash map
+			String[] userDataArray = new String[4];
+			userDataArray = userData.toString().split(",");
+
+			HashMap<String, String> userDataMap = new HashMap<>();
+			for (int i = 0; i < userDataArray.length; i++) {
+				String[] tempArr = userDataArray[i].split(":");
+				userDataMap.put(tempArr[0], tempArr[1]);
+			}
+
+			this.userName = userDataMap.get("username");
+			this.userBalance = new BigDecimal(userDataMap.get("balance"));
+
+			// TODO: check if the current passwords match with each other
+			// TODO: check if the new passwords match
+			// TODO: check if the user enters text in the new password textfield, must
+			// contain text
+			// Checking if the user's email is the same with the aligned password
+			if (currentPassword.equals(userDataMap.get("password"))) {
+
+				JOptionPane.showMessageDialog(null, "Changed Account Password!", "Password Changed Message",
+						JOptionPane.INFORMATION_MESSAGE);
+
+				this.userPassword = PasswordResetPanel.getNewPassword();
+
+				File userFile = new File(userDataPath.resolve(userMail) + ".txt");
+				FileWriter userWriter = new FileWriter(userFile);
+
+				userWriter.write("email:" + this.userMail + ",\n");
+				userWriter.write("username:" + this.userName + ",\n");
+				userWriter.write("password:" + this.userPassword + ",\n");
+				userWriter.write("balance:" + this.userBalance);
+				userWriter.close();
+
+				fileReader.close();
+
+			} else {
+				JOptionPane.showMessageDialog(null, "Wrong Password!", "Incorrect Password",
+						JOptionPane.WARNING_MESSAGE);
+			}
+
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Account not found!", "No Account Fount", JOptionPane.WARNING_MESSAGE);
+		}
+
 	}
 
 	/* Helper methods for our program */

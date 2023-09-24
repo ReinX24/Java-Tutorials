@@ -20,7 +20,7 @@ public class MainButtons implements ActionListener {
 	JButton loginAccountButton;
 	JButton registerAccountButton;
 	JButton clearDetailsButton;
-	
+
 	final BigDecimal DEFAULT_BALANCE = BigDecimal.valueOf(0);
 
 	public MainButtons() {
@@ -37,7 +37,7 @@ public class MainButtons implements ActionListener {
 		registerButton.setPreferredSize(new Dimension(256, 64));
 		registerButton.setFont(new Font(null, Font.BOLD, 16));
 		registerButton.setForeground(MainPanel.BLACK);
-		
+
 		aboutButton = new JButton("About");
 		aboutButton.addActionListener(this);
 		aboutButton.setFocusable(false);
@@ -93,9 +93,9 @@ public class MainButtons implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if (e.getSource() == loginButton) {
-			
+
 			MainPanel.addAndClearUserPanel();
 
 			LoginPanel loginPanel = new LoginPanel();
@@ -103,13 +103,13 @@ public class MainButtons implements ActionListener {
 			MainPanel.userPanel.add(loginPanel);
 
 			MainPanel.repaintAndRevalidate();
-			
+
 		}
 
 		if (e.getSource() == registerButton) {
-			
+
 			MainPanel.addAndClearUserPanel();
-			
+
 			RegisterPanel registerPanel = new RegisterPanel();
 			registerPanel.addRegisterPanelComponents();
 			MainPanel.userPanel.add(registerPanel);
@@ -119,15 +119,15 @@ public class MainButtons implements ActionListener {
 		}
 
 		if (e.getSource() == aboutButton) {
-			
+
 			MainPanel.addAndClearUserPanel();
-			
+
 			AboutPanel aboutPanel = new AboutPanel();
 			aboutPanel.addAboutPanelComponents();
 			MainPanel.userPanel.add(aboutPanel);
 
 			MainPanel.repaintAndRevalidate();
-			
+
 		}
 
 		if (e.getSource() == loginAccountButton) {
@@ -175,8 +175,10 @@ public class MainButtons implements ActionListener {
 			}
 		}
 
+		// TODO: debug clear button, currently throws a exception in the console. Should
+		// be empty
 		if (e.getSource() == clearDetailsButton) {
-			
+
 			LoginPanel.mailField.setText("");
 			LoginPanel.passwordField.setText("");
 			LoginPanel.reEnterPasswordField.setText("");
@@ -185,7 +187,7 @@ public class MainButtons implements ActionListener {
 			RegisterPanel.nameField.setText("");
 			RegisterPanel.passwordField.setText("");
 			RegisterPanel.reEnterPasswordField.setText("");
-			
+
 		}
 
 	}

@@ -20,7 +20,7 @@ public class DepositPanel extends JPanel {
 		this.setPreferredSize(new Dimension(1024, 768));
 	};
 
-	public void addDepositLabelComponents() {
+	public void addDepositPanelComponents() {
 		depositFundsLabel = new JLabel("Deposit Funds:");
 		depositFundsLabel.setPreferredSize(new Dimension(192, 32));
 
