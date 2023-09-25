@@ -16,8 +16,11 @@ class JsonTest {
 	@Test
 	void testParse() throws JsonMappingException, JsonProcessingException {
 
-		JsonNode jsonNode = Json.parse(testCaseOne);
-		assertEquals(jsonNode.get("joke").asText(), "Why did the twinkie go to the dentist? He lost his filling!");
+		JsonNode jsonNodeOne = Json.parse(testCaseOne);
+		assertEquals(jsonNodeOne.get("joke").asText(), "Why did the twinkie go to the dentist? He lost his filling!");
+		
+		JsonNode jsonNodeTwo = Json.parse(testCaseTwo);
+		assertEquals(jsonNodeTwo.get("name").asText(), "Rein");
 
 	}
 
