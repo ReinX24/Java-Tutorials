@@ -64,7 +64,6 @@ public class AccountButtons implements ActionListener {
 		sendFundsButton.setFont(new Font(null, Font.BOLD, 16));
 		sendFundsButton.setForeground(MainPanel.BLACK);
 
-		// TODO: add a button that lets the user reset their password
 		resetPasswordButton = new JButton("Reset Password");
 		resetPasswordButton.addActionListener(this);
 		resetPasswordButton.setFocusable(false);

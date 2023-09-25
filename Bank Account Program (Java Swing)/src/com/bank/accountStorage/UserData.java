@@ -91,17 +91,20 @@ public class UserData {
 
 			BufferedReader fileReader = new BufferedReader(
 					new FileReader(userDataPath.resolve(userMail + ".txt").toString()));
+
 			String userDataTemp;
-			StringBuilder userData = new StringBuilder();
+			StringBuilder userDataBuilder = new StringBuilder();
+
 			while ((userDataTemp = fileReader.readLine()) != null) {
-				userData.append(userDataTemp);
+				userDataBuilder.append(userDataTemp);
 			}
 
 			// Storing the user's email, user name password, and funds in a hash map
 			String[] userDataArray = new String[4];
-			userDataArray = userData.toString().split(",");
+			userDataArray = userDataBuilder.toString().split(",");
 
 			HashMap<String, String> userDataMap = new HashMap<>();
+
 			for (int i = 0; i < userDataArray.length; i++) {
 				String[] tempArr = userDataArray[i].split(":");
 				userDataMap.put(tempArr[0], tempArr[1]);
@@ -165,36 +168,58 @@ public class UserData {
 
 		// For finding a text file and reading its data
 		try {
-			
+
 			String currentPassword = PasswordResetPanel.getCurrentPassword();
+			String confirmCurrentPassword = PasswordResetPanel.getConfirmCurrentPassword();
+			String newPassword = PasswordResetPanel.getNewPassword();
+			String confirmNewPassword = PasswordResetPanel.getConfirmNewPassword();
 
 			BufferedReader fileReader = new BufferedReader(
 					new FileReader(userDataPath.resolve(userMail + ".txt").toString()));
+
 			String userDataTemp;
-			StringBuilder userData = new StringBuilder();
+
+			StringBuilder userDataBuilder = new StringBuilder();
+
 			while ((userDataTemp = fileReader.readLine()) != null) {
-				userData.append(userDataTemp);
+				userDataBuilder.append(userDataTemp);
 			}
 
 			// Storing the user's email, user name password, and funds in a hash map
 			String[] userDataArray = new String[4];
-			userDataArray = userData.toString().split(",");
+			userDataArray = userDataBuilder.toString().split(",");
 
 			HashMap<String, String> userDataMap = new HashMap<>();
+
 			for (int i = 0; i < userDataArray.length; i++) {
 				String[] tempArr = userDataArray[i].split(":");
 				userDataMap.put(tempArr[0], tempArr[1]);
 			}
 
-			this.userName = userDataMap.get("username");
-			this.userBalance = new BigDecimal(userDataMap.get("balance"));
+			String recordedPassword = userDataMap.get("password");
 
-			// TODO: check if the current passwords match with each other
-			// TODO: check if the new passwords match
-			// TODO: check if the user enters text in the new password textfield, must
-			// contain text
 			// Checking if the user's email is the same with the aligned password
-			if (currentPassword.equals(userDataMap.get("password"))) {
+			if (!currentPassword.equals(recordedPassword)) {
+				// Entered password does not match with recorded password
+				JOptionPane.showMessageDialog(null, "Wrong Password!", "Incorrect Password",
+						JOptionPane.WARNING_MESSAGE);
+
+			} else if (!currentPassword.equals(confirmCurrentPassword)) {
+				// Current password fields do not match
+				JOptionPane.showMessageDialog(null, "Current Passwords Do Not Match!", "Current Password Mismatch",
+						JOptionPane.WARNING_MESSAGE);
+
+			} else if (!newPassword.equals(confirmNewPassword)) {
+				// New passwords do not match
+				JOptionPane.showMessageDialog(null, "New Passwords Do Not Match!", "New Password Mismatch",
+						JOptionPane.WARNING_MESSAGE);
+
+			} else if (newPassword.length() == 0 || confirmNewPassword.length() == 0) {
+				// Checks if the new password contains any characters
+				JOptionPane.showMessageDialog(null, "New Password Must Contain Characters!",
+						"New Password No Characters", JOptionPane.WARNING_MESSAGE);
+
+			} else if (currentPassword.equals(recordedPassword) && newPassword.equals(confirmNewPassword)) {
 
 				JOptionPane.showMessageDialog(null, "Changed Account Password!", "Password Changed Message",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -212,9 +237,8 @@ public class UserData {
 
 				fileReader.close();
 
-			} else {
-				JOptionPane.showMessageDialog(null, "Wrong Password!", "Incorrect Password",
-						JOptionPane.WARNING_MESSAGE);
+				PasswordResetPanel.clearPasswordResetFields();
+
 			}
 
 		} catch (IOException e) {

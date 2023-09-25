@@ -16,6 +16,8 @@ public class PasswordResetPanel extends JPanel {
 
 	// TODO: convert into password fields and find a way to show passwords to the
 	// user as text
+	// TODO: mask the current password and the new password when the user is typing
+	// them in
 	static JTextField currentPasswordField;
 	static JTextField confirmPasswordField;
 	static JTextField newPasswordField;
@@ -75,8 +77,23 @@ public class PasswordResetPanel extends JPanel {
 		return currentPasswordField.getText();
 	}
 
+	public static String getConfirmCurrentPassword() {
+		return confirmPasswordField.getText();
+	}
+
 	public static String getNewPassword() {
+		return newPasswordField.getText();
+	}
+
+	public static String getConfirmNewPassword() {
 		return confirmNewPasswordField.getText();
+	}
+
+	public static void clearPasswordResetFields() {
+		currentPasswordField.setText("");
+		confirmPasswordField.setText("");
+		newPasswordField.setText("");
+		confirmNewPasswordField.setText("");
 	}
 
 }

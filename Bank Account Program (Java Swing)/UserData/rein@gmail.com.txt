@@ -1,4 +1,4 @@
 email:rein@gmail.com,
 username:rein,
-password:pog,
+password:rein,
 balance:2250

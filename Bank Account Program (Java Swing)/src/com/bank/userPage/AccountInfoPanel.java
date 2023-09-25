@@ -26,6 +26,7 @@ public class AccountInfoPanel extends JPanel {
 	JLabel userNameLabel;
 	JLabel userBalanceLabel;
 
+	// TODO: format account balance with commas
 	static NumberFormat numberFormat;
 
 	public AccountInfoPanel() {
