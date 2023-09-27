@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class PasswordResetPanel extends JPanel {
@@ -16,12 +17,10 @@ public class PasswordResetPanel extends JPanel {
 
 	// TODO: convert into password fields and find a way to show passwords to the
 	// user as text
-	// TODO: mask the current password and the new password when the user is typing
-	// them in
-	static JTextField currentPasswordField;
-	static JTextField confirmPasswordField;
-	static JTextField newPasswordField;
-	static JTextField confirmNewPasswordField;
+	static JPasswordField currentPasswordField;
+	static JPasswordField confirmPasswordField;
+	static JPasswordField newPasswordField;
+	static JPasswordField confirmNewPasswordField;
 
 	public PasswordResetPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
@@ -34,7 +33,7 @@ public class PasswordResetPanel extends JPanel {
 
 		this.add(currentPasswordLabel);
 
-		currentPasswordField = new JTextField();
+		currentPasswordField = new JPasswordField();
 		currentPasswordField.setPreferredSize(new Dimension(640, 40));
 
 		this.add(currentPasswordField);
@@ -44,7 +43,7 @@ public class PasswordResetPanel extends JPanel {
 
 		this.add(confirmCurrentPasswordLabel);
 
-		confirmPasswordField = new JTextField();
+		confirmPasswordField = new JPasswordField();
 		confirmPasswordField.setPreferredSize(new Dimension(640, 40));
 
 		this.add(confirmPasswordField);
@@ -54,7 +53,7 @@ public class PasswordResetPanel extends JPanel {
 
 		this.add(newPasswordLabel);
 
-		newPasswordField = new JTextField();
+		newPasswordField = new JPasswordField();
 		newPasswordField.setPreferredSize(new Dimension(640, 40));
 
 		this.add(newPasswordField);
@@ -64,7 +63,7 @@ public class PasswordResetPanel extends JPanel {
 
 		this.add(confirmNewPasswordLabel);
 
-		confirmNewPasswordField = new JTextField();
+		confirmNewPasswordField = new JPasswordField();
 		confirmNewPasswordField.setPreferredSize(new Dimension(640, 40));
 
 		this.add(confirmNewPasswordField);
@@ -74,19 +73,19 @@ public class PasswordResetPanel extends JPanel {
 	}
 
 	public static String getCurrentPassword() {
-		return currentPasswordField.getText();
+		return String.valueOf(currentPasswordField.getPassword());
 	}
 
 	public static String getConfirmCurrentPassword() {
-		return confirmPasswordField.getText();
+		return String.valueOf(confirmPasswordField.getPassword());
 	}
 
 	public static String getNewPassword() {
-		return newPasswordField.getText();
+		return String.valueOf(newPasswordField.getPassword());
 	}
 
 	public static String getConfirmNewPassword() {
-		return confirmNewPasswordField.getText();
+		return String.valueOf(confirmNewPasswordField.getPassword());
 	}
 
 	public static void clearPasswordResetFields() {

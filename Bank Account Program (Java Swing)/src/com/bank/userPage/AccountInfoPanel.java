@@ -6,10 +6,16 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.Date;
 
 import com.bank.accountStorage.UserData;
 import com.bank.loginPage.MainPanel;
@@ -26,8 +32,7 @@ public class AccountInfoPanel extends JPanel {
 	JLabel userNameLabel;
 	JLabel userBalanceLabel;
 
-	// TODO: format account balance with commas
-	static NumberFormat numberFormat;
+	NumberFormat numberFormat;
 
 	public AccountInfoPanel() {
 		this.setPreferredSize(new Dimension(1024, 768));
@@ -43,11 +48,21 @@ public class AccountInfoPanel extends JPanel {
 
 	public void addAccountInfoPanelComponents() {
 
-		// TODO: greet the user with a good morning, good afternoon, or good evening,
-		// depending on the system's time
-		greetUserLabel = new JLabel("Hello " + getUserName() + "!");
-		greetUserLabel.setPreferredSize(new Dimension(1024, 96));
+		greetUserLabel = new JLabel();
+		greetUserLabel.setPreferredSize(new Dimension(1024, 64));
 		greetUserLabel.setFont(new Font(null, Font.BOLD, 32));
+
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("HH");
+		LocalDateTime dateNow = LocalDateTime.now();
+		int currentHour = Integer.parseInt(dateFormat.format(dateNow));
+		
+		if (currentHour < 12) {
+			greetUserLabel.setText("Good Morning " + getUserName() + "!");
+		} else if (currentHour >= 12 && currentHour < 18) {
+			greetUserLabel.setText("Good Afternoon " + getUserName() + "!");
+		} else if (currentHour >= 18 && currentHour <= 24) {
+			greetUserLabel.setText("Good Evening " + getUserName() + "!");
+		}
 
 		this.add(greetUserLabel);
 

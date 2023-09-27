@@ -47,15 +47,24 @@ public class RegisterPanel extends JPanel {
 
 		mailField = new JTextField("");
 		mailField.setPreferredSize(new Dimension(640, 40));
+		mailField.setFont(new Font(null, Font.PLAIN, 16));
+		mailField.setForeground(MainPanel.BLACK);
 
 		nameField = new JTextField("");
 		nameField.setPreferredSize(new Dimension(640, 40));
-
+		nameField.setFont(new Font(null, Font.PLAIN, 16));
+		nameField.setForeground(MainPanel.BLACK);
+		
 		passwordField = new JPasswordField("");
 		passwordField.setPreferredSize(new Dimension(640, 40));
-
+		passwordField.setFont(new Font(null, Font.PLAIN, 16));
+		passwordField.setForeground(MainPanel.BLACK);
+		
 		reEnterPasswordField = new JPasswordField("");
 		reEnterPasswordField.setPreferredSize(new Dimension(640, 40));
+		reEnterPasswordField.setFont(new Font(null, Font.PLAIN, 16));
+		reEnterPasswordField.setForeground(MainPanel.BLACK);
+		
 	}
 
 	public void addRegisterPanelComponents() {
@@ -85,11 +94,11 @@ public class RegisterPanel extends JPanel {
 	}
 	
 	public static String getRegisterPassword() {
-		return passwordField.getPassword().toString();
+		return String.valueOf(passwordField.getPassword());
 	}
 	
 	public static String getRegisterRePassword() {
-		return reEnterPasswordField.getPassword().toString();
+		return String.valueOf(reEnterPasswordField.getPassword());
 	}
 	
 }

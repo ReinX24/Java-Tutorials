@@ -27,7 +27,7 @@ public class AccountButtons implements ActionListener {
 	JButton withdrawButton;
 	JButton sendFundsButton;
 	JButton resetPasswordButton;
-	JButton logoutButton;
+	static JButton logoutButton;
 
 	JButton confirmDespositButton;
 	JButton confirmWithdrawButton;
@@ -97,7 +97,7 @@ public class AccountButtons implements ActionListener {
 		confirmSendButton.setPreferredSize(new Dimension(240, 40));
 		confirmSendButton.setFont(new Font(null, Font.BOLD, 16));
 		confirmSendButton.setForeground(MainPanel.BLACK);
-		
+
 		confirmResetPasswordButton = new JButton("Confirm Reset Password");
 		confirmResetPasswordButton.addActionListener(this);
 		confirmResetPasswordButton.setPreferredSize(new Dimension(280, 40));
@@ -136,7 +136,7 @@ public class AccountButtons implements ActionListener {
 	public JButton addConfirmSendFundsButton() {
 		return confirmSendButton;
 	}
-	
+
 	public JButton addConfirmResetPasswordButton() {
 		return confirmResetPasswordButton;
 	}
@@ -148,6 +148,10 @@ public class AccountButtons implements ActionListener {
 	public static boolean recipientExists(String recipientMail) {
 		File recipientFile = new File(UserData.userDataPath.resolve(recipientMail + ".txt").toString());
 		return recipientFile.exists();
+	}
+	
+	public static void clickLogoutButton() {
+		logoutButton.doClick();
 	}
 
 	@Override
@@ -204,9 +208,9 @@ public class AccountButtons implements ActionListener {
 			MainPanel.loggedInAccountPanel.repaint();
 
 		}
-		
+
 		if (e.getSource() == resetPasswordButton) {
-			
+
 			MainPanel.loggedInAccountPanel.removeAll();
 
 			PasswordResetPanel passwordResetPanel = new PasswordResetPanel();
@@ -215,7 +219,7 @@ public class AccountButtons implements ActionListener {
 
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
-			
+
 		}
 
 		if (e.getSource() == confirmDespositButton) {
@@ -356,12 +360,13 @@ public class AccountButtons implements ActionListener {
 			}
 
 		}
-		
+
 		if (e.getSource() == confirmResetPasswordButton) {
-			
-			UserData currentUser = new UserData(AccountInfoPanel.getUserMail(), AccountInfoPanel.getUserPassword());
+
+			UserData currentUser = new UserData(AccountInfoPanel.getUserMail(), AccountInfoPanel.getUserName(),
+					AccountInfoPanel.getUserPassword(), AccountInfoPanel.getUserBalance());
 			currentUser.resetUserPassword();
-			
+
 		}
 
 		if (e.getSource() == logoutButton) {

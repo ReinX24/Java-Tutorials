@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import com.bank.loginPage.LoginPanel;
 import com.bank.loginPage.MainPanel;
+import com.bank.userPage.AccountButtons;
 import com.bank.userPage.AccountInfoPanel;
 import com.bank.userPage.AccountPanel;
 import com.bank.userPage.PasswordResetPanel;
@@ -201,6 +202,8 @@ public class UserData {
 			// Checking if the user's email is the same with the aligned password
 			if (!currentPassword.equals(recordedPassword)) {
 				// Entered password does not match with recorded password
+				System.out.println(currentPassword);
+				System.out.println(recordedPassword);
 				JOptionPane.showMessageDialog(null, "Wrong Password!", "Incorrect Password",
 						JOptionPane.WARNING_MESSAGE);
 
@@ -238,6 +241,8 @@ public class UserData {
 				fileReader.close();
 
 				PasswordResetPanel.clearPasswordResetFields();
+				// Return to the login screen
+				AccountButtons.clickLogoutButton();
 
 			}
 
