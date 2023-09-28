@@ -54,17 +54,19 @@ public class RegisterPanel extends JPanel {
 		nameField.setPreferredSize(new Dimension(640, 40));
 		nameField.setFont(new Font(null, Font.PLAIN, 16));
 		nameField.setForeground(MainPanel.BLACK);
-		
+
+		// TODO: create a JCheckBox that asks the user if they want to show their
+		// password or not
 		passwordField = new JPasswordField("");
 		passwordField.setPreferredSize(new Dimension(640, 40));
 		passwordField.setFont(new Font(null, Font.PLAIN, 16));
 		passwordField.setForeground(MainPanel.BLACK);
-		
+
 		reEnterPasswordField = new JPasswordField("");
 		reEnterPasswordField.setPreferredSize(new Dimension(640, 40));
 		reEnterPasswordField.setFont(new Font(null, Font.PLAIN, 16));
 		reEnterPasswordField.setForeground(MainPanel.BLACK);
-		
+
 	}
 
 	public void addRegisterPanelComponents() {
@@ -88,17 +90,17 @@ public class RegisterPanel extends JPanel {
 	public static String getRegisterMail() {
 		return mailField.getText();
 	}
-	
+
 	public static String getRegisterName() {
 		return nameField.getText();
 	}
-	
+
 	public static String getRegisterPassword() {
 		return String.valueOf(passwordField.getPassword());
 	}
-	
+
 	public static String getRegisterRePassword() {
 		return String.valueOf(reEnterPasswordField.getPassword());
 	}
-	
+
 }

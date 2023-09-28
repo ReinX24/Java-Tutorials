@@ -28,6 +28,7 @@ public class AccountButtons implements ActionListener {
 	JButton sendFundsButton;
 	JButton resetPasswordButton;
 	static JButton logoutButton;
+	JButton deleteAccountButton;
 
 	JButton confirmDespositButton;
 	JButton confirmWithdrawButton;
@@ -72,6 +73,13 @@ public class AccountButtons implements ActionListener {
 		resetPasswordButton.setForeground(MainPanel.BLACK);
 
 		// TODO: add a button that lets the user delete their account
+		deleteAccountButton = new JButton("Delete Account");
+		deleteAccountButton.addActionListener(this);
+		deleteAccountButton.setFocusable(false);
+		deleteAccountButton.setPreferredSize(new Dimension(256, 64));
+		deleteAccountButton.setFont(new Font(null, Font.BOLD, 16));
+		deleteAccountButton.setForeground(MainPanel.BLACK);
+
 		logoutButton = new JButton("Logout");
 		logoutButton.addActionListener(this);
 		logoutButton.setFocusable(false);
@@ -125,6 +133,10 @@ public class AccountButtons implements ActionListener {
 		return logoutButton;
 	}
 
+	public JButton addDeleteAccountButton() {
+		return deleteAccountButton;
+	}
+
 	public JButton addConfirmDepositButton() {
 		return confirmDespositButton;
 	}
@@ -149,7 +161,7 @@ public class AccountButtons implements ActionListener {
 		File recipientFile = new File(UserData.userDataPath.resolve(recipientMail + ".txt").toString());
 		return recipientFile.exists();
 	}
-	
+
 	public static void clickLogoutButton() {
 		logoutButton.doClick();
 	}
@@ -216,6 +228,19 @@ public class AccountButtons implements ActionListener {
 			PasswordResetPanel passwordResetPanel = new PasswordResetPanel();
 			passwordResetPanel.addResetPasswordPanelComponents();
 			MainPanel.loggedInAccountPanel.add(passwordResetPanel);
+
+			MainPanel.loggedInAccountPanel.revalidate();
+			MainPanel.loggedInAccountPanel.repaint();
+
+		}
+
+		if (e.getSource() == deleteAccountButton) {
+
+			MainPanel.loggedInAccountPanel.removeAll();
+
+			DeleteAccountPanel deleteAccountPanel = new DeleteAccountPanel();
+			deleteAccountPanel.addDeleteAccountPanelComponents();
+			MainPanel.loggedInAccountPanel.add(deleteAccountPanel);
 
 			MainPanel.loggedInAccountPanel.revalidate();
 			MainPanel.loggedInAccountPanel.repaint();
@@ -378,6 +403,48 @@ public class AccountButtons implements ActionListener {
 
 			MainPanel.mainPanel.repaint();
 			MainPanel.mainPanel.revalidate();
+		}
+		
+		if (e.getSource() == deleteAccountButton) {
+			
+			String userMail = DeleteAccountPanel.getUserMail();
+			String userName = DeleteAccountPanel.getUserName();
+			String userPassword = DeleteAccountPanel.getPassword();
+			String userConfirmPassword = DeleteAccountPanel.getConfirmPassword();
+			
+			File userFile = new File(UserData.userDataPath.resolve(userMail + ".txt").toString());
+			
+			if (!userFile.exists()) {
+				// Check if the email exists
+				JOptionPane.showMessageDialog(null, "Email does not exist!", "Email Not Found Message", JOptionPane.ERROR_MESSAGE);
+			} else {
+				// TODO: Check if the name corresponds with the one recorded with the email
+				
+				try {
+					
+					BufferedReader fileReader = new BufferedReader(new FileReader(userFile));
+					
+					StringBuilder fileData = new StringBuilder();
+					
+					String tempStr;
+					
+					while ((tempStr = fileReader.readLine()) != null) {
+						fileData.append(tempStr);
+					}
+					
+					
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+			// TODO: Check if the password is correct
+			
+			// TODO: Check if the confirmation password is correct
+			
+			// TODO: Delete the account (Text file) after these checks are finished
+			
 		}
 
 	}

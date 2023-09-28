@@ -2,25 +2,27 @@ package com.bank.userPage;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class PasswordResetPanel extends JPanel {
+public class PasswordResetPanel extends JPanel implements ActionListener {
 
 	JLabel currentPasswordLabel;
 	JLabel confirmCurrentPasswordLabel;
 	JLabel newPasswordLabel;
 	JLabel confirmNewPasswordLabel;
 
-	// TODO: convert into password fields and find a way to show passwords to the
-	// user as text
 	static JPasswordField currentPasswordField;
 	static JPasswordField confirmPasswordField;
 	static JPasswordField newPasswordField;
 	static JPasswordField confirmNewPasswordField;
+	JCheckBox showPasswordsCheckBox;
 
 	public PasswordResetPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
@@ -68,6 +70,13 @@ public class PasswordResetPanel extends JPanel {
 
 		this.add(confirmNewPasswordField);
 
+		showPasswordsCheckBox = new JCheckBox("Show Passwords");
+		showPasswordsCheckBox.setPreferredSize(new Dimension(192, 32));
+		showPasswordsCheckBox.setFocusable(false);
+		showPasswordsCheckBox.addActionListener(this);
+
+		this.add(showPasswordsCheckBox);
+
 		AccountButtons accountButtons = new AccountButtons();
 		this.add(accountButtons.addConfirmResetPasswordButton());
 	}
@@ -93,6 +102,27 @@ public class PasswordResetPanel extends JPanel {
 		confirmPasswordField.setText("");
 		newPasswordField.setText("");
 		confirmNewPasswordField.setText("");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (showPasswordsCheckBox.isSelected()) {
+			// Shows the passwords instead of asterisks
+			currentPasswordField.setEchoChar((char) 0);
+			confirmPasswordField.setEchoChar((char) 0);
+			newPasswordField.setEchoChar((char) 0);
+			confirmNewPasswordField.setEchoChar((char) 0);
+
+		} else {
+			// Goes back to showing asterisks
+			currentPasswordField.setEchoChar('*');
+			confirmPasswordField.setEchoChar('*');
+			newPasswordField.setEchoChar('*');
+			confirmNewPasswordField.setEchoChar('*');
+
+		}
+
 	}
 
 }

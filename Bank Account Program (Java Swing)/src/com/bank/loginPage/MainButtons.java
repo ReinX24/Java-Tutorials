@@ -175,7 +175,7 @@ public class MainButtons implements ActionListener {
 			}
 		}
 
-		// TODO: debug clear button, currently throws a exception in the console. Should
+		// TODO: debug clear button, currently throws a exception in the console
 		// be empty
 		if (e.getSource() == clearDetailsButton) {
 
