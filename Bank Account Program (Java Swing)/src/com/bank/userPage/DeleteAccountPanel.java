@@ -108,7 +108,7 @@ public class DeleteAccountPanel extends JPanel {
 		this.add(confirmPasswordField);
 
 		AccountButtons accountButtons = new AccountButtons();
-		this.add(accountButtons.addDeleteAccountButton());
+		this.add(accountButtons.addConfirmDeleteAccountButton());
 
 	}
 	

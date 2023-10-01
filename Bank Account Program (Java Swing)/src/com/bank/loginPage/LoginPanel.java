@@ -4,14 +4,17 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.management.MBeanAttributeInfo;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginPanel extends JPanel {
+public class LoginPanel extends JPanel implements ActionListener {
 
 	JLabel enterMailLabel;
 	JLabel enterPasswordLabel;
@@ -20,6 +23,8 @@ public class LoginPanel extends JPanel {
 	public static JTextField mailField;
 	public static JPasswordField passwordField;
 	public static JPasswordField reEnterPasswordField;
+
+	JCheckBox showLoginPasswordsBox;
 
 	public LoginPanel() {
 		this.setPreferredSize(new Dimension(1024, 768));
@@ -45,8 +50,6 @@ public class LoginPanel extends JPanel {
 		mailField.setFont(new Font(null, Font.PLAIN, 16));
 		mailField.setForeground(MainPanel.BLACK);
 
-		// TODO: create a JCheckBox that asks the user if they want to show their
-		// password or not
 		passwordField = new JPasswordField("");
 		passwordField.setPreferredSize(new Dimension(640, 40));
 		passwordField.setFont(new Font(null, Font.PLAIN, 16));
@@ -57,6 +60,10 @@ public class LoginPanel extends JPanel {
 		reEnterPasswordField.setFont(new Font(null, Font.PLAIN, 16));
 		reEnterPasswordField.setForeground(MainPanel.BLACK);
 
+		showLoginPasswordsBox = new JCheckBox("Show Passwords");
+		showLoginPasswordsBox.setPreferredSize(new Dimension(192, 32));
+		showLoginPasswordsBox.setFocusable(false);
+		showLoginPasswordsBox.addActionListener(this);
 	}
 
 	public void addLoginPanelComponents() {
@@ -68,6 +75,8 @@ public class LoginPanel extends JPanel {
 
 		this.add(reEnterPasswordLabel);
 		this.add(reEnterPasswordField);
+
+		this.add(showLoginPasswordsBox);
 
 		MainButtons loginButton = new MainButtons();
 		this.add(loginButton.getLoginAccountButton());
@@ -84,6 +93,19 @@ public class LoginPanel extends JPanel {
 
 	public static String getLoginReEnterPassword() {
 		return String.valueOf(reEnterPasswordField.getPassword());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (showLoginPasswordsBox.isSelected()) {
+			passwordField.setEchoChar((char) 0);
+			reEnterPasswordField.setEchoChar((char) 0);
+		} else {
+			passwordField.setEchoChar('*');
+			reEnterPasswordField.setEchoChar('*');
+		}
+
 	}
 
 }

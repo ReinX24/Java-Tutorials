@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -20,6 +21,8 @@ public class RegisterPanel extends JPanel {
 	public static JTextField nameField;
 	public static JPasswordField passwordField;
 	public static JPasswordField reEnterPasswordField;
+	
+	JCheckBox showRegisterPasswords;
 
 	public RegisterPanel() {
 		this.setPreferredSize(new Dimension(1024, 768));

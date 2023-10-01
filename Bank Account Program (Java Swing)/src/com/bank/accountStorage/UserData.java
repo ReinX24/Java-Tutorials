@@ -101,8 +101,7 @@ public class UserData {
 			}
 
 			// Storing the user's email, user name password, and funds in a hash map
-			String[] userDataArray = new String[4];
-			userDataArray = userDataBuilder.toString().split(",");
+			String[] userDataArray = userDataBuilder.toString().split(",");
 
 			HashMap<String, String> userDataMap = new HashMap<>();
 

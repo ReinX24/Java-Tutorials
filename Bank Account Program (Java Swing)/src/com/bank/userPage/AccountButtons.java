@@ -34,6 +34,7 @@ public class AccountButtons implements ActionListener {
 	JButton confirmWithdrawButton;
 	JButton confirmSendButton;
 	JButton confirmResetPasswordButton;
+	JButton confirmDeleteAccountButton;
 
 	public AccountButtons() {
 		/* New side buttons that will lead to deposit, withdraw, or send funds panels */
@@ -111,6 +112,12 @@ public class AccountButtons implements ActionListener {
 		confirmResetPasswordButton.setPreferredSize(new Dimension(280, 40));
 		confirmResetPasswordButton.setFont(new Font(null, Font.BOLD, 16));
 		confirmResetPasswordButton.setForeground(MainPanel.BLACK);
+
+		confirmDeleteAccountButton = new JButton("Confirm Account Deletion");
+		confirmDeleteAccountButton.addActionListener(this);
+		confirmDeleteAccountButton.setPreferredSize(new Dimension(280, 40));
+		confirmDeleteAccountButton.setFont(new Font(null, Font.BOLD, 16));
+		confirmDeleteAccountButton.setForeground(MainPanel.BLACK);
 	}
 
 	public JButton addDepositButton() {
@@ -151,6 +158,10 @@ public class AccountButtons implements ActionListener {
 
 	public JButton addConfirmResetPasswordButton() {
 		return confirmResetPasswordButton;
+	}
+
+	public JButton addConfirmDeleteAccountButton() {
+		return confirmDeleteAccountButton;
 	}
 
 	public JButton addAccountInfoButton() {
@@ -270,7 +281,7 @@ public class AccountButtons implements ActionListener {
 				DepositPanel.depositFundsField.setText("");
 			} catch (NumberFormatException e1) {
 				JOptionPane.showMessageDialog(null, "Invalid Input!\nPlease Enter a number", "Invalid Input Message",
-						JOptionPane.WARNING_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 				DepositPanel.depositFundsField.setText(""); // removes invalid input
 			}
 
@@ -307,7 +318,7 @@ public class AccountButtons implements ActionListener {
 				}
 			} catch (NumberFormatException e2) {
 				JOptionPane.showMessageDialog(null, "Invalid Input!\nPlease Enter a number", "Invalid Input Message",
-						JOptionPane.WARNING_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 				WithdrawPanel.withdrawFundsField.setText("");
 			}
 
@@ -380,7 +391,7 @@ public class AccountButtons implements ActionListener {
 				e1.printStackTrace();
 			} catch (NumberFormatException e2) {
 				JOptionPane.showMessageDialog(null, "Invalid Input!\nPlease Enter a number", "Invalid Input Message",
-						JOptionPane.WARNING_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 				SendFundsPanel.sendFundsField.setText("");
 			}
 
@@ -404,47 +415,74 @@ public class AccountButtons implements ActionListener {
 			MainPanel.mainPanel.repaint();
 			MainPanel.mainPanel.revalidate();
 		}
-		
-		if (e.getSource() == deleteAccountButton) {
-			
+
+		if (e.getSource() == confirmDeleteAccountButton) {
+
 			String userMail = DeleteAccountPanel.getUserMail();
 			String userName = DeleteAccountPanel.getUserName();
 			String userPassword = DeleteAccountPanel.getPassword();
 			String userConfirmPassword = DeleteAccountPanel.getConfirmPassword();
-			
+
 			File userFile = new File(UserData.userDataPath.resolve(userMail + ".txt").toString());
-			
+
 			if (!userFile.exists()) {
 				// Check if the email exists
-				JOptionPane.showMessageDialog(null, "Email does not exist!", "Email Not Found Message", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Email does not exist!", "Email Not Found Message",
+						JOptionPane.ERROR_MESSAGE);
 			} else {
-				// TODO: Check if the name corresponds with the one recorded with the email
-				
+
 				try {
-					
+
 					BufferedReader fileReader = new BufferedReader(new FileReader(userFile));
-					
+
 					StringBuilder fileData = new StringBuilder();
-					
+
 					String tempStr;
-					
+
 					while ((tempStr = fileReader.readLine()) != null) {
 						fileData.append(tempStr);
 					}
+
+					String[] userDataArray = fileData.toString().split(",");
+
+					HashMap<String, String> userDataMap = new HashMap<>();
+
+					for (int i = 0; i < userDataArray.length; i++) {
+						String[] dataTemp = userDataArray[i].split(":");
+						userDataMap.put(dataTemp[0], dataTemp[1]);
+					}
+
+					String recordedName = userDataMap.get("username");
+					String recordedPassword = userDataMap.get("password");
+
+					if (!userName.equals(recordedName)) {
+						
+						JOptionPane.showMessageDialog(null, "Incorrect Name!", "Wrong Name Message", JOptionPane.ERROR_MESSAGE);
+						
+					} else if (!userPassword.equals(userConfirmPassword)) {
+						
+						JOptionPane.showMessageDialog(null, "Passwords Do Not Match!", "Mismatch Password Message", JOptionPane.ERROR_MESSAGE);
+						
+					} else if (!userPassword.equals(recordedPassword)) {
+						
+						JOptionPane.showMessageDialog(null, "Incorrect Password!", "Wrong Password Message", JOptionPane.ERROR_MESSAGE);
+						
+					} else {
+						
+						// TODO: Delete the account (Text file) after these checks are finished
+						JOptionPane.showMessageDialog(null, "Account Successfully Deleted", "Deletion Successful Message", JOptionPane.INFORMATION_MESSAGE);
+						
+						logoutButton.doClick();
+						
+					}
 					
-					
-					
+
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				
+
 			}
-			// TODO: Check if the password is correct
-			
-			// TODO: Check if the confirmation password is correct
-			
-			// TODO: Delete the account (Text file) after these checks are finished
-			
+
 		}
 
 	}
