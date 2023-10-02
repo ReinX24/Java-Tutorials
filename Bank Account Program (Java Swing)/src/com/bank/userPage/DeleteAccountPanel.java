@@ -3,6 +3,8 @@ package com.bank.userPage;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -12,7 +14,7 @@ import javax.swing.JTextField;
 
 import com.bank.loginPage.MainPanel;
 
-public class DeleteAccountPanel extends JPanel {
+public class DeleteAccountPanel extends JPanel implements ActionListener {
 
 	JLabel instructionsLabel;
 	JLabel warningLabel;
@@ -25,6 +27,8 @@ public class DeleteAccountPanel extends JPanel {
 	static JTextField nameField;
 	static JPasswordField passwordField;
 	static JPasswordField confirmPasswordField;
+
+	JCheckBox showPasswordsBox;
 
 	JCheckBox showPasswordsCheckBox;
 
@@ -107,25 +111,45 @@ public class DeleteAccountPanel extends JPanel {
 
 		this.add(confirmPasswordField);
 
+		showPasswordsBox = new JCheckBox("Show Passwords");
+		showPasswordsBox.setPreferredSize(new Dimension(192, 32));
+		showPasswordsBox.setFocusable(false);
+		showPasswordsBox.addActionListener(this);
+
+		this.add(showPasswordsBox);
+
 		AccountButtons accountButtons = new AccountButtons();
 		this.add(accountButtons.addConfirmDeleteAccountButton());
 
 	}
-	
+
 	public static String getUserMail() {
 		return mailField.getText();
 	}
-	
+
 	public static String getUserName() {
 		return nameField.getText();
 	}
-	
+
 	public static String getPassword() {
 		return String.valueOf(passwordField.getPassword());
 	}
-	
+
 	public static String getConfirmPassword() {
 		return String.valueOf(confirmPasswordField.getPassword());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (showPasswordsBox.isSelected()) {
+			passwordField.setEchoChar((char) 0);
+			confirmPasswordField.setEchoChar((char) 0);
+		} else {
+			passwordField.setEchoChar('*');
+			confirmPasswordField.setEchoChar('*');
+		}
+
 	}
 
 }

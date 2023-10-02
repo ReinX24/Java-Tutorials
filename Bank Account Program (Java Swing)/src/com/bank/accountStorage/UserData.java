@@ -240,8 +240,10 @@ public class UserData {
 				fileReader.close();
 
 				PasswordResetPanel.clearPasswordResetFields();
-				// Return to the login screen
-				AccountButtons.clickLogoutButton();
+
+				AccountButtons accountButtons = new AccountButtons();
+
+				accountButtons.clickLogoutButton();
 
 			}
 
@@ -282,13 +284,6 @@ public class UserData {
 
 	public void setUserBalance(BigDecimal userBalance) {
 		this.userBalance = userBalance;
-	}
-
-	// TODO: remove this toString() function after fully debugging program
-	@Override
-	public String toString() {
-		return "UserData [userMail=" + userMail + ", userName=" + userName + ", userPassword=" + userPassword
-				+ ", userBalance=" + userBalance + "]";
 	}
 
 }

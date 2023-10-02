@@ -19,7 +19,8 @@ public class MainButtons implements ActionListener {
 
 	JButton loginAccountButton;
 	JButton registerAccountButton;
-	JButton clearDetailsButton;
+	JButton clearLoginDetailsButton;
+	JButton clearRegisterDetailsButton;
 
 	final BigDecimal DEFAULT_BALANCE = BigDecimal.valueOf(0);
 
@@ -59,12 +60,19 @@ public class MainButtons implements ActionListener {
 		registerAccountButton.setFont(new Font(null, Font.BOLD, 16));
 		registerAccountButton.setForeground(MainPanel.BLACK);
 
-		clearDetailsButton = new JButton("Clear");
-		clearDetailsButton.addActionListener(this);
-		clearDetailsButton.setPreferredSize(new Dimension(160, 40));
-		clearDetailsButton.setFocusable(false);
-		clearDetailsButton.setFont(new Font(null, Font.BOLD, 16));
-		clearDetailsButton.setForeground(MainPanel.BLACK);
+		clearLoginDetailsButton = new JButton("Clear");
+		clearLoginDetailsButton.addActionListener(this);
+		clearLoginDetailsButton.setPreferredSize(new Dimension(160, 40));
+		clearLoginDetailsButton.setFocusable(false);
+		clearLoginDetailsButton.setFont(new Font(null, Font.BOLD, 16));
+		clearLoginDetailsButton.setForeground(MainPanel.BLACK);
+
+		clearRegisterDetailsButton = new JButton("Clear");
+		clearRegisterDetailsButton.addActionListener(this);
+		clearRegisterDetailsButton.setPreferredSize(new Dimension(160, 40));
+		clearRegisterDetailsButton.setFocusable(false);
+		clearRegisterDetailsButton.setFont(new Font(null, Font.BOLD, 16));
+		clearRegisterDetailsButton.setForeground(MainPanel.BLACK);
 	}
 
 	public JButton getLoginButton() {
@@ -87,8 +95,12 @@ public class MainButtons implements ActionListener {
 		return registerAccountButton;
 	}
 
-	public JButton getClearDetailsButton() {
-		return clearDetailsButton;
+	public JButton getClearLoginDetailsButton() {
+		return clearLoginDetailsButton;
+	}
+
+	public JButton getClearRegisterDetailsButton() {
+		return clearRegisterDetailsButton;
 	}
 
 	@Override
@@ -175,16 +187,17 @@ public class MainButtons implements ActionListener {
 			}
 		}
 
-		// TODO: debug clear button, currently throws a exception in the console
-		// be empty
-		if (e.getSource() == clearDetailsButton) {
+		if (e.getSource() == clearLoginDetailsButton) {
 
 			LoginPanel.mailField.setText("");
 			LoginPanel.passwordField.setText("");
 			LoginPanel.reEnterPasswordField.setText("");
 
+		}
+
+		if (e.getSource() == clearRegisterDetailsButton) {
+
 			RegisterPanel.mailField.setText("");
-			RegisterPanel.nameField.setText("");
 			RegisterPanel.passwordField.setText("");
 			RegisterPanel.reEnterPasswordField.setText("");
 

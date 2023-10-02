@@ -1,4 +1,4 @@
 email:rein@gmail.com,
 username:rein,
-password:rein,
+password:1234,
 balance:200

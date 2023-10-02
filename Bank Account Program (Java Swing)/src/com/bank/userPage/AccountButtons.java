@@ -27,7 +27,7 @@ public class AccountButtons implements ActionListener {
 	JButton withdrawButton;
 	JButton sendFundsButton;
 	JButton resetPasswordButton;
-	static JButton logoutButton;
+	JButton logoutButton;
 	JButton deleteAccountButton;
 
 	JButton confirmDespositButton;
@@ -73,7 +73,6 @@ public class AccountButtons implements ActionListener {
 		resetPasswordButton.setFont(new Font(null, Font.BOLD, 16));
 		resetPasswordButton.setForeground(MainPanel.BLACK);
 
-		// TODO: add a button that lets the user delete their account
 		deleteAccountButton = new JButton("Delete Account");
 		deleteAccountButton.addActionListener(this);
 		deleteAccountButton.setFocusable(false);
@@ -168,13 +167,13 @@ public class AccountButtons implements ActionListener {
 		return accountInfoButton;
 	}
 
+	public void clickLogoutButton() {
+		logoutButton.doClick();
+	}
+
 	public static boolean recipientExists(String recipientMail) {
 		File recipientFile = new File(UserData.userDataPath.resolve(recipientMail + ".txt").toString());
 		return recipientFile.exists();
-	}
-
-	public static void clickLogoutButton() {
-		logoutButton.doClick();
 	}
 
 	@Override
@@ -456,26 +455,28 @@ public class AccountButtons implements ActionListener {
 					String recordedPassword = userDataMap.get("password");
 
 					if (!userName.equals(recordedName)) {
-						
-						JOptionPane.showMessageDialog(null, "Incorrect Name!", "Wrong Name Message", JOptionPane.ERROR_MESSAGE);
-						
+
+						JOptionPane.showMessageDialog(null, "Incorrect Name!", "Wrong Name Message",
+								JOptionPane.ERROR_MESSAGE);
+
 					} else if (!userPassword.equals(userConfirmPassword)) {
-						
-						JOptionPane.showMessageDialog(null, "Passwords Do Not Match!", "Mismatch Password Message", JOptionPane.ERROR_MESSAGE);
-						
+
+						JOptionPane.showMessageDialog(null, "Passwords Do Not Match!", "Mismatch Password Message",
+								JOptionPane.ERROR_MESSAGE);
+
 					} else if (!userPassword.equals(recordedPassword)) {
-						
-						JOptionPane.showMessageDialog(null, "Incorrect Password!", "Wrong Password Message", JOptionPane.ERROR_MESSAGE);
-						
+
+						JOptionPane.showMessageDialog(null, "Incorrect Password!", "Wrong Password Message",
+								JOptionPane.ERROR_MESSAGE);
+
 					} else {
-						
-						// TODO: Delete the account (Text file) after these checks are finished
-						JOptionPane.showMessageDialog(null, "Account Successfully Deleted", "Deletion Successful Message", JOptionPane.INFORMATION_MESSAGE);
-						
+
+						JOptionPane.showMessageDialog(null, "Account Successfully Deleted",
+								"Deletion Successful Message", JOptionPane.INFORMATION_MESSAGE);
+						userFile.delete();
 						logoutButton.doClick();
-						
+
 					}
-					
 
 				} catch (IOException e1) {
 					e1.printStackTrace();

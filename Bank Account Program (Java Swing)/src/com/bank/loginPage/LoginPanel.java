@@ -80,7 +80,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 		MainButtons loginButton = new MainButtons();
 		this.add(loginButton.getLoginAccountButton());
-		this.add(loginButton.getClearDetailsButton());
+		this.add(loginButton.getClearLoginDetailsButton());
 	}
 
 	public static String getLoginMail() {

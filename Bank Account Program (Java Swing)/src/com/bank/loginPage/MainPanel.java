@@ -3,6 +3,7 @@ package com.bank.loginPage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.net.URL;
 
 import javax.swing.*;
 
@@ -53,23 +54,23 @@ public class MainPanel {
 		/* Starting page that shows that the program is about */
 		AboutPanel aboutPanel = new AboutPanel();
 		aboutPanel.addAboutPanelComponents();
-		userPanel.add(aboutPanel);		
+		userPanel.add(aboutPanel);
 
 		/* Finish instantiating our loginFrame */
 		loginFrame.getContentPane().add(mainPanel);
 		loginFrame.pack();
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
-		
+
 		/* Creating a folder that will contain our user's login information */
 		UserData.createUserDataFolder();
 	}
-	
+
 	public static void addAndClearUserPanel() {
 		mainPanel.add(userPanel);
 		userPanel.removeAll();
 	}
-	
+
 	public static void repaintAndRevalidate() {
 		mainPanel.repaint();
 		mainPanel.revalidate();
