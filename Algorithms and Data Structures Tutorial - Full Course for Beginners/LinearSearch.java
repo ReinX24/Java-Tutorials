@@ -11,7 +11,7 @@ public class LinearSearch {
         int targetNum = numArr[random.nextInt(numArr.length)];
 
         long startTime = System.nanoTime();
-        int targetIndex = linearSearch(targetNum, numArr);
+        int targetIndex = linearSearch(numArr, targetNum);
         long totalTime = System.nanoTime() - startTime;
 
         System.out.println(targetNum + " is found at index " + targetIndex);
@@ -19,7 +19,8 @@ public class LinearSearch {
 
     }
 
-    public static int linearSearch(int targetNum, int[] numArr) {
+    // Returns the index of the targetNum, else return -1
+    public static int linearSearch(int[] numArr, int targetNum) {
         for (int i = 0; i < numArr.length; i++) {
             if (targetNum == numArr[i]) {
                 return i;
